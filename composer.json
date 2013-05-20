@@ -1,0 +1,26 @@
+{
+    "name": "DSL Sandbox",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-0": { "DslBox": "src/"}
+    },
+    "require": {
+        "slim/slim": "2.2.0",
+        "slim/extras": "2.0.3",
+        "ngs/ngs-php": "*"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "ngs/ngs-php",
+                "version": "1.0-stable",
+                "source": {
+                    "url": "git@github.com:ngs-doo/ngs-php.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    ]
+}

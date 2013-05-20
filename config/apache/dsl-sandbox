@@ -1,0 +1,17 @@
+<VirtualHost dsl-sandbox:43000>
+    ServerName dsl-sandbox
+    DocumentRoot /var/www/dsl-sandbox/public
+
+    <Directory /var/www/dsl-sandbox/public>
+        AllowOverride none
+        RewriteEngine on
+        RewriteBase /
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^ index.php [QSA,L]
+    </Directory>
+</VirtualHost>
+
+<VirtualHost *:43001>
+    SuexecUserGroup jailuser users
+    DocumentRoot /var/www/dsl-sandbox/sandbox
+</VirtualHost>
