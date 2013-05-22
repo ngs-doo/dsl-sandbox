@@ -77,9 +77,11 @@ function DslSandboxCtrl($scope, $http, $location) {
         if ($scope.isRunning)
             return;
         //$scope.phpSyntax
+        $scope.syntaxErrors = null;
         $scope.phpError = null;
         $scope.phpOutput = '';
         $scope.isRunning = true;
+        $scope.saveCurrent();
         var postData = {
             'php': $scope.php
         }
@@ -88,7 +90,7 @@ function DslSandboxCtrl($scope, $http, $location) {
                 $scope.isRunning = false;
                 if (data.hasOwnProperty('syntax') && data.syntax === false) {
                     $scope.phpSyntax = false;
-                    $scope.phpError = data.output;
+                    $scope.syntaxErrors = data.syntaxErrors;
                 }
                 else {
                     // @todo ngSanitize

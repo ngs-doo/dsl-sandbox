@@ -59,6 +59,13 @@
                         </span>
                     </div>
                     <div class="alert alert-error" ng-show="phpError">{{ phpError }}</div>
+                    <div ng-show="syntaxErrors">
+                        <ul class="unstyled">
+                            <li ng-repeat="error in syntaxErrors">
+                                <div class="alert alert-error"><strong>{{ error.file }}</strong>: {{ error.message }}</div>
+                            </li>
+                        </ul>
+                    </div>
                     <div ng-show="phpOutput">
                         <div id="php-output">
                             

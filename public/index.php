@@ -72,15 +72,20 @@ $client = new \NGS\Client\RestHttp(
         array($dirBase, $dirExample),
         $initCode);
 
-    if ($checkSyntax=false) {
-        $linter = new SyntaxLinter();
-        $syntaxValid = $linter->check(array($initCode, $phpCode));
-        
-        if(!$syntaxValid)
-            return $res->body(json_encode(array(
-                'syntax' => $syntaxValid,
-                'output' => $linter->getOutput())));
+
+    $linter = new SyntaxLinter();
+    $syntaxErrors = array();
+    foreach ($post['php'] as $file) {
+        if(!$linter->check($file['content']))
+            $syntaxErrors[] = array(
+                'file' => $file['name'],
+                'message' => $linter->getOutput());
     }
+    if($syntaxErrors)
+        return $res->body(json_encode(array(
+            'syntax' => false,
+            'syntaxErrors' => $syntaxErrors)));
+
 
     foreach ($post['php'] as $file)
         $sandbox->add($file['name'], $file['content']);
