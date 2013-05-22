@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8f562825f1cbb8fb1b0929c528b5d138",
+    "hash": "38d1ec81be59097f079d263794288c9a",
     "packages": [
         {
             "name": "ngs/ngs-php",

@@ -2,7 +2,10 @@
     "name": "DSL Sandbox",
     "minimum-stability": "stable",
     "autoload": {
-        "psr-0": { "DslBox": "src/"}
+        "psr-0": {
+            "DslBox": "src/",
+            "": "src/"
+        }
     },
     "require": {
         "slim/slim": "2.2.0",

@@ -12,8 +12,32 @@ pre {
     line-height: 14px;
 }
 
-#php-editor {
+#php-editor, #dsl-editor {
     width: 500px;
-    height: 400px;
+    height: 500px;
     font-size: 14px;
+}
+
+.file-tree li {
+    font-size: 12px;
+    line-height: 14px;
+    list-style: none;
+}
+
+.center {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-files>li>a {
+    padding-bottom: 4px;
+    padding-top: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 12px;
+}
+
+ul.nav-files {
+    margin: 0;
 }
