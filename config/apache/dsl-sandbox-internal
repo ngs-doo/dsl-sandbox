@@ -1,0 +1,4 @@
+<VirtualHost *:43001>
+    SuexecUserGroup jailuser users
+    DocumentRoot /var/www/dsl-sandbox/sandbox
+</VirtualHost>

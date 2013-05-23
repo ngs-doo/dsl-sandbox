@@ -7,15 +7,9 @@ class SyntaxLinter
 
     protected $lastError;
 
-    public function check($codes)
+    public function check($code)
     {
-        if (is_array($codes))
-            $code = implode("\n", $codes);
-        else
-            $code = $codes;
-
-        $phpBin = 'php';
-        $cmd = $phpBin.' -l';
+        $cmd = 'php -l';
 
         $descriptorspec = array(
             0 => array("pipe", "r"),  // stdin
@@ -35,8 +29,6 @@ class SyntaxLinter
 
         $returnValue = proc_close($proc);
 
-        \fb::warn($returnValue);
-
         switch ($returnValue) {
             case self::PHPLINT_OK:
                 return true;
@@ -49,7 +41,23 @@ class SyntaxLinter
         }
     }
 
-    public function getOutput()
+    public function getError()
+    {
+        $rawError = $this->lastError;
+        preg_match('/ in - on line (\d+)/', $rawError, $matches);
+        // message is not in expected format
+        if (!$matches || count($matches) !== 2)
+            return array('line' => null, 'message' => $rawError);
+
+        $textToClear = array($matches[0], 'PHP Parse error:  syntax error, ');
+        return array(
+            'line'    => $matches[1],
+            'message' => str_replace($textToClear, '', $rawError),
+            'raw'     => $rawError,
+        );
+    }
+
+    public function getRaw()
     {
         return $this->lastError;
     }

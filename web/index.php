@@ -14,7 +14,6 @@ $app = new MySlim(array(
     'templates.path' => __DIR__.'/../templates'
 ));
 
-
 function getFiles($path, $filter=null) {
     $files = array();
     foreach (new DirectoryIterator($path) as $file) {
@@ -39,6 +38,7 @@ $app->post('/run/:example', function($example) use ($app) {
     if (!isset($post['php']) || !is_array($post['php']))
         $app->fail('No php code in post data');
 
+    $phpFiles = $post['php'];
     $phpCode = array();
     foreach($post['php'] as $file) {
         if (!isset($file['name']) || !is_string($file['name'])
@@ -50,16 +50,11 @@ $app->post('/run/:example', function($example) use ($app) {
     if (!is_dir($dir))
         $app->fail('Example not found', 404);
 
-    $sandbox = new DslBox\Sandbox('http://localhost:43001', '../sandbox/boxes');
-
-    $dirBase = realpath('..');
-    $dirExample = realpath($dir);
-
     $initCode = '<?php
 
-require_once \'[[dir]]/vendor/ngs/ngs-php/NGS/Requirements.php\';
-require_once \'[[dir_example]]/platform/modules/Modules.php\';
-$cfg = parse_ini_file(\'[[dir_example]]/platform/project.ini\');
+require_once SANDBOX_ROOT.\'/vendor/ngs/ngs-php/NGS/Requirements.php\';
+require_once SANDBOX_ROOT.\'/examples/[[example]]/platform/modules/Modules.php\';
+$cfg = parse_ini_file(SANDBOX_ROOT.\'/examples/[[example]]/platform/project.ini\');
 $client = new \NGS\Client\RestHttp(
     $cfg[\'api-url\'],
     $cfg[\'username\'],
@@ -67,31 +62,28 @@ $client = new \NGS\Client\RestHttp(
 );
 \NGS\Client\RestHttp::instance($client);
 ?>';
-    $initCode = str_replace(
-        array('[[dir]]', '[[dir_example]]'),
-        array($dirBase, $dirExample),
-        $initCode);
-
+    $initCode = str_replace('[[example]]', $example, $initCode);
 
     $linter = new SyntaxLinter();
     $syntaxErrors = array();
     foreach ($post['php'] as $file) {
-        if(!$linter->check($file['content']))
-            $syntaxErrors[] = array(
-                'file' => $file['name'],
-                'message' => $linter->getOutput());
+        if(!$linter->check($file['content'])) {
+            $error = $linter->getError();
+            $error['file'] = $file['name'];
+            $syntaxErrors[] = $error;
+        }
     }
     if($syntaxErrors)
         return $res->body(json_encode(array(
             'syntax' => false,
             'syntaxErrors' => $syntaxErrors)));
 
-
+    $sandboxProxy = new DslBox\SandboxProxy('http://localhost:43001');
     foreach ($post['php'] as $file)
-        $sandbox->add($file['name'], $file['content']);
-    $sandbox->add('_init.php', $initCode);
+        $sandboxProxy->add($file['name'], $file['content']);
+    $sandboxProxy->add('_init.php', $initCode);
 
-    $output = $sandbox->execute();
+    $output = $sandboxProxy->execute();
 
     $res->body(json_encode(array('output' => $output)));
 });
@@ -131,7 +123,6 @@ function getSourceFiles($baseDir, $type)
 
 // loads example
 $app->get('/example/:example', function($example) use ($app) {
-
     $baseDir = '../examples/'.$example;
     if(!preg_match('/[a-z0-9_-]+/', $example) || !is_dir($baseDir))
         $app->fail('Example not found', 404);
@@ -154,5 +145,6 @@ $app->get('/example/:example', function($example) use ($app) {
     $app->response()->header('Content-type', 'application/json');
     $app->response()->body(json_encode($result));
 });
+
 
 $app->run();
