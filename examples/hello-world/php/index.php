@@ -1,10 +1,7 @@
-$snoopie = new Animal\Dog();
-$snoopie->name = 'Snoopie';
-$snoopie->persist();
+<?php
 
-$rex = new Animal\Dog();
-$rex->name = 'Rex';
-$rex->persist();
+$book = new Library\Book();
+$book->title = 'Hello world!';
+?>
 
-$dogs = Animal\Dog::findAll();
-print_r($dogs);
+<h1><?=$book->title?></h1>

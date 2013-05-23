@@ -11,7 +11,8 @@ $create->name = 'Create a task';
 $create->isDone = true;
 $create->persist();
 
-$doneTasks = Task::findDone();
+$limit = 5;
+$doneTasks = Task::findDone($limit);
 ?>
 
 <div>Found total of <b><?=count($doneTasks)?></b> done tasks:</div>

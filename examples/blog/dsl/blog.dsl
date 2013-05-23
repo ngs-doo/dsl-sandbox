@@ -4,6 +4,7 @@ module Blog
         string title;
         string content;
         date createdAt;
+        bool isVisible;
         Comment[] comments;
         Security.User *user;
     }
