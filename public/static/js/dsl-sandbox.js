@@ -1,19 +1,22 @@
 function DslSandboxCtrl($scope, $http, $location) {
 
-    $scope.isRunning = false;
+    $scope.clear = function () {
+        $scope.dsl = null;
+        $scope.php = null;
+        
+        $scope.intro = '';
+        $scope.example = false;
 
-    $scope.code = {};
-    $scope.dsl = null;
-    $scope.php = null;
-    
-    $scope.intro = '';
-    $scope.example = false;
+        $scope.currentPhp = null;
+        $scope.currentDsl = null;
+        $scope.phpSyntax = null;
 
-    $scope.currentPhp = null;
-    $scope.currentDsl = null;
-    $scope.phpSyntax = null;
+        $scope.phpIsRunning = false;
+        $scope.exampleIsLoading = false;
+        $scope.error = false;
+    };
 
-    $scope.phpOutput = '<strong>test</strong>';
+    $scope.clear();
 
     $scope.selectDsl = function (dslFile) {
         $scope.currentDsl = dslFile;
@@ -49,9 +52,10 @@ function DslSandboxCtrl($scope, $http, $location) {
     }
 
     $scope.loadExample = function(example) {
-        if (example === $scope.example)
-            if (!confirm('Reload current example? This will lose all changes?'))
+        if (example === $scope.example && !confirm('Reload current example? You will lose all changes?'))
                 return ;
+        $scope.error = false;
+        $scope.exampleIsLoading = true;
         $location.path('example/'+example);
         $http.get('/example/'+example)
             .success(function(data) {
@@ -67,44 +71,50 @@ function DslSandboxCtrl($scope, $http, $location) {
 
                 $scope.intro = data.intro;
                 $scope.modules = data.modules;
+
+                $scope.exampleIsLoading = false;
             })
             .error(function(data) {
-                alert(data);
-            })
+                //$scope = null;
+                $scope.error = data;
+                $scope.exampleIsLoading = false;
+            });
     }
 
     $scope.runCode = function() {
-        if ($scope.isRunning)
+        if ($scope.phpIsRunning || !$scope.php)
             return;
         //$scope.phpSyntax
         $scope.syntaxErrors = null;
         $scope.phpError = null;
         $scope.phpOutput = '';
-        $scope.isRunning = true;
+        $scope.phpIsRunning = true;
         $scope.saveCurrent();
         var postData = {
             'php': $scope.php
         }
         $http.post('/run/'+$scope.example, postData)
             .success(function(data) {
-                $scope.isRunning = false;
+                $scope.phpIsRunning = false;
                 if (data.hasOwnProperty('syntax') && data.syntax === false) {
                     $scope.phpSyntax = false;
                     $scope.syntaxErrors = data.syntaxErrors;
                 }
                 else {
-                    // @todo ngSanitize
-                    $('#php-output').html(data.output);
                     $scope.phpOutput = data.output;
                     $scope.phpStatus = data.status;
                 }
             })
             .error(function(data) {
                 $scope.phpError = data;
-                $scope.isRunning = false;
+                $scope.phpIsRunning = false;
             })
 
     }
+
+    $scope.toggleHelp = function() {
+        $('body').chardinJs('toggle');
+    };
 }
 
 

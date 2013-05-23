@@ -41,3 +41,37 @@ pre {
 ul.nav-files {
     margin: 0;
 }
+.message-wrapper {
+    position: absolute;
+    left: 50%;
+    z-index: 1000;
+}
+.message-center {
+    position: relative;
+    left: -50%;
+}
+.notice {
+    z-index: 1000;
+}
+
+.btn-check {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.btn-check input {
+    margin: 0;
+}
+
+.fade {
+    opacity: 0.3;
+}
+
+.icon-loading {
+    height: 16px;
+    width: 16px;
+    background-image: url("../img/spinner.gif");
+    background-position: 0 0;
+}
+    
