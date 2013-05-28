@@ -11,6 +11,8 @@ $menu = array(
     ),
     'Advanced' => array(
         'olap' => 'OLAP',
+        'snapshot' => 'Snapshots',
+        'report' => 'Dynamic reports',
     ),
 )
 ?>

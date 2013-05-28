@@ -15,7 +15,7 @@ pre {
 #php-editor, #dsl-editor {
     width: 500px;
     height: 500px;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .file-tree li {
@@ -74,4 +74,13 @@ ul.nav-files {
     background-image: url("../img/spinner.gif");
     background-position: 0 0;
 }
-    
+
+#nav-menu li {
+    line-height: 16px;
+}
+
+#php-output {
+    border: 1px #888888 dashed;
+    padding: 8px;
+    margin: 5px;
+}

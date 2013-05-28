@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
-require_once('FirePHPCore/fb.php');
+//require_once('FirePHPCore/fb.php');
 
 class MySlim extends Slim\Slim {
     public function fail($message, $statusCode=500) {
@@ -16,6 +16,8 @@ $app = new MySlim(array(
 
 function getFiles($path, $filter=null) {
     $files = array();
+    if (!is_dir($path))
+        return array();
     foreach (new DirectoryIterator($path) as $file) {
         if ($file->isDir() && !$file->isDot())
             $files = array_merge($files, getFiles($file->getPathName()));
@@ -84,8 +86,51 @@ $client = new \NGS\Client\RestHttp(
     $sandboxProxy->add('_init.php', $initCode);
 
     $output = $sandboxProxy->execute();
+    $headers = $sandboxProxy->getWhitelistResponseHeaders();
+    $headers = $sandboxProxy->getResponseHeaders();
 
-    $res->body(json_encode(array('output' => $output)));
+/*
+    foreach($headers as $key=>$value)
+        $res->header($key, $value);
+    $res->body($output);
+    return ;
+*/
+    $result = array('output' => $output);
+    if(isset($headers['Sandbox-Box-Id']))
+        $result['boxId'] = $headers['Sandbox-Box-Id'];
+    $res->body(json_encode($result));
+});
+
+
+$app->get('/run/:example', function($example) use ($app) {
+    $res = $app->response();
+
+    $dir = '../examples/'.$example;
+    if (!is_dir($dir))
+        $app->fail('Example not found', 404);
+
+    if(!isset($_GET['boxId']))
+        $app->fail('No boxId param');
+    $boxId = $_GET['boxId'];
+    $sandboxProxy = new DslBox\SandboxProxy('http://localhost:43001', $boxId);
+    
+    $query = isset($_GET['query']) ? $_GET['query'] : null;
+    
+    $output = $sandboxProxy->httpGet($query);
+
+    $headers = $sandboxProxy->getWhitelistResponseHeaders();
+    $headers = $sandboxProxy->getResponseHeaders();
+
+    // passthru
+    foreach($headers as $key=>$value)
+        $res->header($key, $value);
+    $res->body($output);
+    return ;
+
+    $res->body(json_encode(array(
+        'output' => $output,
+        'boxId'  => $headers['Sandbox-Box-Id'],
+    )));
 });
 
 function getFileTree($path)
@@ -111,10 +156,16 @@ function getFileTree($path)
 function getSourceFiles($baseDir, $type)
 {
     $dir = $baseDir.'/'.$type;
-    if (!is_dir($dir))
+    if (!is_dir($dir)) {
         throw new LogicException('No '.$type.' folder!');
+    }
     $files = getFiles($dir, function ($f) use ($type) {
-        return $f->getExtension()===$type; } );
+        return $type === pathinfo($f->getFilename(), PATHINFO_EXTENSION);
+    });
+
+       // print_r(get_class_methods($f));die; });
+
+        //return $f->getExtension()===$type; } );
     $contents = array();
     foreach($files as $file)
         $contents[] = array('name'=>basename($file), 'content'=>file_get_contents($file));
@@ -138,8 +189,10 @@ $app->get('/example/:example', function($example) use ($app) {
         $result['modules'] = getFileTree($modulesDir);
         $result['dsl']     = getSourceFiles($baseDir, 'dsl');
         $result['php']     = getSourceFiles($baseDir, 'php');
+        $result['uploads'] = getFiles($baseDir.'/uploads');
     } catch (Exception $ex) {
-        $app->fail($ex->getMessage());
+        //$app->fail($ex->getFile().', line '.$ex->getLine().': '.$ex->getMessage());
+        $app->fail($ex->getTraceAsString());
     }
 
     $app->response()->header('Content-type', 'application/json');

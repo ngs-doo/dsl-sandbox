@@ -13,11 +13,17 @@ function createBox($files)
         mkdir($dir);
     foreach($files as $filename => $content)
         file_put_contents($dir.'/'.$filename, $content);
-    return $dir;
+    return $id;
 }
 
-$boxDir = createBox($_POST['files']);
+if (isset($_SERVER['HTTP_SANDBOX_BOX_ID']))
+    $boxId = $_SERVER['HTTP_SANDBOX_BOX_ID'];
+else
+    $boxId = createBox($_POST['files']);
 
+header('Sandbox-Box-Id: '.$boxId);
+
+$boxDir = SANDBOX_BOXES.'/'.$boxId;
 $initFile = $boxDir.'/_init.php';
 $indexFile = $boxDir.'/index.php';
 
@@ -31,7 +37,11 @@ try {
 catch (Exception $ex) {
 
     ob_end_clean();
-    echo ($ex->getMessage());
+
+    // echo ($ex->getTraceAsString());
+    // echo ($ex->getMessage());
+ 
+    echo ('Exception in '.$ex->getFile().', line '.$ex->getLine().': '.$ex->getMessage());
     
     //fail
 }
