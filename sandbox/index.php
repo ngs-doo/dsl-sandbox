@@ -23,9 +23,9 @@ else
 
 header('Sandbox-Box-Id: '.$boxId);
 
-$boxDir = SANDBOX_BOXES.'/'.$boxId;
-$initFile = $boxDir.'/_init.php';
-$indexFile = $boxDir.'/index.php';
+define('BOX_DIR', SANDBOX_BOXES.'/'.$boxId);
+$initFile = BOX_DIR.'/_init.php';
+$indexFile = BOX_DIR.'/index.php';
 
 try {
     ob_start();

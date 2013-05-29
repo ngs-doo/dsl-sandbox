@@ -3,8 +3,8 @@
     <title>DSL Sandbox</title>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/sandbox.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/sandbox.css">
     <link rel="stylesheet" type="text/css" href="/static/css/chardinjs.css">
     <script src="/static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js" type="text/javascript"></script>
@@ -12,14 +12,13 @@
     <script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/dsl-sandbox.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/chardinjs.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/js/functions-full.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/functions.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body ng-controller="DslSandboxCtrl">
  <!-- header start -->
 <header id="header">
-  <div class="container">
-    <div class="row-fluid">
-      <a href="https://dsl-platform.com/" class="logo"></a>
+    <div class="container-fluid">
+      <a href="https://dsl-platform.com/" class="logo pull-right"></a>
       <div class="nav-container">
         <nav>
           <div class="navbar navbar-inverse">
@@ -30,8 +29,8 @@
             </a>
             <div class="nav-collapse collapse">
               <ul class="nav">
-                <li><a href="https://dsl-platform.com/"  class="active" >Home</a></li>
-                <li><a href="https://docs.dsl-platform.com/" >Docs</a></li>
+                <li><a href="https://dsl-platform.com/">Home</a></li>
+                <li><a href="https://docs.dsl-platform.com/" class="active">Docs</a></li>
                 <li><a href="https://panel.dsl-platform.com/" >Panel</a></li>
                 <li><a href="https://blog.dsl-platform.com/">Blog</a></li>
               </ul>
@@ -59,14 +58,13 @@
         </div>
       </div>
     </div>
-  </div>
 </header>
 <!-- header end -->
 
 <!-- content start -->
-<section id="main">
-    <div class="container">
-        <div class="row append-bottom append-top">
+<section>
+    <div class="container-fluid">
+        <div class="append-bottom append-top">
             <? require 'sandbox.php' ?>
         </div>
     </div>

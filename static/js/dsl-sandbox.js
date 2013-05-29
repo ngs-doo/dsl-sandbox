@@ -1,42 +1,16 @@
 function DslSandboxCtrl($scope, $http, $location) {
 
-    $scope.box = {
-        id: null,
-        dsl: null,
-        php: null,
-        intro: '',
-        example: null
-    };
-
-    $scope.state = {
-        currentPhp: null,
-        currentDsl: null,
-        isRunning: false,
-        isLoading: false
-    };
-/*
-    $scope.clear = function () {
-        $scope.dsl = null;
-        $scope.php = null;
-        $scope.intro = '';
-        $scope.example = false;
-        $scope.currentPhp = null;
-        $scope.currentDsl = null;
-        $scope.phpSyntax = null;
-        $scope.phpIsRunning = false;
-        $scope.exampleIsLoading = false;
-        $scope.error = false;
-        $scope.boxId = null;
-    };
-*/
-//    $scope.clear();
-
+    $scope.box = {};
+    $scope.state = {};
+    $scope.editor = {};
+    
     $scope.selectDsl = function (dslFile) {
-        $scope.state.currentDsl = dslFile;
+        $scope.editor.currentDsl = dslFile;
         var box = $scope.box;
-        for(index in box.dsl)
+        for(index in box.dsl) {
             if (box.dsl[index].name===dslFile)
                 window.dslEditor.setValue(box.dsl[index].content);
+        }
         window.dslEditor.clearSelection();
     }
 
@@ -48,9 +22,9 @@ function DslSandboxCtrl($scope, $http, $location) {
     };
 
     $scope.saveCurrent = function () {
-        var state = $scope.state;
-        if (state.currentPhp !== null) {
-            var current = getIndexByName(state.currentPhp, 'php');
+        var editor = $scope.editor;
+        if (editor.currentPhp !== null) {
+            var current = getIndexByName(editor.currentPhp, 'php');
             if (current)
                 $scope.box.php[current].content = window.phpEditor.getValue();
         }
@@ -60,7 +34,7 @@ function DslSandboxCtrl($scope, $http, $location) {
         $scope.saveCurrent();
         var file = $scope.box.php[getIndexByName(phpFile, 'php')];
         if (file) {
-            $scope.state.currentPhp = phpFile;
+            $scope.editor.currentPhp = phpFile;
             window.phpEditor.setValue(file.content);
             window.phpEditor.clearSelection();
         }
@@ -69,25 +43,16 @@ function DslSandboxCtrl($scope, $http, $location) {
     $scope.loadExample = function(example) {
         if (example === $scope.box.example && !confirm('Reload current example? You will lose all changes?'))
                 return ;
-        $scope.state.error = false;
-        $scope.state.isLoading = true;
+        $scope.state = { isLoading: true };
+        $scope.editor = {};
+
         $location.path('example/'+example);
         $http.get('/example/'+example)
             .success(function(data) {
+                $scope.state = {};
                 $scope.box = data;
                 $scope.box.example = example;
-
-                /*
-                $scope.dsl = data.dsl;
-                $scope.php = data.php;
-                $scope.intro = data.intro;
-                $scope.modules = data.modules;
-                $scope.uploads = data.uploads;
-                */
                 $scope.selectDsl(data.dsl[0].name);
-
-                $scope.state = {};
-
                 $scope.selectPhp('index.php');
             })
             .error(function(data) {
@@ -96,39 +61,54 @@ function DslSandboxCtrl($scope, $http, $location) {
             });
     }
 
-    $scope.runCode = function() {
-        if ($scope.state.phpIsRunning || !$scope.box.php)
+    $scope.runDefaults = {
+        url: '',
+        method: 'get',
+        async: true
+    };
+
+    $scope.run = function(options) {
+
+        var opt = $.extend({}, $scope.runDefaults, options);
+
+        if ($scope.state.isRunning || !$scope.box.php)
             return;
-        //$scope.phpSyntax
-        $scope.state.syntaxErrors = null;
-        $scope.state.phpError = null;
-        $scope.state.phpOutput = '';
-        $scope.state.isRunning = true;
+        
+        $scope.state = { isRunning: true };
         $scope.saveCurrent();
+        
         var postData = {
-            'php': $scope.box.php
+            'php': $scope.box.php,
+            'method': opt.method,
+            'url': opt.url
+        };  
+
+        if (!opt.async && opt.method==='get') {
+            $scope.state = { isRunning: false };
+            var query = encodeURIComponent(opt.url);
+            var url = '/run/'+$scope.box.example+'?boxId='+$scope.box.id+'&query='+query;
+            window.location = url;
         }
-        $http.post('/run/'+$scope.box.example, postData)
-            .success(function(data) {
-                $scope.state.isRunning = false;
+        else {
+            $http.post('/run/'+$scope.box.example, postData)
+                .success(function(data) {
+                    $scope.state.isRunning = false;
 
-                if (data.hasOwnProperty('syntax') && data.syntax === false) {
-                    $scope.state.phpSyntax = false;
-                    $scope.state.syntaxErrors = data.syntaxErrors;
-                }
-                //else if(data.hasOwnProperty('output')) {
-                else {
-                    if(data.hasOwnProperty('boxId'))
-                        $scope.box.id = data.boxId;
-                    $scope.state.phpOutput = data.output;
-                    $scope.state.phpStatus = data.status;
-                }
-            })
-            .error(function(data) {
-                $scope.state.phpError = data;
-                $scope.state.phpIsRunning = false;
-            })
-
+                    if (data.hasOwnProperty('syntaxErrors') && data.syntaxErrors) {
+                        $scope.state.syntaxErrors = data.syntaxErrors;
+                    }
+                    else {
+                        if(data.hasOwnProperty('boxId'))
+                            $scope.box.id = data.boxId;
+                        $scope.state.phpOutput = data.output;
+                        $scope.state.phpStatus = data.status;
+                    }
+                })
+                .error(function(data) {
+                    $scope.state.error = data;
+                    $scope.state.isRunning = false;
+                })
+        }
     }
 
     $scope.httpGet = function(query) {

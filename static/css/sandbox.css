@@ -5,6 +5,7 @@ textarea {
 
 .font-fixed {
     font-family: "Monaco","Inconsolata","Andale Mono","Lucida Console","Bitstream Vera Sans Mono","Courier New",Courier,monospace;
+    margin-left: 0;
 }
 
 pre {
@@ -20,8 +21,12 @@ pre {
 
 .file-tree li {
     font-size: 12px;
-    line-height: 14px;
     list-style: none;
+    margin-bottom: 3px;
+}
+
+.file-tree li a span{
+    padding-left: 5px;
 }
 
 .center {
@@ -75,12 +80,11 @@ ul.nav-files {
     background-position: 0 0;
 }
 
-#nav-menu li {
-    line-height: 16px;
+.login-container {
+    right: 20px;
 }
-
-#php-output {
-    border: 1px #888888 dashed;
-    padding: 8px;
-    margin: 5px;
+.help-btn {
+    position: absolute;
+    right: 30px;
+    z-index: 1;
 }
