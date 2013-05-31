@@ -1,7 +1,6 @@
 <?php
 use type_safety\foo;
 
-
 $f = new foo();
 $f->bar = "a string";
 

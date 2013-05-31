@@ -1,8 +1,9 @@
 <?php
+use ERP\CustomerOrders;
 
 if (isset($_GET['download']))
 {
-    $report = new ERP\CustomerOrders();
+    $report = new CustomerOrders();
     $report->ssn = '12345-67890';
     $report->totalOrder = 5;
 
@@ -30,7 +31,7 @@ else {
 <p>Inserted some random data...</p>
 <p>Download reports:
     <ul>
-        <li><a href="?download=docx" data-async="0">DOCX report</a></li>
-        <li><a href="?download=pdf" data-async="0">PDF report</a></li>
+        <li><a href="?download=docx" data-async="false">DOCX report</a></li>
+        <li><a href="?download=pdf" data-async="false">PDF report</a></li>
     </ul>
 </p>

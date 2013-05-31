@@ -1,5 +1,4 @@
 <?php
-
 use Library\Book;
 
 $myBook = new Book();

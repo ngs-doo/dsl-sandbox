@@ -12,6 +12,7 @@ $products = array(
     $teleporter = new Product(array('name' => 'Teleporter', 'price' => 700)),
     $phasor     = new Product(array('name' => 'Phasor', 'price' => 450.20)),
 );
+// note: each persist is a separate request, but this can be optimized
 array_walk($products, function ($it) { $it->persist(); } );
 
 $luke = new Customer();
