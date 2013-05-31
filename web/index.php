@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
-@require_once('FirePHPCore/fb.php');
 
 class MySlim extends Slim\Slim {
     public function fail($message, $statusCode=500) {

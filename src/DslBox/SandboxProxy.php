@@ -1,8 +1,6 @@
 <?php
 namespace DslBox;
 
-@include_once('FirePHPCore/fb.php');
-
 class SandboxProxy
 {
     private $url;
@@ -90,8 +88,6 @@ class SandboxProxy
         curl_setopt_array($curl, $curlOptions);
 
         $response = curl_exec($curl);
-
-        @include_once('FirePHPCore/fb.php');
 
         $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
         $this->responseHeader = substr($response, 0, $headerSize);
