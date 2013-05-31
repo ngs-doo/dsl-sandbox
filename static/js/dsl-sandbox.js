@@ -64,7 +64,8 @@ function DslSandboxCtrl($scope, $http, $location) {
     $scope.runDefaults = {
         url: '',
         method: 'get',
-        async: true
+        async: true,
+        data: ''
     };
 
     $scope.run = function(options) {
@@ -74,15 +75,16 @@ function DslSandboxCtrl($scope, $http, $location) {
         if ($scope.state.isRunning || !$scope.box.php)
             return;
         
-        $scope.state = { isRunning: true };
+        $scope.state = {
+            phpOutput: $scope.state.phpOutput,  // preserve output
+            isRunning: true
+        };
         $scope.saveCurrent();
+       // $scope.$apply();
         
-        var postData = {
-            'php': $scope.box.php,
-            'method': opt.method,
-            'url': opt.url
-        };  
+        opt.php = $scope.box.php;
 
+        // async GET, used for downloads
         if (!opt.async && opt.method==='get') {
             $scope.state = { isRunning: false };
             var query = encodeURIComponent(opt.url);
@@ -90,24 +92,30 @@ function DslSandboxCtrl($scope, $http, $location) {
             window.location = url;
         }
         else {
-            $http.post('/run/'+$scope.box.example, postData)
-                .success(function(data) {
-                    $scope.state.isRunning = false;
+            opt.php  = $.map($scope.box.php, function(f) {
+                return { name: f.name, content: f.content }; });
 
-                    if (data.hasOwnProperty('syntaxErrors') && data.syntaxErrors) {
-                        $scope.state.syntaxErrors = data.syntaxErrors;
-                    }
-                    else {
-                        if(data.hasOwnProperty('boxId'))
-                            $scope.box.id = data.boxId;
-                        $scope.state.phpOutput = data.output;
-                        $scope.state.phpStatus = data.status;
-                    }
-                })
-                .error(function(data) {
-                    $scope.state.error = data;
-                    $scope.state.isRunning = false;
-                })
+            $.ajax({
+                url: '/run/'+$scope.box.example,
+                type: 'POST',
+                data: opt,
+                dataType: 'json'
+            }).success(function(data) {
+                $scope.state.isRunning = false;
+                if (data.hasOwnProperty('syntaxErrors') && data.syntaxErrors) {
+                    $scope.state.syntaxErrors = data.syntaxErrors;
+                }
+                else {
+                    if(data.hasOwnProperty('boxId'))
+                        $scope.box.id = data.boxId;
+                    $scope.state.phpOutput = data.output;
+                }
+                $scope.$apply();
+            }).error(function(data) {
+                $scope.state.error = data;
+                $scope.state.isRunning = false;
+                $scope.$apply();
+            });
         }
     }
 

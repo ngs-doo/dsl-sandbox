@@ -8,6 +8,7 @@ $menu = array(
     'Basics' => array(
         'search' => 'Simple search',
         'blog' => 'Blog',
+        'todo-crud' => 'TODO app'
     ),
     'Advanced' => array(
         'olap' => 'OLAP',
@@ -23,7 +24,7 @@ $menu = array(
     </ul>
 <?php      foreach ($examples as $example => $title): ?>
     <ul class="nav-list">
-        <li ng-class="{active: example=='<?=$example?>'}" class="{active: example=='<?=$example?>'}"><a href="#/example/<?=$example?>" ng-click="loadExample('<?=$example?>')"><?=$title?></a></li>
+        <li ng-class="{active: box.example=='<?=$example?>'}" class="{active: box.example=='<?=$example?>'}"><a href="#/example/<?=$example?>" ng-click="loadExample('<?=$example?>')"><?=$title?></a></li>
     </ul>
 <?php      endforeach ?>
 <?php endforeach ?>

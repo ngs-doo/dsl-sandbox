@@ -72,17 +72,16 @@
                         <i class="icon icon-white icon-play"></i>
                         <span>Run</span>
                     </button>
-                    <div class="clear"></div>
+                    
                     <span ng-show="state.isRunning">
                         <i class="icon icon-loading"></i>
+                        <span>Running</span>
                     </span>
-
-                    <span ng-show="state.isRunning">Running</span>
                 </div>
 
                 <div class="alert alert-error" ng-show="state.phpError">{{ state.phpError }}</div>
                 <div ng-show="state.syntaxErrors">
-                    <div class="alert alert-warning">Check your code for syntax errors:</div>
+                    <div class="alert alert-danger">Found {{state.syntaxErrors.length}} syntax error{{ state.syntaxErrors.length > 1 ? 's' : '' }}:</div>
                     <ul>
                         <li ng-repeat="error in state.syntaxErrors">
                             <span>{{ error.file }}, line {{ error.line }}:</span>
@@ -94,7 +93,7 @@
                     <div id="php-output" class="white-box" ng-bind-html-unsafe="state.phpOutput">
                     </div>
                 </div>
-                <div ng-show="!state.phpOutput">
+                <div ng-show="!state.phpOutput && !state.isRunning">
                     <small>Click run to show php output</small>
                 </div>
             </div>
@@ -133,17 +132,28 @@ $(function(){
     var link = $('.nav-list a[href="#/example/'+example+'"]');
     link.click();
 
-    // handle click events in output
-    var bodyScope = angular.element(document.body).scope();
+    var sandbox = angular.element(document.body).scope();
+
+    // execute click and form submit events via sandbox
     $('#php-output').on('click', 'a', function(event) {
         event.preventDefault();
-        var cfg = {
-            url: $(this).attr('href')
-        };
-        var async = $(this).data('async');
-        if (async==='0' || async===0)
-            cfg.async = false;
-        bodyScope.run(cfg);
+
+        sandbox.run({
+            url:   $(this).attr('href')+'&rnd='+Math.random(),
+            method: 'get',
+            async: $(this).data('async') !== false
+        });
+    });
+
+    $('#php-output').on('submit', 'form', function(event) {
+        event.preventDefault();
+
+        sandbox.run({
+            url:   $(this).attr('action'),
+            method: 'post',
+            async: $(this).data('async') !== 'false',
+            data: $(this).serialize()
+        });
     });
 
 })
