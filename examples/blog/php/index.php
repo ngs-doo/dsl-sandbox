@@ -1,19 +1,23 @@
 <?php
+use Blog\Post;
+use Security\User;
+use Blog\Comment;
+
 require('clean.php');
 
-$admin = new Security\User();
+$admin = new User();
 $admin->email = 'admin@example.com';
 $admin->persist();
 
-$someone = new Security\User(array('email' => 'someone@example.com'));
+$someone = new User(array('email' => 'someone@example.com'));
 $someone->persist();
 
-$post = new Blog\Post();
+$post = new Post();
 $post->title = 'Hello world!';
 $post->user = $admin;
 $post->comments = array(
-    new Blog\Comment(array('content' => 'first!', 'user' => $someone)),
-    new Blog\Comment(array('content' => 'lol noob!', 'user' => $admin)));
+    new Comment(array('content' => 'first!', 'user' => $someone)),
+    new Comment(array('content' => 'lol noob!', 'user' => $admin)));
 
 $post->persist();
 

@@ -33,10 +33,10 @@ class SandboxProxy
         $this->files[$filename] = $content;
     }
 
-    public function getResponseHeaders()
+    private static function parseHeaders($header)
     {
         $headers = array();
-        $lines = explode("\r\n", $this->responseHeader);
+        $lines = explode("\r\n", $header);
         foreach ($lines as $line) {
             $colonPos = strpos($line, ':');
             if ($colonPos===false)
@@ -48,21 +48,96 @@ class SandboxProxy
         return $headers;
     }
 
+    public function getResponseHeaders()
+    {
+        return self::parseHeaders($this->responseHeader);
+    }
+
     public function getWhitelistResponseHeaders()
     {
         $headers = $this->getResponseHeaders();
         return array_intersect_key($headers, array_flip($this->headersWhitelist));
     }
 
-    public function execute()
+    public function httpGet($queryString='')
     {
-        // $output = file_get_contents($this->url.'?box='.$this->id);
-
-        //return $this->passthru();
-
-        return $this->postFiles();
+        return $this->execute('GET', $queryString);
     }
 
+    public function execute($method='GET', $queryString='', $data=null)
+    {
+        $curl = curl_init($this->url.$queryString);
+
+        $method = strtoupper($method);
+
+        $curlOptions = array(
+            CURLINFO_HEADER_OUT     => true,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_HEADER          => true,
+            CURLOPT_POST            => $method!=='GET',
+            CURLOPT_HTTPHEADER      =>  array(
+                'Sandbox-Box-Id: '.$this->boxId,
+            ),
+            /*CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: '.strlen($postBody)
+            ),*/
+        );
+
+        if ($data && $method!=='GET')
+            $curlOptions[CURLOPT_POSTFIELDS] = $data;
+
+        curl_setopt_array($curl, $curlOptions);
+
+        $response = curl_exec($curl);
+
+        @include_once('FirePHPCore/fb.php');
+
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $this->responseHeader = substr($response, 0, $headerSize);
+        $this->responseBody   = substr($response, $headerSize);
+
+        return $this->responseBody;
+    }
+
+    public function writeFiles()
+    {
+        $curl = curl_init($this->url);
+
+        $postBody = http_build_query(array(
+            'files' => $this->files,
+        ));
+        $curlOptions = array(
+            CURLINFO_HEADER_OUT     => true,
+            CURLOPT_HEADER          => true,
+            CURLOPT_POST            => true,
+            CURLOPT_POSTFIELDS      => $postBody,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_HTTPHEADER      => array(
+                'Sandbox-Box-Id:'.$this->boxId,
+                'Sandbox-Update: 1',
+            ),
+        );
+
+        curl_setopt_array($curl, $curlOptions);
+
+        $response = curl_exec($curl);
+
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $responseHeader = substr($response, 0, $headerSize);
+        $responseBody   = substr($response, $headerSize);
+
+        $headers = self::parseHeaders($responseHeader);
+
+        $this->boxId = $headers['Sandbox-Box-Id'];
+
+        if ($responseBody!=='ok')
+            throw new \Exception('Failed to write files to sandbox');
+        
+        return true;
+    }
+
+/*
     public function httpGet($queryString=null)
     {
         $curl = curl_init($this->url.($queryString ?: ''));
@@ -86,36 +161,5 @@ class SandboxProxy
 
         return $this->responseBody;
     }
-
-    private function postFiles()
-    {
-        $curl = curl_init($this->url);
-
-        $postBody = http_build_query(array('files' => $this->files));
-        $curlOptions = array(
-            CURLINFO_HEADER_OUT     => true,
-            CURLOPT_POST            => true,
-            CURLOPT_POSTFIELDS      => $postBody,
-            CURLOPT_RETURNTRANSFER  => true,
-            //CURLOPT_VERBOSE         => true,
-            CURLOPT_HEADER          => true,
-            CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: '.strlen($postBody)
-            ),
-        );
-        curl_setopt_array($curl, $curlOptions);
-
-        $response = curl_exec($curl);
-        $responseInfo = curl_getinfo($curl);
-
-        @include_once('FirePHPCore/fb.php');
-
-        // Then, after your curl_exec call:
-        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        $this->responseHeader = substr($response, 0, $headerSize);
-        $this->responseBody   = substr($response, $headerSize);
-
-        return $this->responseBody;
-    }
+*/
 }

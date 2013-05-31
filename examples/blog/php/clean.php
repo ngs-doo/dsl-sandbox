@@ -1,5 +1,8 @@
 <?php
+use NGS\Client\StandardProxy;
+use Blog\Post;
+use Security\User;
 
-$proxy = NGS\Client\StandardProxy::instance();
-$proxy->delete(Blog\Post::findAll());
-$proxy->delete(Security\User::findAll());
+$proxy = StandardProxy::instance();
+$proxy->delete(Post::findAll());
+$proxy->delete(User::findAll());
