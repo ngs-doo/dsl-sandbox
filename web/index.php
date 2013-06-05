@@ -129,9 +129,9 @@ $app->get('/example/:example', function($example) use ($app) {
     try {
         $result['intro']   = is_file($intro) ? file_get_contents($intro) : '';
         $result['modules'] = Files::getFileTree($modulesDir);
-        $result['dsl']     = Files::getSourceFiles($baseDir, 'dsl');
-        $result['php']     = Files::getSourceFiles($baseDir, 'php');
-        $result['uploads'] = Files::getFiles($baseDir.'/uploads');
+        $result['dsl']     = Files::byExt($baseDir, 'dsl');
+        $result['php']     = Files::byExt($baseDir, 'php');
+        $result['uploads'] = Files::filter($baseDir.'/uploads');
     } catch (Exception $ex) {
         //$app->fail($ex->getFile().', line '.$ex->getLine().': '.$ex->getMessage());
         $app->fail($ex->getTraceAsString());
@@ -141,5 +141,25 @@ $app->get('/example/:example', function($example) use ($app) {
     $app->response()->body(json_encode($result));
 });
 
+// download a file from example
+$app->get('/file', function() use ($app) {
+    $path = realpath($app->request()->get('path'));
+    // allows download of _any_ file in /examples
+    if(strpos($path, realpath('../examples')) !== 0)
+        $app->fail('Invalid path: '.$path);
+
+    $ext = pathinfo($path, PATHINFO_EXTENSION);
+    $filename = pathinfo($path, PATHINFO_FILENAME);
+    $content = file_get_contents($path);
+
+    $res = $app->response();
+    if ($ext === 'php') $mime = 'application/x-php';
+    elseif ($ext === 'docx') $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    if (isset($mime))
+        $res->header('Content-Type', $mime);
+    $res->header('Content-Disposition', 'attachment; filename='.$filename);
+    $res->header('Content-Length', strlen($content));
+    $res->body(file_get_contents($path));
+});
 
 $app->run();

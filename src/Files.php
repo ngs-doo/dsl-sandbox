@@ -3,13 +3,13 @@
 // simple file helpers
 abstract class Files
 {
-    public static function getFiles($path, $filter=null) {
+    public static function filter($path, $filter=null) {
         $files = array();
         if (!is_dir($path))
             return array();
         foreach (new DirectoryIterator($path) as $file) {
             if ($file->isDir() && !$file->isDot())
-                $files = array_merge($files, self::getFiles($file->getPathName()));
+                $files = array_merge($files, self::filter($file->getPathName()));
             elseif ($file->isFile() && ($filter===null || call_user_func($filter, $file)))
                 $files[] = $path.'/'.$file->getFilename();
         }
@@ -28,6 +28,7 @@ abstract class Files
                 $node['nodes'] = self::getFileTree($item->getPathname());
             } elseif ($item->isFile()) {
                 $node['isFile'] = true;
+                $node['path'] = $item->getPath();
                 $node['isConverter'] = strpos($item->getFilename(), 'Converter.php') !== false;
             }
             $node['name'] = $item->getFilename();
@@ -36,19 +37,15 @@ abstract class Files
         return $nodes;
     }
 
-    public static function getSourceFiles($baseDir, $type)
+    public static function byExt($baseDir, $type)
     {
         $dir = $baseDir.'/'.$type;
         if (!is_dir($dir)) {
             throw new LogicException('No '.$type.' folder!');
         }
-        $files = self::getFiles($dir, function ($f) use ($type) {
+        $files = self::filter($dir, function ($f) use ($type) {
             return $type === pathinfo($f->getFilename(), PATHINFO_EXTENSION);
         });
-
-           // print_r(get_class_methods($f));die; });
-
-            //return $f->getExtension()===$type; } );
         $contents = array();
         foreach($files as $file)
             $contents[] = array('name'=>basename($file), 'content'=>file_get_contents($file));

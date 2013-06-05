@@ -10,6 +10,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-sanitize.min.js"></script>
     <script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/lodash.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/dsl-sandbox.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/chardinjs.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/functions.js" type="text/javascript" charset="utf-8"></script>

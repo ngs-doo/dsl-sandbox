@@ -24,7 +24,7 @@
         <div class="row-fluid">
             <div class="span6">
                 <ul class="nav nav-tabs nav-files" data-intro="Domain model is defined in DSL files." data-position="bottom">
-                    <li ng-repeat="file in box.dsl" ng-class="{active:file.name==editor.currentDsl}" ng-click="selectDsl(file.name)">
+                    <li ng-repeat="file in box.dsl" ng-class="{active:file.name==dslEditor.current}" ng-click="selectDsl(file.name)">
                         <a href="#">{{ file.name }}</a>
                     </li>
                 </ul>
@@ -32,8 +32,8 @@
             </div>
             <div class="span6">
                 <ul class="nav nav-tabs nav-files" data-intro="Try it out by writing your own PHP" data-position="bottom">
-                    <li ng-repeat="file in box.php" ng-class="{active:file.name==editor.currentPhp}" ng-click="selectPhp(file.name)">
-                        <a href="#">{{ file.name }}</a>
+                    <li ng-repeat="file in box.php" ng-class="{active:file.name==phpEditor.current}" ng-click="selectPhp(file.name)">
+                        <a href="#">{{ file.name }} <span ng-show="file.readOnly">*</span></a>
                     </li>
                 </ul>
                 <div id="php-editor"></div>
@@ -46,7 +46,6 @@
                 <div class="span12">
                     <h4>Generated PHP</h4>
                     <div class="append-vertical">
-
                         <div>
                             <div class="pull-right">
                                 <label class="btn-check" for="showConverters">
@@ -59,10 +58,15 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="span12" ng-show="box.uploads">
+                    <hr>
                     <h4>Additional files</h4>
                     <ul class="font-fixed file-tree">
-                        <li ng-repeat="file in box.uploads"><i class="icon icon-file"></i> {{ file }}</li>
+                        <li ng-repeat="file in box.uploads">
+                            <i class="icon icon-file"></i>
+                            <a href="/file?path={{file}}">{{ filename(file) }}</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -102,59 +106,14 @@
 </div>
 
 <script type="text/ng-template"  id="tree_item_renderer.html">
-    <a href="#" ng-show="!data.isConverter || showConverters"><i class="icon icon-folder-open" ng-show="{{data.isDir}}"></i><i class="icon icon-file" ng-show="{{data.isFile}}"></i><span>{{data.name}}</span></a>
+    <a href="#" ng-show="!data.isConverter || showConverters" ng-click="loadFile(data)">
+        <i class="icon icon-folder-open" ng-show="{{data.isDir}}"></i>
+        <i class="icon icon-file" ng-show="{{data.isFile}}"></i>
+        <span>{{data.name}}</span>
+    </a>
     <ul class="">
         <li ng-repeat="data in data.nodes" ng-include="'tree_item_renderer.html'"></li>
     </ul>
 </script>
 
-<script type="text/javascript">
-$(function(){
-    var dslEditor = ace.edit("dsl-editor");
-    window.dslEditor = dslEditor;
-
-    var editor = ace.edit("php-editor");
-    editor.getSession().setMode("ace/mode/php");
-    window.phpEditor = editor;
-
-    $(window).resize(function() {
-        $('#php-editor,#dsl-editor').each(function() {
-            $(this).width($(this).parent().width() - 0);
-        });
-    }).trigger('resize');
-
-    // simple routing, @todo replace with actual ng routing
-    var urlHash = window.location.hash;
-    if (urlHash && urlHash.indexOf('#/example/')===0)
-        var example = urlHash.replace('#/example/', '');
-    else
-        var example = 'hello-world';
-    var link = $('.nav-list a[href="#/example/'+example+'"]');
-    link.click();
-
-    var sandbox = angular.element(document.body).scope();
-
-    // execute click and form submit events via sandbox
-    $('#php-output').on('click', 'a', function(event) {
-        event.preventDefault();
-
-        sandbox.run({
-            url:   $(this).attr('href')+'&rnd='+Math.random(),
-            method: 'get',
-            async: $(this).data('async') !== false
-        });
-    });
-
-    $('#php-output').on('submit', 'form', function(event) {
-        event.preventDefault();
-
-        sandbox.run({
-            url:   $(this).attr('action'),
-            method: 'post',
-            async: $(this).data('async') !== 'false',
-            data: $(this).serialize()
-        });
-    });
-
-})
-</script>
+<script src="/static/js/dsl-sandbox-init.js" type="text/javascript" charset="utf-8"></script>

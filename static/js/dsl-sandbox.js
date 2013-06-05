@@ -1,11 +1,20 @@
+angular.module('sandbox', [])
+
+angular.module('sandbox', [])
+    .filter('filename', function () {
+        return function (path) {
+        };
+    });
+
 function DslSandboxCtrl($scope, $http, $location) {
 
     $scope.box = {};
     $scope.state = {};
-    $scope.editor = {};
+    $scope.dslEditor = {};
+    $scope.phpEditor = {};
     
     $scope.selectDsl = function (dslFile) {
-        $scope.editor.currentDsl = dslFile;
+        $scope.dslEditor.current = dslFile;
         var box = $scope.box;
         for(index in box.dsl) {
             if (box.dsl[index].name===dslFile)
@@ -22,9 +31,9 @@ function DslSandboxCtrl($scope, $http, $location) {
     };
 
     $scope.saveCurrent = function () {
-        var editor = $scope.editor;
-        if (editor.currentPhp !== null) {
-            var current = getIndexByName(editor.currentPhp, 'php');
+        var editor = $scope.phpEditor;
+        if (editor.current !== null) {
+            var current = getIndexByName(editor.current, 'php');
             if (current)
                 $scope.box.php[current].content = window.phpEditor.getValue();
         }
@@ -34,7 +43,7 @@ function DslSandboxCtrl($scope, $http, $location) {
         $scope.saveCurrent();
         var file = $scope.box.php[getIndexByName(phpFile, 'php')];
         if (file) {
-            $scope.editor.currentPhp = phpFile;
+            $scope.phpEditor.current = phpFile;
             window.phpEditor.setValue(file.content);
             window.phpEditor.clearSelection();
         }
@@ -44,7 +53,8 @@ function DslSandboxCtrl($scope, $http, $location) {
         if (example === $scope.box.example && !confirm('Reload current example? You will lose all changes?'))
                 return ;
         $scope.state = { isLoading: true };
-        $scope.editor = {};
+        $scope.dslEditor = {};
+        $scope.phpEditor = {};
 
         $location.path('example/'+example);
         $http.get('/example/'+example)
@@ -69,8 +79,9 @@ function DslSandboxCtrl($scope, $http, $location) {
     };
 
     $scope.run = function(options) {
-
-        var opt = $.extend({}, $scope.runDefaults, options);
+        if (typeof options === 'undefined')
+            options = {};
+        var opt =  _.defaults(options, $scope.runDefaults);
 
         if ($scope.state.isRunning || !$scope.box.php)
             return;
@@ -80,9 +91,6 @@ function DslSandboxCtrl($scope, $http, $location) {
             isRunning: true
         };
         $scope.saveCurrent();
-       // $scope.$apply();
-        
-        opt.php = $scope.box.php;
 
         // async GET, used for downloads
         if (!opt.async && opt.method==='get') {
@@ -92,8 +100,14 @@ function DslSandboxCtrl($scope, $http, $location) {
             window.location = url;
         }
         else {
-            opt.php  = $.map($scope.box.php, function(f) {
-                return { name: f.name, content: f.content }; });
+            opt.php = _($scope.box.php).filter(function(f) {
+                    return !_.has(f, 'readOnly') || !f.readOnly
+                }).map(function(f) {
+                    return {
+                        name: f.name,
+                        content: f.content
+                    };
+                }).valueOf();
 
             $.ajax({
                 url: '/run/'+$scope.box.example,
@@ -132,6 +146,32 @@ function DslSandboxCtrl($scope, $http, $location) {
     $scope.toggleHelp = function() {
         $('body').chardinJs('toggle');
     };
+
+    $scope.loadFile = function(file) {
+        var name = file.name,
+            path = file.path;
+        if(_.any($scope.box.php, function(f) { return f.name===name }))
+            return $scope.selectPhp(name);
+        
+        $.ajax({
+            url: '/file?path='+encodeURIComponent(path+'/'+name),
+            type: 'GET',
+            dataType: 'text'
+        }).success(function(data) {
+            $scope.$apply(function() {
+                $scope.box.php.push({
+                    name: name,
+                    content: data,
+                    readOnly: true
+                });
+                $scope.selectPhp(name);
+            });
+        }).error(function(data) {
+            console.warn(data.responseText);
+        });
+    };
+
+    $scope.filename = function(path) { return path.split('/').pop() };
 }
 
 
