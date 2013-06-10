@@ -24,7 +24,7 @@
         <div class="row-fluid">
             <div class="span6">
                 <ul class="nav nav-tabs nav-files" data-intro="Domain model is defined in DSL files." data-position="bottom">
-                    <li ng-repeat="file in box.dsl" ng-class="{active:file.name==dslEditor.current}" ng-click="selectDsl(file.name)">
+                    <li ng-repeat="file in box.dsl" ng-class="{active:file.name==dslEditor.current}" ng-click="openDsl(file.name)">
                         <a href="#">{{ file.name }}</a>
                     </li>
                 </ul>
@@ -32,10 +32,14 @@
             </div>
             <div class="span6">
                 <ul class="nav nav-tabs nav-files" data-intro="Try it out by writing your own PHP" data-position="bottom">
-                    <li ng-repeat="file in box.php" ng-class="{active:file.name==phpEditor.current}" ng-click="selectPhp(file.name)">
-                        <a href="#">{{ file.name }} <span ng-show="file.readOnly">*</span></a>
+                    <li ng-repeat="file in box.php" ng-class="{active:file.name==phpEditor.current.name}" ng-click="openPhp(file.name)">
+                        <a class="float-left" href="#">
+                            <span>{{ file.name }}</span>
+                            <span ng-show="file.readOnly" class="clickable" href="#" title="Close file" ng-click="closePhp(file.name)"><i class="icon icon-remove-sign"></i></span>
+                        </a>
                     </li>
                 </ul>
+                <div ng-show="phpEditor.current.readOnly" class="editor-label label label-info">* read-only</div>
                 <div id="php-editor"></div>
             </div>
         </div>
@@ -98,7 +102,7 @@
                     </div>
                 </div>
                 <div ng-show="!state.phpOutput && !state.isRunning">
-                    <small>Click run to show php output</small>
+                    <small>Click the "Run" button to show php output</small>
                 </div>
             </div>
         </div>

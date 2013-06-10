@@ -88,3 +88,15 @@ ul.nav-files {
     right: 30px;
     z-index: 1;
 }
+.clickable {
+    cursor: pointer;
+}
+.editor-label {
+    position: absolute;
+    z-index: 10000;
+    right: 0px;
+}
+
+.btn.disabled, .btn[disabled] .preferences-box {
+  margin-bottom: 0px;
+}

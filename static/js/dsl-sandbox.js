@@ -13,7 +13,7 @@ function DslSandboxCtrl($scope, $http, $location) {
     $scope.dslEditor = {};
     $scope.phpEditor = {};
     
-    $scope.selectDsl = function (dslFile) {
+    $scope.openDsl = function (dslFile) {
         $scope.dslEditor.current = dslFile;
         var box = $scope.box;
         for(index in box.dsl) {
@@ -21,40 +21,47 @@ function DslSandboxCtrl($scope, $http, $location) {
                 window.dslEditor.setValue(box.dsl[index].content);
         }
         window.dslEditor.clearSelection();
-    }
-
-    function getIndexByName(name, property) {
-        for(index in $scope.box[property])
-            if ($scope.box[property][index].name===name)
-                return index;
-        return null;
     };
 
     $scope.saveCurrent = function () {
         var editor = $scope.phpEditor;
-        if (editor.current !== null) {
-            var current = getIndexByName(editor.current, 'php');
-            if (current)
-                $scope.box.php[current].content = window.phpEditor.getValue();
+        if (_.has(editor, 'current') && editor.current) {
+            var indexCurrent = _.findIndex($scope.box.php, function(f) {
+                return f.name===editor.current.name });
+            if (indexCurrent >= 0)
+                $scope.box.php[indexCurrent].content = window.phpEditor.getValue();
         }
     };
 
-    $scope.selectPhp = function (phpFile) {
+    $scope.openPhp = function (filename) {
         $scope.saveCurrent();
-        var file = $scope.box.php[getIndexByName(phpFile, 'php')];
+        var file = _($scope.box.php).find(function(f) { return f.name === filename });
         if (file) {
-            $scope.phpEditor.current = phpFile;
+            $scope.phpEditor.stack.push(filename);
+            $scope.phpEditor.current = file;
+            window.phpEditor.setReadOnly(_.has(file, 'readOnly') && file.readOnly);
             window.phpEditor.setValue(file.content);
             window.phpEditor.clearSelection();
         }
-    }
+    };
 
-    $scope.loadExample = function(example) {
+    $scope.closePhp = function (file) {
+        var editor = $scope.phpEditor;
+        $scope.box.php = _.filter($scope.box.php, function(f) { return f.name!==file; });
+        editor.stack = _.filter(editor.stack, function(f) { return f!==file; });
+        editor.current = null;
+        if (editor.stack.length>0) {
+            var lastOpened = editor.stack.pop();
+            $scope.openPhp(lastOpened);
+        }
+    };
+
+    $scope.loadExample = function(example, opt) {
         if (example === $scope.box.example && !confirm('Reload current example? You will lose all changes?'))
                 return ;
         $scope.state = { isLoading: true };
         $scope.dslEditor = {};
-        $scope.phpEditor = {};
+        $scope.phpEditor = { stack: [] };
 
         $location.path('example/'+example);
         $http.get('/example/'+example)
@@ -62,14 +69,16 @@ function DslSandboxCtrl($scope, $http, $location) {
                 $scope.state = {};
                 $scope.box = data;
                 $scope.box.example = example;
-                $scope.selectDsl(data.dsl[0].name);
-                $scope.selectPhp('index.php');
+                var startDsl = _.has(opt, 'defaultDsl') ? opt.defaultDsl : data.dsl[0].name;
+                $scope.openDsl(startDsl);
+                var startPhp = _.has(opt, 'defaultPhp') ? opt.defaultPhp : 'index.php';
+                $scope.openPhp(startPhp);
             })
             .error(function(data) {
                 $scope.state.error = data;
                 $scope.state.isLoading = false;
             });
-    }
+    };
 
     $scope.runDefaults = {
         url: '',
@@ -86,20 +95,24 @@ function DslSandboxCtrl($scope, $http, $location) {
         if ($scope.state.isRunning || !$scope.box.php)
             return;
         
-        $scope.state = {
-            phpOutput: $scope.state.phpOutput,  // preserve output
-            isRunning: true
-        };
-        $scope.saveCurrent();
-
         // async GET, used for downloads
         if (!opt.async && opt.method==='get') {
-            $scope.state = { isRunning: false };
             var query = encodeURIComponent(opt.url);
             var url = '/run/'+$scope.box.example+'?boxId='+$scope.box.id+'&query='+query;
             window.location = url;
         }
         else {
+            // reset state, but preserve output
+            $scope.state = {
+                phpOutput: $scope.state.phpOutput,
+                isRunning: true
+            };
+            $scope.saveCurrent();
+
+            // need to update isRunning state when called outside of scope
+            if($scope.$$phase !== '$apply')
+                $scope.$apply();
+
             opt.php = _($scope.box.php).filter(function(f) {
                     return !_.has(f, 'readOnly') || !f.readOnly
                 }).map(function(f) {
@@ -116,9 +129,8 @@ function DslSandboxCtrl($scope, $http, $location) {
                 dataType: 'json'
             }).success(function(data) {
                 $scope.state.isRunning = false;
-                if (data.hasOwnProperty('syntaxErrors') && data.syntaxErrors) {
+                if (_.has(data, 'syntaxErrors') && data.syntaxErrors)
                     $scope.state.syntaxErrors = data.syntaxErrors;
-                }
                 else {
                     if(data.hasOwnProperty('boxId'))
                         $scope.box.id = data.boxId;
@@ -131,7 +143,7 @@ function DslSandboxCtrl($scope, $http, $location) {
                 $scope.$apply();
             });
         }
-    }
+    };
 
     $scope.httpGet = function(query) {
         var query = query ? encodeURIComponent(query) : '';
@@ -148,10 +160,12 @@ function DslSandboxCtrl($scope, $http, $location) {
     };
 
     $scope.loadFile = function(file) {
+        if (!_.has(file, 'isFile') || !file.isFile)
+            return false;
         var name = file.name,
             path = file.path;
         if(_.any($scope.box.php, function(f) { return f.name===name }))
-            return $scope.selectPhp(name);
+            return $scope.openPhp(name);
         
         $.ajax({
             url: '/file?path='+encodeURIComponent(path+'/'+name),
@@ -164,14 +178,15 @@ function DslSandboxCtrl($scope, $http, $location) {
                     content: data,
                     readOnly: true
                 });
-                $scope.selectPhp(name);
+                $scope.openPhp(name);
             });
         }).error(function(data) {
             console.warn(data.responseText);
         });
     };
 
-    $scope.filename = function(path) { return path.split('/').pop() };
+
+    $scope.filename = function(path) { return path.split('/').pop(); };
 }
 
 

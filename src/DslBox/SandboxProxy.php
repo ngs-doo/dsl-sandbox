@@ -82,9 +82,10 @@ class SandboxProxy
             ),*/
         );
 
-        if ($data && $method!=='GET')
+        if ($data && $method!=='GET') {
             $curlOptions[CURLOPT_POSTFIELDS] = $data;
-
+            $curlOptions[CURLOPT_HTTPHEADER][] = 'Content-Length: '.strlen($data);
+        }
         curl_setopt_array($curl, $curlOptions);
 
         $response = curl_exec($curl);

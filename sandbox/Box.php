@@ -54,7 +54,8 @@ class Box
             ob_end_clean();
             // echo ($ex->getTraceAsString());
             // echo ($ex->getMessage());
-            return ('Exception in '.$ex->getFile().', line '.$ex->getLine().': '.$ex->getMessage());
+            return ('Exception in '.$ex->getFile().', line '.$ex->getLine().': '.$ex->getMessage()
+                ."\n".'Full trace: '.$ex->getTraceAsString());
         }
     }
 
