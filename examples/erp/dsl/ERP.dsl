@@ -4,7 +4,6 @@ module ERP
         string name;
         string description;
         money price;
-        string temp;
     }
     
     aggregate Customer {

@@ -12,7 +12,6 @@ require_once __DIR__.'/ProductArrayConverter.php';
  * @property string $name a string
  * @property string $description a string
  * @property \NGS\Money $price a money amount
- * @property string $temp a string
  *
  * @package ERP
  * @version 0.9.9 beta
@@ -24,7 +23,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $name;
     protected $description;
     protected $price;
-    protected $temp;
 
     /**
      * Constructs object using a key-property array or instance of class "ERP\Product"
@@ -63,8 +61,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['description'] = ''; // a string
         if(!array_key_exists('price', $data))
             $data['price'] = new \NGS\Money(0); // a money amount
-        if(!array_key_exists('temp', $data))
-            $data['temp'] = ''; // a string
     }
 
     /**
@@ -91,9 +87,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (array_key_exists('price', $data))
             $this->setPrice($data['price']);
         unset($data['price']);
-        if (array_key_exists('temp', $data))
-            $this->setTemp($data['temp']);
-        unset($data['temp']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "ERP\Product" constructor: '.implode(', ', array_keys($data)));
@@ -145,14 +138,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
-     * @return a string
-     */
-    public function getTemp()
-    {
-        return $this->temp;
-    }
-
-    /**
      * Property getter which throws Exceptions on invalid access
      *
      * @param string $name Property name
@@ -171,8 +156,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getDescription(); // a string
         if ($name === 'price')
             return $this->getPrice(); // a money amount
-        if ($name === 'temp')
-            return $this->getTemp(); // a string
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "ERP\Product" does not exist and could not be retrieved!');
     }
@@ -196,8 +179,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // a string (always set)
         if ($name === 'price')
             return true; // a money amount (always set)
-        if ($name === 'temp')
-            return true; // a string (always set)
 
         return false;
     }
@@ -261,20 +242,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
-     * @param string $value a string
-     *
-     * @return string
-     */
-    public function setTemp($value)
-    {
-        if ($value === null)
-            throw new \InvalidArgumentException('Property "temp" cannot be set to null because it is non-nullable!');
-        $value = \NGS\Converter\PrimitiveConverter::toString($value);
-        $this->temp = $value;
-        return $value;
-    }
-
-    /**
      * Property setter which checks for invalid access to entity properties and enforces proper type checks
      *
      * @param string $name Property name
@@ -290,8 +257,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->setDescription($value); // a string
         if ($name === 'price')
             return $this->setPrice($value); // a money amount
-        if ($name === 'temp')
-            return $this->setTemp($value); // a string
         throw new \InvalidArgumentException('Property "'.$name.'" in class "ERP\Product" does not exist and could not be set!');
     }
 
@@ -310,8 +275,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \LogicException('The property "description" cannot be unset because it is non-nullable!'); // a string (cannot be unset)
         if ($name === 'price')
             throw new \LogicException('The property "price" cannot be unset because it is non-nullable!'); // a money amount (cannot be unset)
-        if ($name === 'temp')
-            throw new \LogicException('The property "temp" cannot be unset because it is non-nullable!'); // a string (cannot be unset)
     }
 
     /**
@@ -335,7 +298,6 @@ class Product extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->name = $result->name;
         $this->description = $result->description;
         $this->price = $result->price;
-        $this->temp = $result->temp;
         $this->ID = $result->ID;
     }
 

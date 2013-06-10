@@ -1,40 +1,41 @@
 <?php
-namespace Todo;
+namespace ERP;
 
-require_once __DIR__.'/Task.php';
+require_once __DIR__.'/OrderView.php';
 
 /**
  * Generated from NGS DSL
  *
- * Converts an object of class Todo\Task into a simple array and backwards.
+ * Converts an object of class ERP\OrderView into a simple array and backwards.
  *
- * @package Todo
+ * @package ERP
  * @version 0.9.9 beta
  */
-abstract class TaskArrayConverter
+abstract class OrderViewArrayConverter
 {/**
-     * @param array|\Todo\Task An object or an array of objects of type "Todo\Task"
+     * @param array|\ERP\OrderView An object or an array of objects of type "ERP\OrderView"
      *
      * @return array A simple array representation
      */
     public static function toArray($item, $allowNullValues=false)
     {
-        if ($item instanceof \Todo\Task)
+        if ($item instanceof \ERP\OrderView)
             return self::toArrayObject($item);
         if (is_array($item))
             return self::toArrayList($item, $allowNullValues);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "Todo\Task" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "ERP\OrderView" nor an array of said instances!');
     }
 
     private static function toArrayObject($item)
     {
         $ret = array();
         $ret['URI'] = $item->URI;
-        $ret['ID'] = $item->ID;
-        $ret['name'] = $item->name;
-        $ret['isDone'] = $item->isDone;
         $ret['created'] = $item->created->__toString();
+        $ret['delivery'] = $item->delivery === null ? null : $item->delivery->__toString();
+        $ret['name'] = $item->name;
+        $ret['ssn'] = $item->ssn;
+        $ret['totalCost'] = $item->totalCost->__toString();
         return $ret;
     }
 
@@ -47,8 +48,8 @@ abstract class TaskArrayConverter
                 $ret[] = null;
             }
             else {
-                if (!$val instanceof \Todo\Task)
-                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "Todo\Task"! Type was: '.\NGS\Utils::getType($val));
+                if (!$val instanceof \ERP\OrderView)
+                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "ERP\OrderView"! Type was: '.\NGS\Utils::getType($val));
 
                 $ret[] = $val->toArray();
             }
@@ -59,12 +60,12 @@ abstract class TaskArrayConverter
 
     public static function fromArray($item)
     {
-        if ($item instanceof \Todo\Task)
+        if ($item instanceof \ERP\OrderView)
             return $item;
         if (is_array($item))
-            return new \Todo\Task($item, 'build_internal');
+            return new \ERP\OrderView($item);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "Todo\Task" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "ERP\OrderView" nor an array of said instances!');
     }
 
     public static function fromArrayList(array $items, $allowNullValues=false)
@@ -75,12 +76,12 @@ abstract class TaskArrayConverter
                     continue;
                 if($val === null)
                     throw new \InvalidArgumentException('Null value found in provided array');
-                if(!$val instanceof \Todo\Task)
-                    $val = new \Todo\Task($val, 'build_internal');
+                if(!$val instanceof \ERP\OrderView)
+                    $val = new \ERP\OrderView($val);
             }
         }
         catch (\Exception $e) {
-            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "Todo\Task"!', 42, $e);
+            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "ERP\OrderView"!', 42, $e);
         }
 
         return $items;

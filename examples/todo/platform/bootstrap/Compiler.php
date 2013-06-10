@@ -104,6 +104,10 @@ abstract class Compiler
 
     private static function rebuildPlatform(array $dsls)
     {
+        foreach ($dsls as &$v)
+            $v = str_replace(array("\r\n", "\r"), "\n", $v);
+        ksort($dsls);
+
         if (Config::$confirmUnsafe) {
             $res = Connector::call($dsls, true);
         } else if (Config::$skipDiff) {

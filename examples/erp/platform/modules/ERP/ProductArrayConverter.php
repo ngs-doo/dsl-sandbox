@@ -35,7 +35,6 @@ abstract class ProductArrayConverter
         $ret['name'] = $item->name;
         $ret['description'] = $item->description;
         $ret['price'] = $item->price->__toString();
-        $ret['temp'] = $item->temp;
         return $ret;
     }
 

@@ -17,14 +17,20 @@ abstract class Bootstrap
 
     private static $httpOK;
     private static $curlOK, $curlSsl, $curlZLib;
+    private static $mbstringOK;
 
     public static function performChecks()
     {
         self::$httpOK = in_array('http', stream_get_wrappers());
         self::$curlOK = in_array('curl', get_loaded_extensions());
+        self::$mbstringOK = in_array('mbstring', get_loaded_extensions());
 
         if (!self::$curlOK) {
             self::remotePredefinedError('bootstrap', 'curl-missing');
+        }
+
+        if (!self::$mbstringOK) {
+            self::remotePredefinedError('bootstrap', 'mbstring-missing');
         }
 
         self::$curlSsl = false;
@@ -42,9 +48,7 @@ abstract class Bootstrap
     }
 
     public static function remotePredefinedError ($section, $code, $httpOK = true) {
-        if (isset($_SERVER['SERVER_PROTOCOL'])) {
-            header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error', true, 500);
-        }
+        header(':', true, 500);
 
         if ($httpOK) {
             header('Content-Type: text/html; charset=UTF-8');
@@ -53,7 +57,7 @@ abstract class Bootstrap
             $message = @file_get_contents($errorUrl);
             if ($message !== false) {
                 echo $message;
-                return;
+                exit(501);
             }
         }
 
