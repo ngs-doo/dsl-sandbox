@@ -7,8 +7,8 @@
     <span class="alert">No tasks found</span>
 <? else: ?>
     <a href="?action=delete_all">Delete all</a>
-
-    <a href="?action=remove_completed">Remove completed</a>
+    |
+    <a href="?action=delete_done">Delete completed</a>
 
     <table class="table table-condensed">
         <tr>

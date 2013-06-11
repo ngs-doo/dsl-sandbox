@@ -143,7 +143,10 @@ $app->get('/example/:example', function($example) use ($app) {
 
 // download a file from example
 $app->get('/file', function() use ($app) {
-    $path = realpath($app->request()->get('path'));
+    $example = $app->request()->get('example');
+    $relPath = $app->request()->get('path');
+    $path = realpath('../examples/'.$example.'/platform/modules/'.$relPath);
+
     // allows download of _any_ file in /examples
     if(strpos($path, realpath('../examples')) !== 0)
         $app->fail('Invalid path: '.$path);

@@ -46,4 +46,26 @@ $(function(){
         });
     });
 
+    $('#box-intro').on('click', 'a', function(event) {
+        var openPhp = $(this).attr('data-openPhp');
+        if (openPhp) {
+            event.preventDefault();
+            var parts = openPhp.split(':');
+            var file = parts[0];
+            
+            var line = parts.length>1 ? parts[1] : null;
+            if (line) {
+                var lines = line.split('-');
+                startLine = lines[0];
+                endLine = lines.length > 1 ? lines[1] : null;
+
+            }
+            sandbox.loadFile(file).done(function() {
+                if (startLine!==null)
+                    window.phpEditor.gotoLine(startLine);
+                if (endLine!==null)
+                    window.phpEditor.selection.selectTo(endLine);
+            });
+        }
+    })
 })

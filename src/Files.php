@@ -16,7 +16,7 @@ abstract class Files
         return $files;
     }
 
-    public static function getFileTree($path)
+    public static function getFileTree($path, $basepath='')
     {
         $nodes = array();
         foreach (new DirectoryIterator($path) as $item) {
@@ -25,10 +25,10 @@ abstract class Files
             $node = array();
             if ($item->isDir()) {
                 $node['isDir'] = true;
-                $node['nodes'] = self::getFileTree($item->getPathname());
+                $node['nodes'] = self::getFileTree($item->getPathname(), $basepath.$item->getFilename().'/');
             } elseif ($item->isFile()) {
                 $node['isFile'] = true;
-                $node['path'] = $item->getPath();
+                $node['path'] = $basepath;//$item->getPath();
                 $node['isConverter'] = strpos($item->getFilename(), 'Converter.php') !== false;
             }
             $node['name'] = $item->getFilename();

@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="clear"></div>
-        <div ng-show="box.intro" ng-bind-html-unsafe="box.intro"></div>
+        <div id="box-intro" ng-show="box.intro" ng-bind-html-unsafe="box.intro"></div>
         <div class="row-fluid">
             <div class="span6">
                 <ul class="nav nav-tabs nav-files" data-intro="Domain model is defined in DSL files." data-position="bottom">

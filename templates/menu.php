@@ -11,9 +11,9 @@ $menu = array(
     'Basics' => array(
         'search' => array(
             'title' => 'Simple search'),
-        'blog' => array(
-            'title' => 'Collections',
-            'defaultDsl' => 'blog.dsl'),
+        // 'blog' => array(
+        //     'title' => 'Collections',
+        //     'defaultDsl' => 'blog.dsl'),
         'todo-crud' => array(
             'title' => 'TODO app')
     ),
@@ -21,8 +21,8 @@ $menu = array(
         'olap' => array(
             'title' => 'OLAP',
             'defaultDsl' => 'olap.dsl'),
-        'snapshot' => array(
-            'title' => 'Snapshots'),
+        // 'snapshot' => array(
+        //     'title' => 'Snapshots'),
         'report' => array(
             'title' => 'Dynamic reports'),
     ),

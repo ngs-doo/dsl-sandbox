@@ -160,18 +160,34 @@ function DslSandboxCtrl($scope, $http, $location) {
     };
 
     $scope.loadFile = function(file) {
-        if (!_.has(file, 'isFile') || !file.isFile)
-            return false;
-        var name = file.name,
-            path = file.path;
-        if(_.any($scope.box.php, function(f) { return f.name===name }))
-            return $scope.openPhp(name);
-        
-        $.ajax({
-            url: '/file?path='+encodeURIComponent(path+'/'+name),
+        if(_.isObject(file) && _.has(file, 'isFile') && file.isFile) {
+            var name = file.name,
+                path = file.path;
+        }
+        else if (_.isString(file)) {
+            var parts = file.split('/');
+            var name = parts.pop();
+            var path = parts.join('/');
+        }
+        else
+            throw Error('loadFile: file must be an object or a string');
+
+        if(_.any($scope.box.php, function(f) { return f.name===name })) {
+            $scope.openPhp(name);
+            var dfd = new jQuery.Deferred();
+            setTimeout(function () { dfd.resolve(); }, 50);
+            return dfd.promise();
+        }
+        return $.ajax({
+            url: '/file',
+            data: {
+                path: path+'/'+name,
+                example: $scope.box.example
+            },
+            //?path='+encodeURIComponent(path+'/'+name),
             type: 'GET',
             dataType: 'text'
-        }).success(function(data) {
+        }).done(function(data) {
             $scope.$apply(function() {
                 $scope.box.php.push({
                     name: name,
@@ -181,7 +197,7 @@ function DslSandboxCtrl($scope, $http, $location) {
                 $scope.openPhp(name);
             });
         }).error(function(data) {
-            console.warn(data.responseText);
+            throw Error(data.responseText);
         });
     };
 
