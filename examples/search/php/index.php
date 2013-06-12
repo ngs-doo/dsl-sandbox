@@ -1,23 +1,26 @@
 <?php
 use Todo\Task;
+use Task\findDone;
 
-$fix = new Task();
-$fix->name = 'Fix bug!';
-$fix->isDone = false;
-$fix->persist();
+$totalCount = Task::count();
 
-$create = new Task();
-$create->name = 'Create a task';
-$create->isDone = true;
-$create->persist();
+$findDone = new Task\findDone();
+$doneCount = $findDone->count();
 
-$limit = 5;
-$doneTasks = Task::findDone($limit);
+if(isset($_GET['query'])) {
+
+    $tasks = Task::findByName($_GET['query']);
+}
 ?>
 
-<div>Found total of <b><?=count($doneTasks)?></b> done tasks:</div>
 <ul>
-    <? foreach ($doneTasks as $task): ?>
-    <li><?=$task->name?></li>
-    <? endforeach ?>
+    <li>Total tasks: <strong><?=$totalCount?></strong></li>
+    <li>Completed tasks: <strong><?=$doneCount?></strong></li>
 </ul>
+
+
+
+<form method="get" class="form-inline">
+    <label>Search tasks by name:</label>
+    <input type="text" name="query" placeholder="query">
+</form>

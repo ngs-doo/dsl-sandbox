@@ -33,6 +33,7 @@ abstract class TaskArrayConverter
         $ret['URI'] = $item->URI;
         $ret['ID'] = $item->ID;
         $ret['name'] = $item->name;
+        $ret['priority'] = $item->priority;
         $ret['isDone'] = $item->isDone;
         $ret['created'] = $item->created->__toString();
         return $ret;

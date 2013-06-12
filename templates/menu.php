@@ -8,23 +8,34 @@ $menu = array(
         'type-safety' => array(
             'title' => 'Type safety'),
     ),
-    'Basics' => array(
-        'search' => array(
-            'title' => 'Simple search'),
+    'Basic concepts' => array(
+        'sequence' => array(
+            'title' => 'Sequence'
+        ),
+        'search-spec' => array(
+            'title' => 'Simple specification'),
+        'search-spec-params' => array(
+            'title' => 'Specification parameters'),
+        'search-spec-complex' => array(
+            'title' => 'Complex specification'),
+        'search-generic' => array(
+            'title' => 'Generic search'),
+    ),
         // 'blog' => array(
         //     'title' => 'Collections',
         //     'defaultDsl' => 'blog.dsl'),
-        'todo-crud' => array(
-            'title' => 'TODO app')
-    ),
-    'Advanced' => array(
+    'Advanced concepts' => array(
         'olap' => array(
             'title' => 'OLAP',
             'defaultDsl' => 'olap.dsl'),
         // 'snapshot' => array(
         //     'title' => 'Snapshots'),
         'report' => array(
-            'title' => 'Dynamic reports'),
+            'title' => 'Reports'),
+    ),
+    'Sample apps' => array(
+        'todo-crud' => array(
+            'title' => 'TODO'),
     ),
 );
 ?>

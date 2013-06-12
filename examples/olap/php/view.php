@@ -1,16 +1,21 @@
 <style type="text/css">
 #olap label { display: inline ;}
 </style>
-<form id="olap">
-    Facts:
-    <? foreach ($facts as $f): ?>
-        <label><input type="checkbox" name="facts[<?=$f?>]"> <?=$f?></label>
-    <? endforeach ?>
-    Dimensions:
-    <? foreach ($dims as $d): ?>
-        <label><input type="checkbox" name="dims[<?=$d?>]"><?=$d?></label>
-    <? endforeach ?>
-    <button type="submit">Submit</button>
+
+<form id="olap" method="post">
+    <div>
+        <strong>Facts</strong>
+        <? foreach ($allFacts as $fact): ?>
+            <label><input type="checkbox" <? if(in_array($fact, $facts)): ?>checked="checked"<?endif?> name="facts[<?=$fact?>]"> <?=$fact?></label>
+        <? endforeach ?>
+    </div>
+    <div>
+        <strong>Dimensions</strong>
+        <? foreach ($allDims as $dim): ?>
+            <label><input type="checkbox" <? if(in_array($dim, $dims)): ?>checked="checked"<?endif?> name="dims[<?=$dim?>]"> <?=$dim?></label>
+        <? endforeach ?>
+    </div>
+    <button type="submit" class="btn">Analyze</button>
 </form>
 
 <table class="table table-condensed">
