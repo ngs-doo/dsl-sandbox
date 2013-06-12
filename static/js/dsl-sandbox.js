@@ -41,6 +41,7 @@ function DslSandboxCtrl($scope, $http, $location) {
             $scope.phpEditor.current = file;
             window.phpEditor.setReadOnly(_.has(file, 'readOnly') && file.readOnly);
             window.phpEditor.setValue(file.content);
+            window.phpEditor.gotoLine(0);
             window.phpEditor.clearSelection();
         }
     };
@@ -54,6 +55,15 @@ function DslSandboxCtrl($scope, $http, $location) {
             var lastOpened = editor.stack.pop();
             $scope.openPhp(lastOpened);
         }
+    };
+
+    $scope.highlightPhp = function (filename, startLine, endLine) {
+        $scope.openPhp(filename);
+        window.phpEditor.gotoLine(startLine);
+        if (endLine!==null)
+            window.phpEditor.selection.selectTo(endLine);
+        else
+            window.phpEditor.selection.selectLineEnd();
     };
 
     $scope.loadExample = function(example, opt) {
@@ -160,7 +170,10 @@ function DslSandboxCtrl($scope, $http, $location) {
     };
 
     $scope.loadFile = function(file) {
-        if(_.isObject(file) && _.has(file, 'isFile') && file.isFile) {
+
+        if(_.isObject(file)) {
+            if (!_.has(file, 'isFile') || !file.isFile)
+                return false;
             var name = file.name,
                 path = file.path;
         }
@@ -171,6 +184,9 @@ function DslSandboxCtrl($scope, $http, $location) {
         }
         else
             throw Error('loadFile: file must be an object or a string');
+
+        if ($scope.box.php.current && name===$scope.box.php.current)
+            $scope.openPhp(name);
 
         if(_.any($scope.box.php, function(f) { return f.name===name })) {
             $scope.openPhp(name);

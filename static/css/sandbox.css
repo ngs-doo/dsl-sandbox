@@ -100,3 +100,10 @@ ul.nav-files {
 .btn.disabled, .btn[disabled] .preferences-box {
   margin-bottom: 0px;
 }
+
+#php-output input, #php-output select {
+    padding: 2px 6px;
+}
+#php-output * {
+    font-size: 12px;
+}

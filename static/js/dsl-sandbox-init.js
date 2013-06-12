@@ -37,12 +37,14 @@ $(function(){
 
     $('#php-output').on('submit', 'form', function(event) {
         event.preventDefault();
-
+        var form = $(this);
+        var method = form.attr('method') ? form.attr('method').toLowerCase() : 'get';
+        var url = method==='get' ? '?'+form.serialize() : form.attr('action');
         sandbox.run({
-            url:   $(this).attr('action'),
-            method: 'post',
-            async: $(this).data('async') !== 'false',
-            data: $(this).serialize()
+            url: url,
+            method: method,
+            async: form.data('async') !== 'false',
+            data: form.serialize()
         });
     });
 
