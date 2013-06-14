@@ -3,12 +3,29 @@ $menu = array(
     'Beginner' => array(
         'hello-world' => array(
             'title' => 'Hello world'),
-        'simple-crud' => array(
-            'title' => 'Simple CRUD'),
+    ),
+/*    'Building blocks' => array(
+        'aggregate' => array(
+            'title' => 'Aggregate root'),
+        'entity' => array(
+            'title' => 'Entity'),
+        'value' => array(
+            'title' => 'Value'),
+        'reference' => array(
+            'title' => 'References'),
+        'colection' => array(
+            'title' => 'Collections'),
+    ),
+    */
+    'Basic concepts' => array(
+        'detail' => array(
+            'title' => 'Detail'),
+        'snowflake' => array(
+            'title' => 'Snowflake'),
         'type-safety' => array(
             'title' => 'Type safety'),
-    ),
-    'Basic concepts' => array(
+        'simple-crud' => array(
+            'title' => 'Simple CRUD'),
         'sequence' => array(
             'title' => 'Sequence'
         ),
@@ -23,13 +40,13 @@ $menu = array(
     ),
         // 'blog' => array(
         //     'title' => 'Collections',
-        //     'defaultDsl' => 'blog.dsl'),
+        //     'dsl' => 'blog.dsl'),
     'Advanced concepts' => array(
         'olap' => array(
             'title' => 'OLAP',
-            'defaultDsl' => 'olap.dsl'),
-        // 'snapshot' => array(
-        //     'title' => 'Snapshots'),
+            'dsl' => 'olap.dsl'),
+        'snapshot' => array(
+            'title' => 'Snapshot'),
         'report' => array(
             'title' => 'Reports'),
     ),
@@ -46,7 +63,6 @@ $menu = array(
     </ul>
 <?php      foreach ($examples as $example => $val):
     $title = $val['title'];
-    $defaultDsl = isset($val['defaultDsl']) ? json_encode($val['defaultDsl']) : null;
 ?>
 
     <ul class="nav-list">

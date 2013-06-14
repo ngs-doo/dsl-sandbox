@@ -1,10 +1,12 @@
 module Todo
 {
-    root Task {
+    root Task
+    {
         string name;
         int priority;
         bool isDone;
         timestamp created;
+        Group? *group;
 
         specification findDone 'it => it.isDone == true';
 
@@ -23,5 +25,20 @@ module Todo
             int? minPriority;
             int? maxPriority;
         }
+    }
+
+    root Group
+    {
+        string name;
+        detail tasks Task.group;
+    }
+    
+    snowflake TaskList Task
+    {
+        name;
+        priority;
+        isDone;
+
+        order by priority asc, name desc;
     }
 }

@@ -1,38 +1,39 @@
 <?php
-namespace type_safety;
+namespace Todo;
 
-require_once __DIR__.'/Foo.php';
+require_once __DIR__.'/TaskList.php';
 
 /**
  * Generated from NGS DSL
  *
- * Converts an object of class type_safety\Foo into a simple array and backwards.
+ * Converts an object of class Todo\TaskList into a simple array and backwards.
  *
- * @package type_safety
+ * @package Todo
  * @version 0.9.9 beta
  */
-abstract class FooArrayConverter
+abstract class TaskListArrayConverter
 {/**
-     * @param array|\type_safety\Foo An object or an array of objects of type "type_safety\Foo"
+     * @param array|\Todo\TaskList An object or an array of objects of type "Todo\TaskList"
      *
      * @return array A simple array representation
      */
     public static function toArray($item, $allowNullValues=false)
     {
-        if ($item instanceof \type_safety\Foo)
+        if ($item instanceof \Todo\TaskList)
             return self::toArrayObject($item);
         if (is_array($item))
             return self::toArrayList($item, $allowNullValues);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "type_safety\Foo" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "Todo\TaskList" nor an array of said instances!');
     }
 
     private static function toArrayObject($item)
     {
         $ret = array();
         $ret['URI'] = $item->URI;
-        $ret['ID'] = $item->ID;
-        $ret['bar'] = $item->bar;
+        $ret['name'] = $item->name;
+        $ret['priority'] = $item->priority;
+        $ret['isDone'] = $item->isDone;
         return $ret;
     }
 
@@ -45,8 +46,8 @@ abstract class FooArrayConverter
                 $ret[] = null;
             }
             else {
-                if (!$val instanceof \type_safety\Foo)
-                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "type_safety\Foo"! Type was: '.\NGS\Utils::getType($val));
+                if (!$val instanceof \Todo\TaskList)
+                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "Todo\TaskList"! Type was: '.\NGS\Utils::getType($val));
 
                 $ret[] = $val->toArray();
             }
@@ -57,12 +58,12 @@ abstract class FooArrayConverter
 
     public static function fromArray($item)
     {
-        if ($item instanceof \type_safety\Foo)
+        if ($item instanceof \Todo\TaskList)
             return $item;
         if (is_array($item))
-            return new \type_safety\Foo($item, 'build_internal');
+            return new \Todo\TaskList($item);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "type_safety\Foo" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "Todo\TaskList" nor an array of said instances!');
     }
 
     public static function fromArrayList(array $items, $allowNullValues=false)
@@ -73,12 +74,12 @@ abstract class FooArrayConverter
                     continue;
                 if($val === null)
                     throw new \InvalidArgumentException('Null value found in provided array');
-                if(!$val instanceof \type_safety\Foo)
-                    $val = new \type_safety\Foo($val, 'build_internal');
+                if(!$val instanceof \Todo\TaskList)
+                    $val = new \Todo\TaskList($val);
             }
         }
         catch (\Exception $e) {
-            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "type_safety\Foo"!', 42, $e);
+            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "Todo\TaskList"!', 42, $e);
         }
 
         return $items;

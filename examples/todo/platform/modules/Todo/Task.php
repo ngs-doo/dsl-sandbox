@@ -3,6 +3,7 @@ namespace Todo;
 
 require_once __DIR__.'/TaskJsonConverter.php';
 require_once __DIR__.'/TaskArrayConverter.php';
+require_once __DIR__.'/Group.php';
 
 /**
  * Generated from NGS DSL
@@ -13,6 +14,9 @@ require_once __DIR__.'/TaskArrayConverter.php';
  * @property int $priority an integer number
  * @property bool $isDone a boolean value
  * @property \NGS\Timestamp $created a timestamp with time zone
+ * @property int $groupID used by reference $group (read-only)
+ * @property string $groupURI reference to an object of class "Todo\Group" (read-only)
+ * @property \Todo\Group $group an object of class "Todo\Group", can be null
  *
  * @package Todo
  * @version 0.9.9 beta
@@ -25,6 +29,9 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $priority;
     protected $isDone;
     protected $created;
+    protected $groupID;
+    protected $groupURI;
+    protected $group;
 
     /**
      * Constructs object using a key-property array or instance of class "Todo\Task"
@@ -94,6 +101,15 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (array_key_exists('created', $data))
             $this->setCreated($data['created']);
         unset($data['created']);
+        if (array_key_exists('groupID', $data))
+            $this->setGroupID($data['groupID']);
+        unset($data['groupID']);
+        if (array_key_exists('group', $data))
+            $this->setGroup($data['group']);
+        unset($data['group']);
+        if(array_key_exists('groupURI', $data))
+            $this->groupURI = $data['groupURI'] === null ? null : \NGS\Converter\PrimitiveConverter::toString($data['groupURI']);
+        unset($data['groupURI']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Todo\Task" constructor: '.implode(', ', array_keys($data)));
@@ -153,6 +169,32 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @return an integer number, can be null
+     */
+    public function getGroupID()
+    {
+        return $this->groupID;
+    }
+
+    /**
+     * @return a reference to an object of class "Todo\Group"
+     */
+    public function getGroupURI()
+    {
+        return $this->groupURI;
+    }
+
+    /**
+     * @return an object of class "Todo\Group", can be null
+     */
+    public function getGroup()
+    {
+        if ($this->groupURI !== null && $this->group === null)
+            $this->group = \NGS\Patterns\Repository::instance()->find('Todo\\Group', $this->groupURI);
+        return $this->group;
+    }
+
+    /**
      * Property getter which throws Exceptions on invalid access
      *
      * @param string $name Property name
@@ -173,6 +215,12 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getIsDone(); // a boolean value
         if ($name === 'created')
             return $this->getCreated(); // a timestamp with time zone
+        if ($name === 'groupID')
+            return $this->getGroupID(); // an integer number, can be null
+        if ($name === 'groupURI')
+            return $this->getGroupURI(); // a reference to an object of class "Todo\Group"
+        if ($name === 'group')
+            return $this->getGroup(); // an object of class "Todo\Group", can be null
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Todo\Task" does not exist and could not be retrieved!');
     }
@@ -198,11 +246,13 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // a boolean value (always set)
         if ($name === 'created')
             return true; // a timestamp with time zone (always set)
+        if ($name === 'group')
+            return $this->getGroup() !== null; // an object of class "Todo\Group", can be null
 
         return false;
     }
 
-    private static $_read_only_properties = array('URI', 'ID');
+    private static $_read_only_properties = array('URI', 'ID', 'groupID', 'groupURI');
 
     /**
      * @param int $value an integer number
@@ -275,6 +325,38 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @param int $value an integer number, can be null
+     *
+     * @return int
+     */
+    private function setGroupID($value)
+    {
+        $value = $value !== null ? \NGS\Converter\PrimitiveConverter::toInteger($value) : null;
+        $this->groupID = $value;
+        return $value;
+    }
+
+    /**
+     * @param \Todo\Group $value an object of class "Todo\Group", can be null
+     *
+     * @return \Todo\Group
+     */
+    public function setGroup($value)
+    {
+        $value = $value !== null ? \Todo\GroupArrayConverter::fromArray($value) : null;
+        if ($value !== null && $value->URI === null)
+            throw new \InvalidArgumentException('Value of property "group" cannot have URI set to null because it\'s a reference! Reference values must have non-null URIs!');
+        $this->group = $value;
+        $this->groupURI = $value === null ? null : $value->URI;
+        if ($value === null && $this->groupID !== null) {
+            $this->groupID = null;
+        } elseif ($value !== null) {
+            $this->groupID = $value->ID;
+        }
+        return $value;
+    }
+
+    /**
      * Property setter which checks for invalid access to entity properties and enforces proper type checks
      *
      * @param string $name Property name
@@ -292,6 +374,8 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->setIsDone($value); // a boolean value
         if ($name === 'created')
             return $this->setCreated($value); // a timestamp with time zone
+        if ($name === 'group')
+            return $this->setGroup($value); // an object of class "Todo\Group", can be null
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Todo\Task" does not exist and could not be set!');
     }
 
@@ -312,6 +396,8 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \LogicException('The property "isDone" cannot be unset because it is non-nullable!'); // a boolean value (cannot be unset)
         if ($name === 'created')
             throw new \LogicException('The property "created" cannot be unset because it is non-nullable!'); // a timestamp with time zone (cannot be unset)
+        if ($name === 'group')
+            $this->setGroup(null);; // an object of class "Todo\Group", can be null
     }
 
     /**
@@ -336,6 +422,9 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->priority = $result->priority;
         $this->isDone = $result->isDone;
         $this->created = $result->created;
+        $this->groupID = $result->groupID;
+        $this->group = $result->group;
+        $this->groupURI = $result->groupURI;
         $this->ID = $result->ID;
     }
 

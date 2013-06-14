@@ -60,7 +60,7 @@ function DslSandboxCtrl($scope, $http, $location) {
     $scope.highlightPhp = function (filename, startLine, endLine) {
         $scope.openPhp(filename);
         window.phpEditor.gotoLine(startLine);
-        if (endLine!==null)
+        if (typeof(endLine)!=='undefined' && endLine!==null)
             window.phpEditor.selection.selectTo(endLine);
         else
             window.phpEditor.selection.selectLineEnd();
@@ -74,6 +74,7 @@ function DslSandboxCtrl($scope, $http, $location) {
         $scope.phpEditor = { stack: [] };
 
         $location.path('example/'+example);
+        
         $http.get('/example/'+example)
             .success(function(data) {
                 $scope.state = {};
