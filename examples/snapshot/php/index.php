@@ -14,7 +14,7 @@ $customer->persist();
 
 // load order and check that customer's name remains the same
 $order = Order::find($order->URI);
-echo 'Customer name in order: '.$order->customer->name.'<br>';
+echo 'Customer name saved as snapshot: '.$order->customer->name.'<br>';
 
 // we can use URI in snapshot to get to real customer
 $currentCustomer = Customer::find($order->customer->URI);

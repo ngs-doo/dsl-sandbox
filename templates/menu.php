@@ -4,24 +4,28 @@ $menu = array(
         'hello-world' => array(
             'title' => 'Hello world'),
     ),
-/*    'Building blocks' => array(
-        'aggregate' => array(
+    'Building blocks' => array(
+/*        'aggregate' => array(
             'title' => 'Aggregate root'),
         'entity' => array(
             'title' => 'Entity'),
         'value' => array(
             'title' => 'Value'),
-        'reference' => array(
+*/      
+        'types-primitive' => array(
+            'title' => 'Primitive types'),
+        'types-complex' => array(
+            'title' => 'Complex types'),
+        'snowflake' => array(
+            'title' => 'Snowflake'),
+ /*       'reference' => array(
             'title' => 'References'),
-        'colection' => array(
-            'title' => 'Collections'),
+        'collections' => array(
+            'title' => 'Collections'),*/
     ),
-    */
     'Basic concepts' => array(
         'detail' => array(
             'title' => 'Detail'),
-        'snowflake' => array(
-            'title' => 'Snowflake'),
         'type-safety' => array(
             'title' => 'Type safety'),
         'simple-crud' => array(
@@ -37,6 +41,8 @@ $menu = array(
             'title' => 'Complex specification'),
         'search-generic' => array(
             'title' => 'Generic search'),
+   /*     'validation' => array(
+            'title' => 'Validation'),*/
     ),
         // 'blog' => array(
         //     'title' => 'Collections',
@@ -47,10 +53,10 @@ $menu = array(
             'dsl' => 'olap.dsl'),
         'snapshot' => array(
             'title' => 'Snapshot'),
-        'report' => array(
-            'title' => 'Reports'),
     ),
     'Sample apps' => array(
+        'report' => array(
+            'title' => 'Reports'),
         'todo-crud' => array(
             'title' => 'TODO'),
     ),

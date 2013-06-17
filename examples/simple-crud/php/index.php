@@ -1,6 +1,8 @@
 <?php
 use Library\Book;
 
+echo '<pre>';
+
 $myBook = new Book();
 $myBook->title = 'Hamlet';
 print_r($myBook);
@@ -20,3 +22,5 @@ print_r($book);
 
 // Delete
 $book->delete();
+
+echo '</pre>';
