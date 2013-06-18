@@ -57,13 +57,23 @@ function DslSandboxCtrl($scope, $http, $location) {
         }
     };
 
+    var highlight = function (startLine, endLine) {
+        editor.gotoLine(startLine);
+        if (typeof(endLine)!=='undefined' && endLine!==null)
+            editor.selection.selectTo(endLine);
+        else
+            editor.selection.selectLineEnd();
+    }
+
     $scope.highlightPhp = function (filename, startLine, endLine) {
         $scope.openPhp(filename);
-        window.phpEditor.gotoLine(startLine);
-        if (typeof(endLine)!=='undefined' && endLine!==null)
-            window.phpEditor.selection.selectTo(endLine);
-        else
-            window.phpEditor.selection.selectLineEnd();
+        highlight(window.phpEditor, startLine, endLine);
+    };
+
+    $scope.highlightDsl = function (filename, startLine, endLine) {
+        console.log('highligs');
+        $scope.openDsl(filename);
+        highlight(window.dslEditor, startLine, endLine);
     };
 
     $scope.loadExample = function(example, opt) {
@@ -80,9 +90,9 @@ function DslSandboxCtrl($scope, $http, $location) {
                 $scope.state = {};
                 $scope.box = data;
                 $scope.box.example = example;
-                var startDsl = _.has(opt, 'defaultDsl') ? opt.defaultDsl : data.dsl[0].name;
+                var startDsl = _.has(opt, 'dsl') ? opt.dsl : data.dsl[0].name;
                 $scope.openDsl(startDsl);
-                var startPhp = _.has(opt, 'defaultPhp') ? opt.defaultPhp : 'index.php';
+                var startPhp = _.has(opt, 'php') ? opt.php : 'index.php';
                 $scope.openPhp(startPhp);
             })
             .error(function(data) {

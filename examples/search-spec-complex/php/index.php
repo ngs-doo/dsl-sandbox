@@ -3,7 +3,7 @@ use Todo\Task;
 use Todo\Task\findRecent;
 
 $spec = new findRecent();
-$spec->days = 3;
+$spec->days = 15;
 $spec->minPriority = 0;
 $spec->maxPriority = 4;
 $tasks = $spec->search();

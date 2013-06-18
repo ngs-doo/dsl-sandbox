@@ -9,7 +9,7 @@ $doneTasks = Task::findDone($limit, $offset);
 // limit and offset are optional
 // calling Task::findDone() without parameters will fetch _all_ done tasks
 
-// we can get a total count for specification
+// get total count for specification
 $spec = new Task\findDone();
 $doneCount = $spec->count();
 

@@ -6,26 +6,23 @@ $search = new GenericSearch('Todo\\Task');
 
 $search->equals('isDone', false);
 
-$days = 3;
-$minPriority = 0;
-$maxPriority = 2;
-
 // gte = Greater Than or Equal
-$search->gte('priority', $minPriority);
+$search->gte('priority', 0);
 
 // lte = Less Than or Equal
-$search->lte('priority', $maxPriority);
+$search->lte('priority', 2);
 
-// only tasks cweekBeforereated in the last 3 days
+// filter tasks created in the last 15 days
 $today = new DateTime();
-$dt = $today->sub(new DateInterval('P'.$days.'D'));
+$dt = $today->sub(new DateInterval('P15D'));
+// gte = 'Greater Than or Equal' filter can be used with dates
 $search->gte('created', $dt->format('Y-m-d'));
 
 $count = $search->count();
 $tasks = $search->search();
 ?>
 
-<p>Found total of <?=$count?> done task(s)</p>
+<p>Found total of <?=$count?> task(s)</p>
 <ul>
 <? foreach ($tasks as $task): ?>
     <li>

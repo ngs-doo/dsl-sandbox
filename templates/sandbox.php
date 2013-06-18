@@ -35,7 +35,7 @@
                     <li ng-repeat="file in box.php" ng-class="{active:file.name==phpEditor.current.name}" ng-click="openPhp(file.name)">
                         <a class="float-left" href="">
                             <span>{{ file.name }}</span>
-                            <span ng-show="file.readOnly" href="" class="clickable" title="Close file" ng-click="closePhp(file.name)"><i class="icon icon-remove-sign"></i></span>
+                            <span ng-show="file.readOnly" class="clickable" title="Close file" ng-click="closePhp(file.name)"><i class="icon icon-remove-sign"></i></span>
                         </a>
                     </li>
                 </ul>

@@ -4,7 +4,7 @@ use Library\Book;
 $books = array();
 for($i=0; $i<3; $i++) {
     $book = new Book();
-    $book->title = 'Some book '.$i;
+    $book->title = 'book #'.$i;
     $book->persist();
     $books[] = $book;
 }

@@ -1,1 +1,2 @@
 <p><strong>Detail</strong> is used to include related objects inside another entity when there is a relationship between them.</p>
+<p>In this example, each Task can reference a Group. This can be characterized as a 'one-to-many' relationship. From Task object, we can reach the referenced Group by 'group' property. To get references in other direction (Group => Task), we can add detail property to Group root. Each detail specifies a related object, in this case 'Task.group'.</p>

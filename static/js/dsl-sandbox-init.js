@@ -48,7 +48,7 @@ $(function(){
         });
     });
 
-    $('#box-intro').on('click', 'a', function(event) {
+    $('#box-intro').on('mouseenter', 'a', function(event) {
         var openPhp = $(this).attr('data-openPhp');
         if (openPhp) {
             event.preventDefault();

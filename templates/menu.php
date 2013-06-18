@@ -5,8 +5,10 @@ $menu = array(
             'title' => 'Hello world'),
     ),
     'Building blocks' => array(
-/*        'aggregate' => array(
-            'title' => 'Aggregate root'),
+        'aggregate-root' => array(
+            'title' => 'Aggregate root',
+            'dsl'   => 'Football.dsl'),
+        /*
         'entity' => array(
             'title' => 'Entity'),
         'value' => array(
@@ -24,15 +26,14 @@ $menu = array(
             'title' => 'Collections'),*/
     ),
     'Basic concepts' => array(
-        'detail' => array(
-            'title' => 'Detail'),
-        'type-safety' => array(
-            'title' => 'Type safety'),
         'simple-crud' => array(
             'title' => 'Simple CRUD'),
+        'type-safety' => array(
+            'title' => 'Type safety'),
+        'detail' => array(
+            'title' => 'Detail'),
         'sequence' => array(
-            'title' => 'Sequence'
-        ),
+            'title' => 'Sequence'),
         'search-spec' => array(
             'title' => 'Simple specification'),
         'search-spec-params' => array(
@@ -51,6 +52,8 @@ $menu = array(
         'olap' => array(
             'title' => 'OLAP',
             'dsl' => 'olap.dsl'),
+        'history' => array(
+            'title' => 'History'),
         'snapshot' => array(
             'title' => 'Snapshot'),
     ),

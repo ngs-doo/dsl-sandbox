@@ -8,6 +8,9 @@ module Library
         // primitive collection, can be null
         string[]? tags;
 
+        // collection with null values:
+        // string?[]? tags;
+
         // complex references collection
         Page[] *pages;
     }

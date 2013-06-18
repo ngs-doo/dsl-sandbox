@@ -1,11 +1,22 @@
 <?php
 use Todo\Task;
+use Todo\Task\findByName;
 
 $tasks = array();
 $query = isset($_GET['query']) ? $_GET['query'] : null;
 
-if($query)
-    $tasks = Task::findByName($_GET['query']);
+$limit = 10;
+$offset = 0;
+
+if($query) {
+    // 1) call static  function
+    $tasks = Task::findByName($_GET['query'], $limit, $offset);
+} else {
+    // 2) create object and call search method
+    $spec = new findByName();
+    $spec->query = 'task';
+    $tasks = $spec->search($limit, $offset);
+}
 ?>
 
 <form method="get" accept-charset="utf-8">
