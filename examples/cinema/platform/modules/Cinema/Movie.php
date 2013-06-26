@@ -17,14 +17,16 @@ require_once __DIR__.'/MovieArrayConverter.php';
  * @property float $loudnessIndex a floating point number
  * @property bool $under18 a boolean value
  * @property array $awards a map[string, string]
- * @property \NGS\ByteStream $poster a byte stream
  * @property \NGS\LocalDate $released a date
  * @property \NGS\Timestamp $premiered a timestamp with time zone
  * @property \NGS\BigDecimal $criticsRating a decimal
  * @property \NGS\BigDecimal $publicRating a decimal with scale of 4
- * @property \NGS\UUID $catalogId a uuid
  * @property \NGS\Money $budget a money amount
+ * @property \NGS\ByteStream $poster a byte stream
+ * @property \NGS\UUID $catalogId a uuid
  * @property SimpleXMLElement $captions a xml value
+ * @property \NGS\Location $filmingLocation a Location reference
+ * @property \NGS\Point $turningPoint a Point reference
  *
  * @package Cinema
  * @version 0.9.9 beta
@@ -41,14 +43,16 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $loudnessIndex;
     protected $under18;
     protected $awards;
-    protected $poster;
     protected $released;
     protected $premiered;
     protected $criticsRating;
     protected $publicRating;
-    protected $catalogId;
     protected $budget;
+    protected $poster;
+    protected $catalogId;
     protected $captions;
+    protected $filmingLocation;
+    protected $turningPoint;
 
     /**
      * Constructs object using a key-property array or instance of class "Cinema\Movie"
@@ -97,8 +101,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['under18'] = false; // a boolean value
         if(!array_key_exists('awards', $data))
             $data['awards'] = array(); // a map[string, string]
-        if(!array_key_exists('poster', $data))
-            $data['poster'] = new \NGS\ByteStream(); // a byte stream
         if(!array_key_exists('released', $data))
             $data['released'] = new \NGS\LocalDate(); // a date
         if(!array_key_exists('premiered', $data))
@@ -107,10 +109,16 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['criticsRating'] = new \NGS\BigDecimal(0); // a decimal
         if(!array_key_exists('publicRating', $data))
             $data['publicRating'] = new \NGS\BigDecimal(0, 4); // a decimal with scale of 4
-        if(!array_key_exists('catalogId', $data))
-            $data['catalogId'] = new \NGS\UUID(); // a uuid
         if(!array_key_exists('budget', $data))
             $data['budget'] = new \NGS\Money(0); // a money amount
+        if(!array_key_exists('poster', $data))
+            $data['poster'] = new \NGS\ByteStream(); // a byte stream
+        if(!array_key_exists('catalogId', $data))
+            $data['catalogId'] = new \NGS\UUID(); // a uuid
+        if(!array_key_exists('filmingLocation', $data))
+            $data['filmingLocation'] = new \NGS\Location(); // a Location reference
+        if(!array_key_exists('turningPoint', $data))
+            $data['turningPoint'] = new \NGS\Point(); // a Point reference
     }
 
     /**
@@ -152,9 +160,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (array_key_exists('awards', $data))
             $this->setAwards($data['awards']);
         unset($data['awards']);
-        if (array_key_exists('poster', $data))
-            $this->setPoster($data['poster']);
-        unset($data['poster']);
         if (array_key_exists('released', $data))
             $this->setReleased($data['released']);
         unset($data['released']);
@@ -167,15 +172,24 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (array_key_exists('publicRating', $data))
             $this->setPublicRating($data['publicRating']);
         unset($data['publicRating']);
-        if (array_key_exists('catalogId', $data))
-            $this->setCatalogId($data['catalogId']);
-        unset($data['catalogId']);
         if (array_key_exists('budget', $data))
             $this->setBudget($data['budget']);
         unset($data['budget']);
+        if (array_key_exists('poster', $data))
+            $this->setPoster($data['poster']);
+        unset($data['poster']);
+        if (array_key_exists('catalogId', $data))
+            $this->setCatalogId($data['catalogId']);
+        unset($data['catalogId']);
         if (array_key_exists('captions', $data))
             $this->setCaptions($data['captions']);
         unset($data['captions']);
+        if (array_key_exists('filmingLocation', $data))
+            $this->setFilmingLocation($data['filmingLocation']);
+        unset($data['filmingLocation']);
+        if (array_key_exists('turningPoint', $data))
+            $this->setTurningPoint($data['turningPoint']);
+        unset($data['turningPoint']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Cinema\Movie" constructor: '.implode(', ', array_keys($data)));
@@ -267,14 +281,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
-     * @return a byte stream
-     */
-    public function getPoster()
-    {
-        return $this->poster;
-    }
-
-    /**
      * @return a date
      */
     public function getReleased()
@@ -307,14 +313,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
-     * @return a uuid
-     */
-    public function getCatalogId()
-    {
-        return $this->catalogId;
-    }
-
-    /**
      * @return a money amount
      */
     public function getBudget()
@@ -323,11 +321,43 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @return a byte stream
+     */
+    public function getPoster()
+    {
+        return $this->poster;
+    }
+
+    /**
+     * @return a uuid
+     */
+    public function getCatalogId()
+    {
+        return $this->catalogId;
+    }
+
+    /**
      * @return a xml value
      */
     public function getCaptions()
     {
         return $this->captions;
+    }
+
+    /**
+     * @return a Location reference
+     */
+    public function getFilmingLocation()
+    {
+        return $this->filmingLocation;
+    }
+
+    /**
+     * @return a Point reference
+     */
+    public function getTurningPoint()
+    {
+        return $this->turningPoint;
     }
 
     /**
@@ -359,8 +389,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getUnder18(); // a boolean value
         if ($name === 'awards')
             return $this->getAwards(); // a map[string, string]
-        if ($name === 'poster')
-            return $this->getPoster(); // a byte stream
         if ($name === 'released')
             return $this->getReleased(); // a date
         if ($name === 'premiered')
@@ -369,12 +397,18 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getCriticsRating(); // a decimal
         if ($name === 'publicRating')
             return $this->getPublicRating(); // a decimal with scale of 4
-        if ($name === 'catalogId')
-            return $this->getCatalogId(); // a uuid
         if ($name === 'budget')
             return $this->getBudget(); // a money amount
+        if ($name === 'poster')
+            return $this->getPoster(); // a byte stream
+        if ($name === 'catalogId')
+            return $this->getCatalogId(); // a uuid
         if ($name === 'captions')
             return $this->getCaptions(); // a xml value
+        if ($name === 'filmingLocation')
+            return $this->getFilmingLocation(); // a Location reference
+        if ($name === 'turningPoint')
+            return $this->getTurningPoint(); // a Point reference
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Cinema\Movie" does not exist and could not be retrieved!');
     }
@@ -408,8 +442,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // a boolean value (always set)
         if ($name === 'awards')
             return true; // a map[string, string] (always set)
-        if ($name === 'poster')
-            return true; // a byte stream (always set)
         if ($name === 'released')
             return true; // a date (always set)
         if ($name === 'premiered')
@@ -418,12 +450,18 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // a decimal (always set)
         if ($name === 'publicRating')
             return true; // a decimal with scale of 4 (always set)
-        if ($name === 'catalogId')
-            return true; // a uuid (always set)
         if ($name === 'budget')
             return true; // a money amount (always set)
+        if ($name === 'poster')
+            return true; // a byte stream (always set)
+        if ($name === 'catalogId')
+            return true; // a uuid (always set)
         if ($name === 'captions')
             return true; // a xml value (always set)
+        if ($name === 'filmingLocation')
+            return true; // a Location reference (always set)
+        if ($name === 'turningPoint')
+            return true; // a Point reference (always set)
 
         return false;
     }
@@ -557,20 +595,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
-     * @param \NGS\ByteStream $value a byte stream
-     *
-     * @return \NGS\ByteStream
-     */
-    public function setPoster($value)
-    {
-        if ($value === null)
-            throw new \InvalidArgumentException('Property "poster" cannot be set to null because it is non-nullable!');
-        $value = \NGS\ByteStream::fromBase64($value);
-        $this->poster = $value;
-        return $value;
-    }
-
-    /**
      * @param \NGS\LocalDate $value a date
      *
      * @return \NGS\LocalDate
@@ -627,20 +651,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
-     * @param \NGS\UUID $value a uuid
-     *
-     * @return \NGS\UUID
-     */
-    public function setCatalogId($value)
-    {
-        if ($value === null)
-            throw new \InvalidArgumentException('Property "catalogId" cannot be set to null because it is non-nullable!');
-        $value = new \NGS\UUID($value);
-        $this->catalogId = $value;
-        return $value;
-    }
-
-    /**
      * @param \NGS\Money $value a money amount
      *
      * @return \NGS\Money
@@ -655,6 +665,34 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @param \NGS\ByteStream $value a byte stream
+     *
+     * @return \NGS\ByteStream
+     */
+    public function setPoster($value)
+    {
+        if ($value === null)
+            throw new \InvalidArgumentException('Property "poster" cannot be set to null because it is non-nullable!');
+        $value = \NGS\ByteStream::fromBase64($value);
+        $this->poster = $value;
+        return $value;
+    }
+
+    /**
+     * @param \NGS\UUID $value a uuid
+     *
+     * @return \NGS\UUID
+     */
+    public function setCatalogId($value)
+    {
+        if ($value === null)
+            throw new \InvalidArgumentException('Property "catalogId" cannot be set to null because it is non-nullable!');
+        $value = new \NGS\UUID($value);
+        $this->catalogId = $value;
+        return $value;
+    }
+
+    /**
      * @param SimpleXMLElement $value a xml value
      *
      * @return SimpleXMLElement
@@ -665,6 +703,34 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \InvalidArgumentException('Property "captions" cannot be set to null because it is non-nullable!');
         $value = \NGS\Converter\XmlConverter::toXml($value);
         $this->captions = $value;
+        return $value;
+    }
+
+    /**
+     * @param \NGS\Location $value a Location reference
+     *
+     * @return \NGS\Location
+     */
+    public function setFilmingLocation($value)
+    {
+        if ($value === null)
+            throw new \InvalidArgumentException('Property "filmingLocation" cannot be set to null because it is non-nullable!');
+        $value = new \NGS\Location($value);
+        $this->filmingLocation = $value;
+        return $value;
+    }
+
+    /**
+     * @param \NGS\Point $value a Point reference
+     *
+     * @return \NGS\Point
+     */
+    public function setTurningPoint($value)
+    {
+        if ($value === null)
+            throw new \InvalidArgumentException('Property "turningPoint" cannot be set to null because it is non-nullable!');
+        $value = new \NGS\Point($value);
+        $this->turningPoint = $value;
         return $value;
     }
 
@@ -694,8 +760,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->setUnder18($value); // a boolean value
         if ($name === 'awards')
             return $this->setAwards($value); // a map[string, string]
-        if ($name === 'poster')
-            return $this->setPoster($value); // a byte stream
         if ($name === 'released')
             return $this->setReleased($value); // a date
         if ($name === 'premiered')
@@ -704,12 +768,18 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->setCriticsRating($value); // a decimal
         if ($name === 'publicRating')
             return $this->setPublicRating($value); // a decimal with scale of 4
-        if ($name === 'catalogId')
-            return $this->setCatalogId($value); // a uuid
         if ($name === 'budget')
             return $this->setBudget($value); // a money amount
+        if ($name === 'poster')
+            return $this->setPoster($value); // a byte stream
+        if ($name === 'catalogId')
+            return $this->setCatalogId($value); // a uuid
         if ($name === 'captions')
             return $this->setCaptions($value); // a xml value
+        if ($name === 'filmingLocation')
+            return $this->setFilmingLocation($value); // a Location reference
+        if ($name === 'turningPoint')
+            return $this->setTurningPoint($value); // a Point reference
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Cinema\Movie" does not exist and could not be set!');
     }
 
@@ -738,8 +808,6 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \LogicException('The property "under18" cannot be unset because it is non-nullable!'); // a boolean value (cannot be unset)
         if ($name === 'awards')
             throw new \LogicException('The property "awards" cannot be unset because it is non-nullable!'); // a map[string, string] (cannot be unset)
-        if ($name === 'poster')
-            throw new \LogicException('The property "poster" cannot be unset because it is non-nullable!'); // a byte stream (cannot be unset)
         if ($name === 'released')
             throw new \LogicException('The property "released" cannot be unset because it is non-nullable!'); // a date (cannot be unset)
         if ($name === 'premiered')
@@ -748,12 +816,18 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \LogicException('The property "criticsRating" cannot be unset because it is non-nullable!'); // a decimal (cannot be unset)
         if ($name === 'publicRating')
             throw new \LogicException('The property "publicRating" cannot be unset because it is non-nullable!'); // a decimal with scale of 4 (cannot be unset)
-        if ($name === 'catalogId')
-            throw new \LogicException('The property "catalogId" cannot be unset because it is non-nullable!'); // a uuid (cannot be unset)
         if ($name === 'budget')
             throw new \LogicException('The property "budget" cannot be unset because it is non-nullable!'); // a money amount (cannot be unset)
+        if ($name === 'poster')
+            throw new \LogicException('The property "poster" cannot be unset because it is non-nullable!'); // a byte stream (cannot be unset)
+        if ($name === 'catalogId')
+            throw new \LogicException('The property "catalogId" cannot be unset because it is non-nullable!'); // a uuid (cannot be unset)
         if ($name === 'captions')
             throw new \LogicException('The property "captions" cannot be unset because it is non-nullable!'); // a xml value (cannot be unset)
+        if ($name === 'filmingLocation')
+            throw new \LogicException('The property "filmingLocation" cannot be unset because it is non-nullable!'); // a Location reference (cannot be unset)
+        if ($name === 'turningPoint')
+            throw new \LogicException('The property "turningPoint" cannot be unset because it is non-nullable!'); // a Point reference (cannot be unset)
     }
 
     /**
@@ -782,14 +856,16 @@ class Movie extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->loudnessIndex = $result->loudnessIndex;
         $this->under18 = $result->under18;
         $this->awards = $result->awards;
-        $this->poster = $result->poster;
         $this->released = $result->released;
         $this->premiered = $result->premiered;
         $this->criticsRating = $result->criticsRating;
         $this->publicRating = $result->publicRating;
-        $this->catalogId = $result->catalogId;
         $this->budget = $result->budget;
+        $this->poster = $result->poster;
+        $this->catalogId = $result->catalogId;
         $this->captions = $result->captions;
+        $this->filmingLocation = $result->filmingLocation;
+        $this->turningPoint = $result->turningPoint;
         $this->ID = $result->ID;
     }
 

@@ -40,15 +40,17 @@ abstract class MovieArrayConverter
         $ret['loudnessIndex'] = $item->loudnessIndex;
         $ret['under18'] = $item->under18;
         $ret['awards'] = $item->awards;
-        $ret['poster'] = $item->poster->__toString();
         $ret['released'] = $item->released->__toString();
         $ret['premiered'] = $item->premiered->__toString();
         $ret['criticsRating'] = $item->criticsRating->__toString();
         $ret['publicRating'] = $item->publicRating->toStringWith(4);
-        $ret['catalogId'] = $item->catalogId->__toString();
         $ret['budget'] = $item->budget->__toString();
+        $ret['poster'] = $item->poster->__toString();
+        $ret['catalogId'] = $item->catalogId->__toString();
         if($item->captions !== null)
             $ret['captions'] = \NGS\Converter\XmlConverter::toArray($item->captions);
+        $ret['filmingLocation'] = $item->filmingLocation->toArray();
+        $ret['turningPoint'] = $item->turningPoint->toArray();
         return $ret;
     }
 

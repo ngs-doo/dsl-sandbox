@@ -14,14 +14,20 @@ module Cinema
         decimal criticsRating;
         decimal(4) publicRating;
         
+        // NGS\Money is a decimal value with scale 2 that is rounded up
+        money budget;
+
         // NGS\UUID
         guid catalogId;
 
-        // NGS\Money
-        money budget;
-
         // SimpleXMLElement
         xml captions;
+
+        // structure holding two double properties: x and y
+        location filmingLocation;
+
+        // structure holding two integer properties: x and y
+        point turningPoint;
 
         string title;
         string(10) shortTitle;

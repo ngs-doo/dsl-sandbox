@@ -21,18 +21,17 @@ module Cinema
         // map is a key-value type, represented as a PHP native array
         map awards;
 
-        binary poster;
-        
         date released;
         timestamp premiered;
         
         decimal criticsRating;
         decimal(4) publicRating;
-        
-        guid catalogId;
-
         money budget;
-
+        
+        binary poster;        
+        guid catalogId;
         xml captions;
+        location filmingLocation;
+        point turningPoint;
     }
 }

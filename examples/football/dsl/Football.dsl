@@ -12,4 +12,11 @@ module Football
         string name;
         Team *team;
     }
+
+    entity PlayerContract
+    {
+        Team *team;
+        date signedOn;
+        date expiry;
+    }
 }

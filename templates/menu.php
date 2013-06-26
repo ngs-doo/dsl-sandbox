@@ -5,41 +5,43 @@ $menu = array(
             'title' => 'Hello world'),
     ),
     'Building blocks' => array(
+        'value' => array(
+            'title' => 'Value'),
+        'entity' => array(
+            'title' => 'Entity'),
         'aggregate-root' => array(
             'title' => 'Aggregate root',
             'dsl'   => 'Football.dsl'),
-        /*
-        'entity' => array(
-            'title' => 'Entity'),
-        'value' => array(
-            'title' => 'Value'),
-*/      
         'types-primitive' => array(
             'title' => 'Primitive types'),
         'types-complex' => array(
             'title' => 'Complex types'),
-        'snowflake' => array(
-            'title' => 'Snowflake'),
- /*       'reference' => array(
-            'title' => 'References'),
-        'collections' => array(
-            'title' => 'Collections'),*/
-    ),
-    'Basic concepts' => array(
-        'simple-crud' => array(
-            'title' => 'Simple CRUD'),
-        'type-safety' => array(
-            'title' => 'Type safety'),
-        'detail' => array(
-            'title' => 'Detail'),
-        'sequence' => array(
-            'title' => 'Sequence'),
         'search-spec' => array(
             'title' => 'Simple specification'),
         'search-spec-params' => array(
-            'title' => 'Specification parameters'),
+            'title' => 'Specification with parameters'),
+        'snowflake' => array(
+            'title' => 'Snowflake'),
+    ),
+    'Basic concepts' => array(
+        'sequence' => array(
+            'title' => 'Sequence'),
         'search-spec-complex' => array(
             'title' => 'Complex specification'),
+        'calculated-specification' => array(
+            'title' => 'Calculated specification'),
+//        'calculated-expression' => array(
+//            'title' => 'Calculated expression'),
+        
+        'type-safety' => array(
+            'title' => 'Type safety'),
+/*        'reference-simple' => array(
+            'title' => 'Simple references'),
+        'reference-collections' => array(
+            'title' => 'Collections references'),*/
+
+        'detail' => array(
+            'title' => 'Detail'),
         'search-generic' => array(
             'title' => 'Generic search'),
    /*     'validation' => array(
@@ -58,6 +60,8 @@ $menu = array(
             'title' => 'Snapshot'),
     ),
     'Sample apps' => array(
+        'simple-crud' => array(
+            'title' => 'Simple CRUD'),
         'report' => array(
             'title' => 'Reports'),
         'todo-crud' => array(
