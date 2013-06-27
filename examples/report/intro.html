@@ -1,1 +1,8 @@
-<h4>Creating dynamic reports</h4>
+<p><strong>Report</strong> should be used as container for various data. Data for complex forms can be populated at once instead of making multiple roundtrips to the server. It is also used for sending this data to the reporting engine.</p>
+<p>Report has two types of properties:</p>
+<ol>
+    <li><strong>Simple properties</strong> are defined by type and used as report parameters</li>
+    <li><strong>Data properties</strong> are defined with type and an expression which behaves as specification and is used to filter data</li>
+</ol>
+<p>Report is used by first filling out the simple properties, and then data properties can be populated by expressions specified in report.</p>
+<p>In this example, <em>CustomerOrders</em> report is used to fetch orders by customer's ssn. <em>ssn</em> and <em>totalOrder</em> properties are used as simple properties. <em>customer</em> and <em>orders</em> are data properties.

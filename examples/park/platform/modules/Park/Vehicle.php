@@ -4,6 +4,8 @@ namespace Park;
 require_once __DIR__.'/VehicleJsonConverter.php';
 require_once __DIR__.'/VehicleArrayConverter.php';
 require_once __DIR__.'/Engine.php';
+require_once __DIR__.'/CurrentState.php';
+require_once __DIR__.'/Company.php';
 
 /**
  * Generated from NGS DSL
@@ -14,7 +16,12 @@ require_once __DIR__.'/Engine.php';
  * @property int $year an integer number
  * @property string $engineID used by reference $engine (read-only)
  * @property \Park\Engine $engine an object of class "Park\Engine"
+ * @property \Park\CurrentState $state an object of class "Park\CurrentState", can be null
+ * @property int $companyID used by reference $company (read-only)
+ * @property string $companyURI reference to an object of class "Park\Company" (read-only)
+ * @property \Park\Company $company an object of class "Park\Company", can be null
  * @property bool $muscleCar a bool, calculated by server (read-only)
+ * @property bool $isOldtimer a bool, calculated by server (read-only)
  *
  * @package Park
  * @version 0.9.9 beta
@@ -27,7 +34,12 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $year;
     protected $engineID;
     protected $engine;
+    protected $state;
+    protected $companyID;
+    protected $companyURI;
+    protected $company;
     protected $muscleCar;
+    protected $isOldtimer;
 
     /**
      * Constructs object using a key-property array or instance of class "Park\Vehicle"
@@ -70,6 +82,8 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['engine'] = new \Park\Engine(); // an object of class "Park\Engine"
         if(!array_key_exists('muscleCar', $data))
             $data['muscleCar'] = false; // a bool, calculated by server
+        if(!array_key_exists('isOldtimer', $data))
+            $data['isOldtimer'] = false; // a bool, calculated by server
     }
 
     /**
@@ -99,9 +113,24 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (array_key_exists('engine', $data))
             $this->setEngine($data['engine']);
         unset($data['engine']);
+        if (array_key_exists('state', $data))
+            $this->setState($data['state']);
+        unset($data['state']);
+        if (array_key_exists('companyID', $data))
+            $this->setCompanyID($data['companyID']);
+        unset($data['companyID']);
+        if (array_key_exists('company', $data))
+            $this->setCompany($data['company']);
+        unset($data['company']);
+        if(array_key_exists('companyURI', $data))
+            $this->companyURI = $data['companyURI'] === null ? null : \NGS\Converter\PrimitiveConverter::toString($data['companyURI']);
+        unset($data['companyURI']);
         if (isset($data['muscleCar']))
             $this->muscleCar = \NGS\Converter\PrimitiveConverter::toBoolean($data['muscleCar']);
         unset($data['muscleCar']);
+        if (isset($data['isOldtimer']))
+            $this->isOldtimer = \NGS\Converter\PrimitiveConverter::toBoolean($data['isOldtimer']);
+        unset($data['isOldtimer']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Park\Vehicle" constructor: '.implode(', ', array_keys($data)));
@@ -161,11 +190,53 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @return an object of class "Park\CurrentState", can be null
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @return an integer number, can be null
+     */
+    public function getCompanyID()
+    {
+        return $this->companyID;
+    }
+
+    /**
+     * @return a reference to an object of class "Park\Company"
+     */
+    public function getCompanyURI()
+    {
+        return $this->companyURI;
+    }
+
+    /**
+     * @return an object of class "Park\Company", can be null
+     */
+    public function getCompany()
+    {
+        if ($this->companyURI !== null && $this->company === null)
+            $this->company = \NGS\Patterns\Repository::instance()->find('Park\\Company', $this->companyURI);
+        return $this->company;
+    }
+
+    /**
      * @return a bool, calculated by server
      */
     public function getMuscleCar()
     {
         return $this->muscleCar;
+    }
+
+    /**
+     * @return a bool, calculated by server
+     */
+    public function getIsOldtimer()
+    {
+        return $this->isOldtimer;
     }
 
     /**
@@ -189,8 +260,18 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getEngineID(); // a string
         if ($name === 'engine')
             return $this->getEngine(); // an object of class "Park\Engine"
+        if ($name === 'state')
+            return $this->getState(); // an object of class "Park\CurrentState", can be null
+        if ($name === 'companyID')
+            return $this->getCompanyID(); // an integer number, can be null
+        if ($name === 'companyURI')
+            return $this->getCompanyURI(); // a reference to an object of class "Park\Company"
+        if ($name === 'company')
+            return $this->getCompany(); // an object of class "Park\Company", can be null
         if ($name === 'muscleCar')
             return $this->getMuscleCar(); // a bool, calculated by server
+        if ($name === 'isOldtimer')
+            return $this->getIsOldtimer(); // a bool, calculated by server
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Park\Vehicle" does not exist and could not be retrieved!');
     }
@@ -214,13 +295,19 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // an integer number (always set)
         if ($name === 'engine')
             return true; // an object of class "Park\Engine" (always set)
+        if ($name === 'state')
+            return $this->getState() !== null; // an object of class "Park\CurrentState", can be null
+        if ($name === 'company')
+            return $this->getCompany() !== null; // an object of class "Park\Company", can be null
         if ($name === 'muscleCar')
+            return true; // a bool, calculated by server (always set)
+        if ($name === 'isOldtimer')
             return true; // a bool, calculated by server (always set)
 
         return false;
     }
 
-    private static $_read_only_properties = array('URI', 'ID', 'engineID', 'muscleCar');
+    private static $_read_only_properties = array('URI', 'ID', 'engineID', 'companyID', 'companyURI', 'muscleCar', 'isOldtimer');
 
     /**
      * @param int $value an integer number
@@ -294,6 +381,50 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @param \Park\CurrentState $value an object of class "Park\CurrentState", can be null
+     *
+     * @return \Park\CurrentState
+     */
+    public function setState($value)
+    {
+        $value = $value !== null ? \Park\CurrentStateArrayConverter::fromArray($value) : null;
+        $this->state = $value;
+        return $value;
+    }
+
+    /**
+     * @param int $value an integer number, can be null
+     *
+     * @return int
+     */
+    private function setCompanyID($value)
+    {
+        $value = $value !== null ? \NGS\Converter\PrimitiveConverter::toInteger($value) : null;
+        $this->companyID = $value;
+        return $value;
+    }
+
+    /**
+     * @param \Park\Company $value an object of class "Park\Company", can be null
+     *
+     * @return \Park\Company
+     */
+    public function setCompany($value)
+    {
+        $value = $value !== null ? \Park\CompanyArrayConverter::fromArray($value) : null;
+        if ($value !== null && $value->URI === null)
+            throw new \InvalidArgumentException('Value of property "company" cannot have URI set to null because it\'s a reference! Reference values must have non-null URIs!');
+        $this->company = $value;
+        $this->companyURI = $value === null ? null : $value->URI;
+        if ($value === null && $this->companyID !== null) {
+            $this->companyID = null;
+        } elseif ($value !== null) {
+            $this->companyID = $value->ID;
+        }
+        return $value;
+    }
+
+    /**
      * Property setter which checks for invalid access to entity properties and enforces proper type checks
      *
      * @param string $name Property name
@@ -309,6 +440,10 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->setYear($value); // an integer number
         if ($name === 'engine')
             return $this->setEngine($value); // an object of class "Park\Engine"
+        if ($name === 'state')
+            return $this->setState($value); // an object of class "Park\CurrentState", can be null
+        if ($name === 'company')
+            return $this->setCompany($value); // an object of class "Park\Company", can be null
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Park\Vehicle" does not exist and could not be set!');
     }
 
@@ -327,6 +462,10 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \LogicException('The property "year" cannot be unset because it is non-nullable!'); // an integer number (cannot be unset)
         if ($name === 'engine')
             throw new \LogicException('The property "engine" cannot be unset because it is non-nullable!'); // an object of class "Park\Engine" (cannot be unset)
+        if ($name === 'state')
+            $this->setState(null);; // an object of class "Park\CurrentState", can be null
+        if ($name === 'company')
+            $this->setCompany(null);; // an object of class "Park\Company", can be null
     }
 
     /**
@@ -351,7 +490,12 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->year = $result->year;
         $this->engineID = $result->engineID;
         $this->engine = $result->engine;
+        $this->state = $result->state;
+        $this->companyID = $result->companyID;
+        $this->company = $result->company;
+        $this->companyURI = $result->companyURI;
         $this->muscleCar = $result->muscleCar;
+        $this->isOldtimer = $result->isOldtimer;
         $this->ID = $result->ID;
     }
 
@@ -400,6 +544,19 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     {
         require_once __DIR__.'/Vehicle/isMuscleCar.php';
         $specification = new \Park\Vehicle\isMuscleCar();
+        return $specification->search($searchLimit, $searchOffset);
+    }
+
+    /**
+     * Find data using declared specification hasValidModelLength
+     * Search can be limited by $searchLimit and $searchOffset integer arguments
+     *
+     * @return array of objects that satisfy specification
+     */
+    public static function hasValidModelLength($searchLimit = null, $searchOffset = null)
+    {
+        require_once __DIR__.'/Vehicle/hasValidModelLength.php';
+        $specification = new \Park\Vehicle\hasValidModelLength();
         return $specification->search($searchLimit, $searchOffset);
     }
 }

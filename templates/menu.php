@@ -20,52 +20,76 @@ $menu = array(
             'title' => 'Simple specification'),
         'search-spec-params' => array(
             'title' => 'Specification with parameters'),
+        'search-spec-complex' => array(
+            'title' => 'Complex specification'),
         'snowflake' => array(
             'title' => 'Snowflake'),
+        //'domain-event' => array(
+        //    'title' => 'Domain event'),
+        'validation' => array(
+            'title' => 'Validation'),
+        'report' => array(
+            'title' => 'Report'),
     ),
     'Basic concepts' => array(
         'sequence' => array(
             'title' => 'Sequence'),
-        'search-spec-complex' => array(
-            'title' => 'Complex specification'),
         'calculated-specification' => array(
             'title' => 'Calculated specification'),
-//        'calculated-expression' => array(
-//            'title' => 'Calculated expression'),
-        
-        'type-safety' => array(
-            'title' => 'Type safety'),
-/*        'reference-simple' => array(
+        'calculated-expression' => array(
+            'title' => 'Calculated expression'),
+        'reference-simple' => array(
             'title' => 'Simple references'),
-        'reference-collections' => array(
-            'title' => 'Collections references'),*/
-
         'detail' => array(
             'title' => 'Detail'),
+        'reference-collections' => array(
+            'title' => 'Collections references'),
+        'type-safety' => array(
+            'title' => 'Type safety'),
         'search-generic' => array(
             'title' => 'Generic search'),
-   /*     'validation' => array(
-            'title' => 'Validation'),*/
     ),
-        // 'blog' => array(
-        //     'title' => 'Collections',
-        //     'dsl' => 'blog.dsl'),
+    'Intermediate concepts' => array(
+        'templater' => array(
+            'title' => 'Templater'),
+        'templater-report' => array(
+            'title' => 'Templater report'),
+        'snapshot' => array(
+            'title' => 'Snapshot'),
+        'sql' => array(
+            'title' => 'SQL'),
+        'ling' => array(
+            'title' => 'LINQ'),
+        
+    ),
     'Advanced concepts' => array(
         'olap' => array(
             'title' => 'OLAP',
             'dsl' => 'olap.dsl'),
+    /*    'olap-templater' => array(
+            'title' => 'OLAP templater',
+            'dsl' => 'olap.dsl'), */
         'history' => array(
             'title' => 'History'),
-        'snapshot' => array(
-            'title' => 'Snapshot'),
+/* @todo
+        snapshot za kolekcije
+        security filtriranje (uz neku random funkciju)
+        index unique i obican
+        index sa predikatom
+        async event
+*/
     ),
     'Sample apps' => array(
         'simple-crud' => array(
             'title' => 'Simple CRUD'),
-        'report' => array(
-            'title' => 'Reports'),
+        'report-app' => array(
+            'title' => 'PDF reports'),
         'todo-crud' => array(
             'title' => 'TODO'),
+
+        // 'blog' => array(
+        //     'title' => 'Collections',
+        //     'dsl' => 'blog.dsl'),
     ),
 );
 ?>

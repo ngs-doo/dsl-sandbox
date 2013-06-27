@@ -1,37 +1,26 @@
 <?php
+use ERP\Customer;
 use ERP\CustomerOrders;
 
-if (isset($_GET['download']))
-{
-    $report = new CustomerOrders();
-    $report->ssn = '12345-67890';
-    $report->totalOrder = 5;
+// fetch random customer
+$customerCount = Customer::count();
+$offset = rand(0, $customerCount);
+$customer = current(Customer::findAll(1, $offset));
 
-    $ext = $_GET['download']==='pdf' ? 'pdf' : 'docx';
-    $content = $ext === 'pdf'
-        ? $report->buildReportsPdf()
-        : $report->buildReports();
+$report = new CustomerOrders();
 
-    // download report contents
-    header('Content-Disposition: attachment; filename=customer-orders.'.$ext);
-    $mimeType = $ext === 'pdf'
-        ? 'application/pdf'
-        : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    header('Content-Type: '.$mimeType);
-    header('Content-Length: '.strlen($content));
-    echo $content;
-    die;
-}
-else {
-    // populate the database with some samples
-    require('sample_data.php');
-}
+$report->ssn = $customer->ssn;
+$report->totalOrder = 10;
+
+// populates data properties
+$report->populate();
+
 ?>
 
-<p>Inserted some random data...</p>
-<p>Download reports:
-    <ul>
-        <li><a href="?download=docx" data-async="false">DOCX report</a></li>
-        <li><a href="?download=pdf" data-async="false">PDF report</a></li>
-    </ul>
-</p>
+Customer with SSN <?=$customer->ssn?> has <?=count($report->orders)?> orders:
+
+<ul>
+<? foreach ($report->orders as $order): ?>
+    <li><?=$order->totalCost?></li>
+<? endforeach ?>
+</ul>

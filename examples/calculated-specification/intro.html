@@ -1,3 +1,2 @@
-<p>Property can be calculated from specification. Since specification always evaluates to true or false, calculated property is a non-null, read-only, boolean property.</p>
-<p>Here a calculated property is used to avoid unnecessary server load. Expression in specification is navigating to the values in Engine entity. Calculating the expression manually in PHP by accessing 'engine' property will result in a server call to fetch the engine instance from the server. When using calculated property, expression is evaluated server-side immediately upon fetching the Vehicle object, so there is no need to load the Engine object.</p>
-<p>Note that object must first be persisted to access calculated property value.</p>
+<p>Property can be <strong>calculated from specification</strong>. Since specification always evaluates to true or false, calculated property is a non-null, read-only, boolean property.</p>
+<p>Note that expression in calculated property is evaluated on the server. That means object must first be persisted in order to access the calculated property value.</p>

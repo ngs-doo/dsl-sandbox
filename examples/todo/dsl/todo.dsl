@@ -8,6 +8,8 @@ module Todo
         timestamp created;
         Group? *group;
 
+        calculated isImportant from 'it => it.priority <= 1 && !it.isDone';
+
         specification findDone 'it => it.isDone == true';
 
         specification findByName 'it => it.name.StartsWith(query)'
@@ -38,6 +40,7 @@ module Todo
         name;
         priority;
         isDone;
+        isImportant;
 
         order by priority asc, name desc;
     }

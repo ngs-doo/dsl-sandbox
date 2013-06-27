@@ -11,6 +11,7 @@ require_once __DIR__.'/TaskListArrayConverter.php';
  * @property string $name a string (read-only)
  * @property int $priority an integer number (read-only)
  * @property bool $isDone a boolean value (read-only)
+ * @property bool $isImportant specification property, calculated by server (read-only)
  *
  * @package Todo
  * @version 0.9.9 beta
@@ -21,6 +22,7 @@ class TaskList extends \NGS\Patterns\Identifiable implements \IteratorAggregate
     protected $name;
     protected $priority;
     protected $isDone;
+    protected $isImportant;
 
     /**
      * Constructs object using a key-property array or instance of class "Todo\TaskList"
@@ -49,6 +51,8 @@ class TaskList extends \NGS\Patterns\Identifiable implements \IteratorAggregate
             $data['priority'] = 0; // an integer number
         if(!array_key_exists('isDone', $data))
             $data['isDone'] = false; // a boolean value
+        if(!array_key_exists('isImportant', $data))
+            $data['isImportant'] = false; // specification property, calculated by server
     }
 
     /**
@@ -73,6 +77,9 @@ class TaskList extends \NGS\Patterns\Identifiable implements \IteratorAggregate
         if (isset($data['isDone']))
             $this->isDone = \NGS\Converter\PrimitiveConverter::toBoolean($data['isDone']);
         unset($data['isDone']);
+        if (isset($data['isImportant']))
+            $this->isImportant = \NGS\Converter\PrimitiveConverter::toBoolean($data['isImportant']);
+        unset($data['isImportant']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Todo\TaskList" constructor: '.implode(', ', array_keys($data)));
@@ -116,6 +123,14 @@ class TaskList extends \NGS\Patterns\Identifiable implements \IteratorAggregate
     }
 
     /**
+     * @return specification property, calculated by server
+     */
+    public function getIsImportant()
+    {
+        return $this->isImportant;
+    }
+
+    /**
      * Property getter which throws Exceptions on invalid access
      *
      * @param string $name Property name
@@ -132,6 +147,8 @@ class TaskList extends \NGS\Patterns\Identifiable implements \IteratorAggregate
             return $this->getPriority(); // an integer number
         if ($name === 'isDone')
             return $this->getIsDone(); // a boolean value
+        if ($name === 'isImportant')
+            return $this->getIsImportant(); // specification property, calculated by server
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Todo\TaskList" does not exist and could not be retrieved!');
     }
@@ -155,6 +172,8 @@ class TaskList extends \NGS\Patterns\Identifiable implements \IteratorAggregate
             return true; // an integer number (always set)
         if ($name === 'isDone')
             return true; // a boolean value (always set)
+        if ($name === 'isImportant')
+            return true; // specification property, calculated by server (always set)
 
         return false;
     }

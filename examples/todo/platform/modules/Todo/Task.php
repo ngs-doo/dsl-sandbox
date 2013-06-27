@@ -17,6 +17,7 @@ require_once __DIR__.'/Group.php';
  * @property int $groupID used by reference $group (read-only)
  * @property string $groupURI reference to an object of class "Todo\Group" (read-only)
  * @property \Todo\Group $group an object of class "Todo\Group", can be null
+ * @property bool $isImportant a bool, calculated by server (read-only)
  *
  * @package Todo
  * @version 0.9.9 beta
@@ -32,6 +33,7 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $groupID;
     protected $groupURI;
     protected $group;
+    protected $isImportant;
 
     /**
      * Constructs object using a key-property array or instance of class "Todo\Task"
@@ -72,6 +74,8 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['isDone'] = false; // a boolean value
         if(!array_key_exists('created', $data))
             $data['created'] = new \NGS\Timestamp(); // a timestamp with time zone
+        if(!array_key_exists('isImportant', $data))
+            $data['isImportant'] = false; // a bool, calculated by server
     }
 
     /**
@@ -110,6 +114,9 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if(array_key_exists('groupURI', $data))
             $this->groupURI = $data['groupURI'] === null ? null : \NGS\Converter\PrimitiveConverter::toString($data['groupURI']);
         unset($data['groupURI']);
+        if (isset($data['isImportant']))
+            $this->isImportant = \NGS\Converter\PrimitiveConverter::toBoolean($data['isImportant']);
+        unset($data['isImportant']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Todo\Task" constructor: '.implode(', ', array_keys($data)));
@@ -195,6 +202,14 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @return a bool, calculated by server
+     */
+    public function getIsImportant()
+    {
+        return $this->isImportant;
+    }
+
+    /**
      * Property getter which throws Exceptions on invalid access
      *
      * @param string $name Property name
@@ -221,6 +236,8 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getGroupURI(); // a reference to an object of class "Todo\Group"
         if ($name === 'group')
             return $this->getGroup(); // an object of class "Todo\Group", can be null
+        if ($name === 'isImportant')
+            return $this->getIsImportant(); // a bool, calculated by server
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Todo\Task" does not exist and could not be retrieved!');
     }
@@ -248,11 +265,13 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // a timestamp with time zone (always set)
         if ($name === 'group')
             return $this->getGroup() !== null; // an object of class "Todo\Group", can be null
+        if ($name === 'isImportant')
+            return true; // a bool, calculated by server (always set)
 
         return false;
     }
 
-    private static $_read_only_properties = array('URI', 'ID', 'groupID', 'groupURI');
+    private static $_read_only_properties = array('URI', 'ID', 'groupID', 'groupURI', 'isImportant');
 
     /**
      * @param int $value an integer number
@@ -425,6 +444,7 @@ class Task extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->groupID = $result->groupID;
         $this->group = $result->group;
         $this->groupURI = $result->groupURI;
+        $this->isImportant = $result->isImportant;
         $this->ID = $result->ID;
     }
 

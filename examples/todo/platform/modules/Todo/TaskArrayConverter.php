@@ -38,6 +38,7 @@ abstract class TaskArrayConverter
         $ret['created'] = $item->created->__toString();
         $ret['groupID'] = $item->groupID;
         $ret['groupURI'] = $item->groupURI;
+        $ret['isImportant'] = $item->isImportant;
         return $ret;
     }
 

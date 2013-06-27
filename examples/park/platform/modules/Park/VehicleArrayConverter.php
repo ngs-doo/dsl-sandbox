@@ -37,7 +37,11 @@ abstract class VehicleArrayConverter
         $ret['engineID'] = $item->engineID;
         if($item->engine !== null)
             $ret['engine'] = \Park\EngineArrayConverter::toArray($item->engine);
+        $ret['state'] = $item->state === null ? null : \Park\CurrentStateArrayConverter::toArray($item->state);
+        $ret['companyID'] = $item->companyID;
+        $ret['companyURI'] = $item->companyURI;
         $ret['muscleCar'] = $item->muscleCar;
+        $ret['isOldtimer'] = $item->isOldtimer;
         return $ret;
     }
 
