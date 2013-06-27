@@ -42,24 +42,24 @@ $menu = array(
             'title' => 'Simple references'),
         'detail' => array(
             'title' => 'Detail'),
-        'reference-collections' => array(
-            'title' => 'Collections references'),
+       // 'reference-collections' => array(
+       //     'title' => 'Collections references'),
         'type-safety' => array(
             'title' => 'Type safety'),
         'search-generic' => array(
             'title' => 'Generic search'),
     ),
     'Intermediate concepts' => array(
-        'templater' => array(
-            'title' => 'Templater'),
-        'templater-report' => array(
-            'title' => 'Templater report'),
+        // 'templater' => array(
+        //     'title' => 'Templater'),
+        // 'templater-report' => array(
+        //     'title' => 'Templater report'),
         'snapshot' => array(
             'title' => 'Snapshot'),
-        'sql' => array(
-            'title' => 'SQL'),
-        'ling' => array(
-            'title' => 'LINQ'),
+        // 'sql' => array(
+        //     'title' => 'SQL'),
+        // 'ling' => array(
+        //     'title' => 'LINQ'),
         
     ),
     'Advanced concepts' => array(
