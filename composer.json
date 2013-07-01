@@ -10,13 +10,13 @@
     "require": {
         "slim/slim": "2.2.0",
         "slim/extras": "2.0.3",
-        "ngs/ngs-php": "*"
+        "ngs/ngs-php-core": "*"
     },
     "repositories": [
         {
             "type": "package",
             "package": {
-                "name": "ngs/ngs-php",
+                "name": "ngs/ngs-php-core",
                 "version": "1.0-stable",
                 "source": {
                     "url": "git@github.com:ngs-doo/ngs-php.git",

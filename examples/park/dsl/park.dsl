@@ -8,10 +8,15 @@ module Park
         CurrentState? state;
         Company? *company;
 
-        specification isMuscleCar 'it => it.engine.power > 250 && it.year < 1970';
+        specification isMuscleCar 'it => it.engine.power > 250 && it.year < 1980';
         calculated muscleCar from isMuscleCar;
 
-        calculated isOldtimer from 'it => it.year < 1950';
+        calculated oldtimer from 'it => it.year < 1970';
+
+        calculated string description from 
+            'it => it.model + ", " + it.year + "; " + it.engine.power' + " horsepower";
+
+        calculated int enginePowerInWatts from 'it => it.engine.power * 746';
 
         persistence;
 
@@ -45,5 +50,15 @@ module Park
         float litersInTank;
         int mileage;
         int oilChangeIn;
+    }
+
+    snowflake CarList from Vehicle
+    {
+        model;
+        year;
+        engine.power;
+        state.mileage;
+        muscleCar;
+        oldtimer;
     }
 }

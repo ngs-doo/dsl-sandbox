@@ -24,5 +24,8 @@ array_walk($cars, function(&$car) { $car->persist(); });
 ?>
 
 <? foreach ($cars as $car): ?>
-<p><?=$car->model?> is a <? if($car->muscleCar): ?> MUSCLE <? endif ?> car.</p>
+<p><?=$car->model?> is a
+    <? if($car->muscleCar): ?> MUSCLE <? endif ?>
+    <? if($car->oldtimer): ?> OLDTIMER <? endif ?>
+    car.</p>
 <? endforeach ?>

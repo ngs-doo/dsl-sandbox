@@ -1,27 +1,19 @@
 <?php
-use Todo\Task;
+use Park\Vehicle;
+use Park\Engine;
 
-$fix = new Task();
-$fix->name = 'Urgent bugfix!';
-$fix->priority = 0;
-$fix->persist();
+$car = new Vehicle();
+$car->model = 'Mustang GT';
+$car->year = 1968;
+$car->engine = new Engine(array(
+    'serialNumber' => uniqid('', true),
+    'power' => 270
+));
 
-$feat = new Task();
-$feat->name = 'Feature xyz';
-$feat->priority = 5;
-
-$fix->persist();
-$feat->persist();
-
+$car->persist();
 ?>
 
-<? foreach (array($fix, $feat) as $task): ?>
-<p>
-    <?=$task->name?>
-    <? if ($task->isImportant): ?>
-        <label class="badge badge-important">important</label>
-    <? else: ?>
-        <label class="badge">todo later</label>
-    <? endif ?>
-</p>
-<? endforeach ?>
+<ul>
+    <li>Description: <?=$car->description?></li>
+    <li>Engine power in Watts: <?=$car->enginePowerInWatts?> W</li>
+</ul>

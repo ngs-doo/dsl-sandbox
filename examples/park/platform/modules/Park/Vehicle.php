@@ -21,7 +21,9 @@ require_once __DIR__.'/Company.php';
  * @property string $companyURI reference to an object of class "Park\Company" (read-only)
  * @property \Park\Company $company an object of class "Park\Company", can be null
  * @property bool $muscleCar a bool, calculated by server (read-only)
- * @property bool $isOldtimer a bool, calculated by server (read-only)
+ * @property bool $oldtimer a bool, calculated by server (read-only)
+ * @property string $description a string, calculated by server (read-only)
+ * @property int $enginePowerInWatts an integer number, calculated by server (read-only)
  *
  * @package Park
  * @version 0.9.9 beta
@@ -39,7 +41,9 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $companyURI;
     protected $company;
     protected $muscleCar;
-    protected $isOldtimer;
+    protected $oldtimer;
+    protected $description;
+    protected $enginePowerInWatts;
 
     /**
      * Constructs object using a key-property array or instance of class "Park\Vehicle"
@@ -82,8 +86,12 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['engine'] = new \Park\Engine(); // an object of class "Park\Engine"
         if(!array_key_exists('muscleCar', $data))
             $data['muscleCar'] = false; // a bool, calculated by server
-        if(!array_key_exists('isOldtimer', $data))
-            $data['isOldtimer'] = false; // a bool, calculated by server
+        if(!array_key_exists('oldtimer', $data))
+            $data['oldtimer'] = false; // a bool, calculated by server
+        if(!array_key_exists('description', $data))
+            $data['description'] = ''; // a string, calculated by server
+        if(!array_key_exists('enginePowerInWatts', $data))
+            $data['enginePowerInWatts'] = 0; // an integer number, calculated by server
     }
 
     /**
@@ -128,9 +136,15 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (isset($data['muscleCar']))
             $this->muscleCar = \NGS\Converter\PrimitiveConverter::toBoolean($data['muscleCar']);
         unset($data['muscleCar']);
-        if (isset($data['isOldtimer']))
-            $this->isOldtimer = \NGS\Converter\PrimitiveConverter::toBoolean($data['isOldtimer']);
-        unset($data['isOldtimer']);
+        if (isset($data['oldtimer']))
+            $this->oldtimer = \NGS\Converter\PrimitiveConverter::toBoolean($data['oldtimer']);
+        unset($data['oldtimer']);
+        if (isset($data['description']))
+            $this->description = \NGS\Converter\PrimitiveConverter::toString($data['description']);
+        unset($data['description']);
+        if (isset($data['enginePowerInWatts']))
+            $this->enginePowerInWatts = \NGS\Converter\PrimitiveConverter::toInteger($data['enginePowerInWatts']);
+        unset($data['enginePowerInWatts']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Park\Vehicle" constructor: '.implode(', ', array_keys($data)));
@@ -234,9 +248,25 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     /**
      * @return a bool, calculated by server
      */
-    public function getIsOldtimer()
+    public function getOldtimer()
     {
-        return $this->isOldtimer;
+        return $this->oldtimer;
+    }
+
+    /**
+     * @return a string, calculated by server
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return an integer number, calculated by server
+     */
+    public function getEnginePowerInWatts()
+    {
+        return $this->enginePowerInWatts;
     }
 
     /**
@@ -270,8 +300,12 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getCompany(); // an object of class "Park\Company", can be null
         if ($name === 'muscleCar')
             return $this->getMuscleCar(); // a bool, calculated by server
-        if ($name === 'isOldtimer')
-            return $this->getIsOldtimer(); // a bool, calculated by server
+        if ($name === 'oldtimer')
+            return $this->getOldtimer(); // a bool, calculated by server
+        if ($name === 'description')
+            return $this->getDescription(); // a string, calculated by server
+        if ($name === 'enginePowerInWatts')
+            return $this->getEnginePowerInWatts(); // an integer number, calculated by server
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Park\Vehicle" does not exist and could not be retrieved!');
     }
@@ -301,13 +335,17 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getCompany() !== null; // an object of class "Park\Company", can be null
         if ($name === 'muscleCar')
             return true; // a bool, calculated by server (always set)
-        if ($name === 'isOldtimer')
+        if ($name === 'oldtimer')
             return true; // a bool, calculated by server (always set)
+        if ($name === 'description')
+            return true; // a string, calculated by server (always set)
+        if ($name === 'enginePowerInWatts')
+            return true; // an integer number, calculated by server (always set)
 
         return false;
     }
 
-    private static $_read_only_properties = array('URI', 'ID', 'engineID', 'companyID', 'companyURI', 'muscleCar', 'isOldtimer');
+    private static $_read_only_properties = array('URI', 'ID', 'engineID', 'companyID', 'companyURI', 'muscleCar', 'oldtimer', 'description', 'enginePowerInWatts');
 
     /**
      * @param int $value an integer number
@@ -495,7 +533,9 @@ class Vehicle extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->company = $result->company;
         $this->companyURI = $result->companyURI;
         $this->muscleCar = $result->muscleCar;
-        $this->isOldtimer = $result->isOldtimer;
+        $this->oldtimer = $result->oldtimer;
+        $this->description = $result->description;
+        $this->enginePowerInWatts = $result->enginePowerInWatts;
         $this->ID = $result->ID;
     }
 

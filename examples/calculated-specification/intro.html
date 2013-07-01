@@ -1,2 +1,4 @@
-<p>Property can be <strong>calculated from specification</strong>. Since specification always evaluates to true or false, calculated property is a non-null, read-only, boolean property.</p>
-<p>Note that expression in calculated property is evaluated on the server. That means object must first be persisted in order to access the calculated property value.</p>
+<p>Property can be <strong>calculated from specification</strong>. Calculated property is a read-only, boolean property. Expression in specification always evaluates to true or false.</p>
+<p>Property can be calculated directly from expression (without defining specification) by specifying th expression body after the <em>from</em> keyword in property.</p>
+<p>Calculated properties (both from expression and specification) can be referenced from snowflake.</p>
+<p>Note that expression in calculated property is evaluated on the server. That means newly created objects must first be persisted in order to access the calculated property value.</p>

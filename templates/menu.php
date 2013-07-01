@@ -50,8 +50,8 @@ $menu = array(
             'title' => 'Generic search'),
     ),
     'Intermediate concepts' => array(
-        // 'templater' => array(
-        //     'title' => 'Templater'),
+        'templater' => array(
+            'title' => 'Templater'),
         // 'templater-report' => array(
         //     'title' => 'Templater report'),
         'snapshot' => array(

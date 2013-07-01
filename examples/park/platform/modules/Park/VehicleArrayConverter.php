@@ -41,7 +41,9 @@ abstract class VehicleArrayConverter
         $ret['companyID'] = $item->companyID;
         $ret['companyURI'] = $item->companyURI;
         $ret['muscleCar'] = $item->muscleCar;
-        $ret['isOldtimer'] = $item->isOldtimer;
+        $ret['oldtimer'] = $item->oldtimer;
+        $ret['description'] = $item->description;
+        $ret['enginePowerInWatts'] = $item->enginePowerInWatts;
         return $ret;
     }
 

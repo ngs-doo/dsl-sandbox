@@ -16,12 +16,4 @@ module Todo
         string name;
         detail tasks Task.group;
     }
-
-    snowflake TaskList Task
-    {
-        name;
-        priority;
-        isDone;
-        isImportant;
-    }
 }
