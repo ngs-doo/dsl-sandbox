@@ -1,4 +1,2 @@
 Tasks:
-    -name: [[name]]
-    -priority: [[priority]]
-    
+    -name: [[name]], created on: [[created]:format(yyyy-MM-dd)]

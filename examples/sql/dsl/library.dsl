@@ -4,19 +4,13 @@ module Library
     {
         string title;
         int number { sequence; }
-
-        // primitive collection, can be null
         string[]? tags;
-
-        // complex references collection
         Page[] pages;
     }
 
     entity Page
     {
         string content;
-
-        // complex collection of values
         Footnote[] ?notes;
     }
 
@@ -26,10 +20,11 @@ module Library
     }
 
     sql BookSearch
-        <# SELECT book.number, book.title
-         FROM "Library"."Book" book
+        <# SELECT book."URI", book.number, book.title
+         FROM "Library"."Book_roo" book
          ORDER BY 2 DESC #>
     {
+        string URI;
         int number;
         string title;
 
@@ -37,5 +32,5 @@ module Library
         {
             string query;
         }
-    }
+    }    
 }

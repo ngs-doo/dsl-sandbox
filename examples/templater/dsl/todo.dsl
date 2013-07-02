@@ -9,6 +9,11 @@ module Todo
         Group? *group;
 
         calculated isImportant from 'it => it.priority <= 1 && !it.isDone';
+
+        specification findByName 'it => it.name.StartsWith(query)'
+        {
+            string query;
+        }
     }
 
     root Group

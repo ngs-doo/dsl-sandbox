@@ -27,10 +27,12 @@ abstract class Bootstrap
 
         if (!self::$curlOK) {
             self::remotePredefinedError('bootstrap', 'curl-missing');
+            exit(255);
         }
 
         if (!self::$mbstringOK) {
             self::remotePredefinedError('bootstrap', 'mbstring-missing');
+            exit(255);
         }
 
         self::$curlSsl = false;
@@ -44,6 +46,7 @@ abstract class Bootstrap
 
         if (!self::$curlSsl) {
             self::remotePredefinedError('bootstrap', 'curl-no-ssl');
+            exit(255);
         }
     }
 
@@ -57,7 +60,7 @@ abstract class Bootstrap
             $message = @file_get_contents($errorUrl);
             if ($message !== false) {
                 echo $message;
-                exit(501);
+                return;
             }
         }
 

@@ -1,41 +1,36 @@
 <?php
-namespace Library;
+namespace Library\BookSearch;
 
-require_once __DIR__.'/Book.php';
+require_once __DIR__.'/findByTitle.php';
 
 /**
  * Generated from NGS DSL
  *
- * Converts an object of class Library\Book into a simple array and backwards.
+ * Converts an object of class Library\BookSearch\findByTitle into a simple array and backwards.
  *
  * @package Library
  * @version 0.9.9 beta
  */
-abstract class BookArrayConverter
+abstract class findByTitleArrayConverter
 {/**
-     * @param array|\Library\Book An object or an array of objects of type "Library\Book"
+     * @param array|\Library\BookSearch\findByTitle An object or an array of objects of type "Library\BookSearch\findByTitle"
      *
      * @return array A simple array representation
      */
     public static function toArray($item, $allowNullValues=false)
     {
-        if ($item instanceof \Library\Book)
+        if ($item instanceof \Library\BookSearch\findByTitle)
             return self::toArrayObject($item);
         if (is_array($item))
             return self::toArrayList($item, $allowNullValues);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "Library\Book" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "Library\BookSearch\findByTitle" nor an array of said instances!');
     }
 
     private static function toArrayObject($item)
     {
         $ret = array();
-        $ret['URI'] = $item->URI;
-        $ret['ID'] = $item->ID;
-        $ret['title'] = $item->title;
-        $ret['number'] = $item->number;
-        $ret['tags'] = $item->tags;
-        $ret['pages'] = \Library\PageArrayConverter::toArray($item->pages, false);
+        $ret['query'] = $item->query;
         return $ret;
     }
 
@@ -48,8 +43,8 @@ abstract class BookArrayConverter
                 $ret[] = null;
             }
             else {
-                if (!$val instanceof \Library\Book)
-                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "Library\Book"! Type was: '.\NGS\Utils::getType($val));
+                if (!$val instanceof \Library\BookSearch\findByTitle)
+                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "Library\BookSearch\findByTitle"! Type was: '.\NGS\Utils::getType($val));
 
                 $ret[] = $val->toArray();
             }
@@ -60,12 +55,12 @@ abstract class BookArrayConverter
 
     public static function fromArray($item)
     {
-        if ($item instanceof \Library\Book)
+        if ($item instanceof \Library\BookSearch\findByTitle)
             return $item;
         if (is_array($item))
-            return new \Library\Book($item, 'build_internal');
+            return new \Library\BookSearch\findByTitle($item);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "Library\Book" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "Library\BookSearch\findByTitle" nor an array of said instances!');
     }
 
     public static function fromArrayList(array $items, $allowNullValues=false)
@@ -76,12 +71,12 @@ abstract class BookArrayConverter
                     continue;
                 if($val === null)
                     throw new \InvalidArgumentException('Null value found in provided array');
-                if(!$val instanceof \Library\Book)
-                    $val = new \Library\Book($val, 'build_internal');
+                if(!$val instanceof \Library\BookSearch\findByTitle)
+                    $val = new \Library\BookSearch\findByTitle($val);
             }
         }
         catch (\Exception $e) {
-            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "Library\Book"!', 42, $e);
+            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "Library\BookSearch\findByTitle"!', 42, $e);
         }
 
         return $items;

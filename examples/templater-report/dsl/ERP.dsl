@@ -33,8 +33,10 @@ module ERP
         Order[] orders 'it => it.customer.ssn == ssn'
             order by created desc limit totalOrder;
         
-        templater buildReports 'Orders.docx';
-        templater buildReportsPdf 'Orders.docx' pdf;
         templater buildReportsTxt 'report.txt';
+
+        templater buildReports 'Orders.docx';
+        // templater in pdf format
+        templater buildReportsPdf 'Orders.docx' pdf;
     }
 }

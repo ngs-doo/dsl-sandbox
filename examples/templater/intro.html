@@ -1,3 +1,7 @@
-<p><strong>Templater</strong> is a simple library for generating reports.</p>
+<p><strong>Templater</strong> is a simple report-generating library integrated into DSL platform. To use it in your project, first upload a template file in the project's 'Uploads' section (found in <a href="//panel.dsl-platform.com">Panel</a>).</p>
+<p>Here is an example template file:</p>
+<pre>Tasks:
+    -name: [[name]], created on: [[created]:format(yyyy-MM-dd)]</pre>
+<p>The example shows populating template with a single Task aggregate. Complex properties can be navigated (<i>[[group.name]]</i>) and various formatting can be applied to properties.</p>
+<p>Besides text files, Templater can be used with several file formats such as MS Office and OpenDocument formats. Find out more about Templater features at <a href="http://templater.info/features">templater.info</a></p>
 
-<p>To read more about Templater features, visit <a href="http://templater.info">templater.info</a></p>

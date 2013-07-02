@@ -52,12 +52,12 @@ $menu = array(
     'Intermediate concepts' => array(
         'templater' => array(
             'title' => 'Templater'),
-        // 'templater-report' => array(
-        //     'title' => 'Templater report'),
+        'templater-report' => array(
+            'title' => 'Templater report'),
         'snapshot' => array(
             'title' => 'Snapshot'),
-        // 'sql' => array(
-        //     'title' => 'SQL'),
+        'sql' => array(
+            'title' => 'SQL'),
         // 'ling' => array(
         //     'title' => 'LINQ'),
         

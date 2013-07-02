@@ -285,6 +285,17 @@ class CustomerOrders
         return $proxy->createReport($this, 'buildReportsPdf');
     }
 
+    /**
+     * Create specified report buildReportsTxt
+     *
+     * @return binary object representing requested document report.txt populated with data
+     */
+    public function buildReportsTxt()
+    {
+        $proxy = new \NGS\Client\ReportingProxy($this->restHttp);
+        return $proxy->createReport($this, 'buildReportsTxt');
+    }
+
     public function toJson()
     {
         return \ERP\CustomerOrdersJsonConverter::toJson($this);

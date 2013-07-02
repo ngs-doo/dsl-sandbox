@@ -1,0 +1,8 @@
+Customer: [[customer.name]]
+Address: [[customer.address]]
+SSN: [[ssn]]
+
+=========================================
+Order #[[orders.ID]]:
+[[orders.items.product.name]] x [[orders.items.quantity]] = [[orders.items.product.price]]
+Total cost: [[orders.totalCost]]
