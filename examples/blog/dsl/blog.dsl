@@ -5,10 +5,13 @@ module Blog
         string title;
         string content;
         
-        Category[]? *categories;
-        Comment[]? comments;
-        Tag[] *tags;
-        Link?[]? links;
+        Set<string> tags;           // strings set, distinct values
+        List<timestamp> modifiedOn; // Timestamp object list
+        Array<string> keywords;
+
+        Comment[]? comments;     // entity collection, can be null
+        Category[]? *categories; // root collection, can be null
+        List<Link?> links;          // ? allows null values in collection
     }
 
     root Category
@@ -22,11 +25,6 @@ module Blog
         string content;
     }
 
-    root Tag(code)
-    {
-        string code;
-    }
-    
     value Link
     {
         string url;

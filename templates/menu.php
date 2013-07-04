@@ -73,11 +73,18 @@ $menu = array(
             'dsl' => 'olap.dsl'), */
         'history' => array(
             'title' => 'History'),
+        'mixin' => array(
+            'title' => 'Mixin',
+            'dsl'   => 'cms.dsl'),
+        'versioning' => array(
+            'title' => 'Versioning'),
+        'index' => array(
+            'title' => 'Index'),
+        'index-predicate' => array(
+            'title' => 'Index with predicate'),
 /* @todo
         snapshot za kolekcije
         security filtriranje (uz neku random funkciju)
-        index unique i obican
-        index sa predikatom
         async event
 */
     ),

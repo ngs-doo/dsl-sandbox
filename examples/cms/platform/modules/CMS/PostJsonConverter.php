@@ -1,39 +1,39 @@
 <?php
-namespace Blog;
+namespace CMS;
 
-require_once __DIR__.'/TagArrayConverter.php';
+require_once __DIR__.'/PostArrayConverter.php';
 
 /**
  * Generated from NGS DSL
  *
- * Converts an object of class Blog\Tag into a JSON string and backwards via an array converter.
+ * Converts an object of class CMS\Post into a JSON string and backwards via an array converter.
  *
- * @package Blog
+ * @package CMS
  * @version 0.9.9 beta
  */
-abstract class TagJsonConverter
+abstract class PostJsonConverter
 {/**
      * @param string Json representation of the object(s)
      *
-     * @return array|\Blog\Tag An object or an array of objects of type "Blog\Tag"
+     * @return array|\CMS\Post An object or an array of objects of type "CMS\Post"
      */
     public static function fromJson($item, $allowNullValues=false)
     {
         $obj = json_decode($item, true);
 
         return \NGS\Utils::isJsonArray($item)
-            ? \Blog\TagArrayConverter::fromArrayList($obj, $allowNullValues)
-            : \Blog\TagArrayConverter::fromArray($obj);
+            ? \CMS\PostArrayConverter::fromArrayList($obj, $allowNullValues)
+            : \CMS\PostArrayConverter::fromArray($obj);
     }
 
     /**
-     * @param array|\Blog\Tag An object or an array of objects of type "Blog\Tag"
+     * @param array|\CMS\Post An object or an array of objects of type "CMS\Post"
      *
      * @return string Json representation of the object(s)
      */
     public static function toJson($item)
     {
-        $arr = \Blog\TagArrayConverter::toArray($item);
+        $arr = \CMS\PostArrayConverter::toArray($item);
         if(is_array($item))
             return json_encode($arr);
         if(empty($arr))

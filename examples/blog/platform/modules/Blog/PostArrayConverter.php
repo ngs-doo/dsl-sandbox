@@ -34,10 +34,12 @@ abstract class PostArrayConverter
         $ret['ID'] = $item->ID;
         $ret['title'] = $item->title;
         $ret['content'] = $item->content;
-        $ret['categoriesURI'] = $item->categoriesURI;
+        $ret['tags'] = $item->tags;
+        $ret['modifiedOn'] = \NGS\Utils::toStringArray($item->modifiedOn);
+        $ret['keywords'] = $item->keywords;
         $ret['comments'] = $item->comments === null ? null : \Blog\CommentArrayConverter::toArray($item->comments, false);
-        $ret['tagsURI'] = $item->tagsURI;
-        $ret['links'] = $item->links === null ? null : \Blog\LinkArrayConverter::toArray($item->links, true);
+        $ret['categoriesURI'] = $item->categoriesURI;
+        $ret['links'] = \Blog\LinkArrayConverter::toArray($item->links, true);
         return $ret;
     }
 
