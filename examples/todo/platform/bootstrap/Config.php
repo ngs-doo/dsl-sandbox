@@ -1,6 +1,7 @@
 <?php
 namespace NGS;
 use NGS\Client\RestHttp;
+use Dsl\ActionHistory;
 
 class Config {
     public static $skipDiff = false;
@@ -20,7 +21,7 @@ class Config {
     {
         $URI = $_SERVER['REQUEST_URI'];
 
-        self::$skipDiff = defined('NGS_UPDATE_SKIP_DIFF') && preg_match(NGS_UPDATE_SKIP_DIFF, $URI);
+        self::$skipDiff = defined('NGS_UPDATE_SKIP_DIFF') && NGS_UPDATE_SKIP_DIFF;
         self::$skipDiff = self::$skipDiff || array_key_exists('_dsl_platform_confirm_diff', $_POST);
 
         self::$confirmUnsafe = array_key_exists('_dsl_platform_confirm_unsafe', $_POST);
@@ -32,7 +33,33 @@ class Config {
 
     private static function paramsCLI()
     {
-        $options = getopt(null, array('skip-diff', 'confirm-unsafe'));
+        $options = getopt(null, array('skip-diff', 'confirm-unsafe', 'help'));
+        if (array_key_exists('help', $options)) {
+            echo <<<EOF
+Command line arguments:
+    --skip-diff
+        Don't show the difference between local and remote DSL
+
+    --confirm-unsafe
+        Confirms unsafe database migrations without asking.
+
+PHP defines:
+    NGS_UPDATE_SKIP_DIFF
+        same as --skip-diff. Set to value that evaluates to true to skip it.
+
+    NGS_UPDATE
+        If undefined, compilation process will begin automatically when DSL files changes.
+        That's good for development environment.
+
+        If set to expression that evaluates to false, compilation process will never start.
+        That's good for production environment.
+
+        Otherwise it is expected to be a string containing regular expression.
+        This regex is then matched with URL. Only if it matches the compilation proccess begins.
+        This allows you to control when you want to compile by changeing the URL in the location bar.
+EOF;
+            die;
+        }
 
         self::$skipDiff = array_key_exists('skip-diff', $options);
         self::$confirmUnsafe = array_key_exists('confirm-unsafe', $options);
@@ -69,7 +96,11 @@ try {
 
         if ($res === "diff") {
             $tmp = doXtimes(3, function() {
-                echo '[C]onfirm / [I]gnore?: ';
+                if (file_exists(Dirs::$modules.'NGS/Requirements.php'))
+                    echo '[C]onfirm / [I]gnore?: ';
+                else
+                    echo '[C]onfirm? ';
+
                 $in = rtrim(fgets(STDIN), "\n\r");
                 echo PHP_EOL;
 
@@ -79,6 +110,10 @@ try {
                         break;
 
                     case 'i':
+                        if (!file_exists(Dirs::$modules.'NGS/Requirements.php')) {
+                            echo "Can't ignore the first compilation!", PHP_EOL;
+                            return false;
+                        }
                         Config::$ignore = true;
                         break;
 

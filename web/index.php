@@ -130,6 +130,8 @@ $app->get('/example/:example', function($example) use ($app) {
         $result['intro']   = is_file($intro) ? file_get_contents($intro) : '';
         $result['modules'] = Files::getFileTree($modulesDir);
         $result['dsl']     = Files::byExt($baseDir, 'dsl');
+        if(is_dir($baseDir.'/cs'))
+            $result['dsl'] = array_merge($result['dsl'], Files::byExt($baseDir, 'cs'));
         $result['php']     = Files::byExt($baseDir, 'php');
         $result['uploads'] = Files::filter($baseDir.'/uploads');
     } catch (Exception $ex) {

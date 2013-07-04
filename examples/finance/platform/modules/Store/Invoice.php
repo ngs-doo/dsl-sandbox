@@ -12,6 +12,7 @@ require_once __DIR__.'/InvoiceArrayConverter.php';
  * @property int $year an integer number
  * @property string $number a string
  * @property \NGS\LocalDate $paid a date, can be null
+ * @property string $code a string
  *
  * @package Store
  * @version 0.9.9 beta
@@ -23,6 +24,7 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     protected $year;
     protected $number;
     protected $paid;
+    protected $code;
 
     /**
      * Constructs object using a key-property array or instance of class "Store\Invoice"
@@ -59,6 +61,8 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             $data['year'] = 0; // an integer number
         if(!array_key_exists('number', $data))
             $data['number'] = ''; // a string
+        if(!array_key_exists('code', $data))
+            $data['code'] = ''; // a string
     }
 
     /**
@@ -85,6 +89,9 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         if (array_key_exists('paid', $data))
             $this->setPaid($data['paid']);
         unset($data['paid']);
+        if (array_key_exists('code', $data))
+            $this->setCode($data['code']);
+        unset($data['code']);
 
         if (count($data) !== 0 && \NGS\Utils::WarningsAsErrors())
             throw new \InvalidArgumentException('Superflous array keys found in "Store\Invoice" constructor: '.implode(', ', array_keys($data)));
@@ -136,6 +143,14 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @return a string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
      * Property getter which throws Exceptions on invalid access
      *
      * @param string $name Property name
@@ -154,6 +169,8 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->getNumber(); // a string
         if ($name === 'paid')
             return $this->getPaid(); // a date, can be null
+        if ($name === 'code')
+            return $this->getCode(); // a string
 
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Store\Invoice" does not exist and could not be retrieved!');
     }
@@ -177,6 +194,8 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return true; // a string (always set)
         if ($name === 'paid')
             return $this->getPaid() !== null; // a date, can be null
+        if ($name === 'code')
+            return true; // a string (always set)
 
         return false;
     }
@@ -238,6 +257,20 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
     }
 
     /**
+     * @param string $value a string
+     *
+     * @return string
+     */
+    public function setCode($value)
+    {
+        if ($value === null)
+            throw new \InvalidArgumentException('Property "code" cannot be set to null because it is non-nullable!');
+        $value = \NGS\Converter\PrimitiveConverter::toString($value);
+        $this->code = $value;
+        return $value;
+    }
+
+    /**
      * Property setter which checks for invalid access to entity properties and enforces proper type checks
      *
      * @param string $name Property name
@@ -253,6 +286,8 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             return $this->setNumber($value); // a string
         if ($name === 'paid')
             return $this->setPaid($value); // a date, can be null
+        if ($name === 'code')
+            return $this->setCode($value); // a string
         throw new \InvalidArgumentException('Property "'.$name.'" in class "Store\Invoice" does not exist and could not be set!');
     }
 
@@ -271,6 +306,8 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
             throw new \LogicException('The property "number" cannot be unset because it is non-nullable!'); // a string (cannot be unset)
         if ($name === 'paid')
             $this->setPaid(null);; // a date, can be null
+        if ($name === 'code')
+            throw new \LogicException('The property "code" cannot be unset because it is non-nullable!'); // a string (cannot be unset)
     }
 
     /**
@@ -294,6 +331,7 @@ class Invoice extends \NGS\Patterns\AggregateRoot implements \IteratorAggregate
         $this->year = $result->year;
         $this->number = $result->number;
         $this->paid = $result->paid;
+        $this->code = $result->code;
         $this->ID = $result->ID;
     }
 

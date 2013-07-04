@@ -1,41 +1,37 @@
 <?php
-namespace Store;
+namespace Todo;
 
-require_once __DIR__.'/Invoice.php';
+require_once __DIR__.'/MarkDone.php';
 
 /**
  * Generated from NGS DSL
  *
- * Converts an object of class Store\Invoice into a simple array and backwards.
+ * Converts an object of class Todo\MarkDone into a simple array and backwards.
  *
- * @package Store
+ * @package Todo
  * @version 0.9.9 beta
  */
-abstract class InvoiceArrayConverter
+abstract class MarkDoneArrayConverter
 {/**
-     * @param array|\Store\Invoice An object or an array of objects of type "Store\Invoice"
+     * @param array|\Todo\MarkDone An object or an array of objects of type "Todo\MarkDone"
      *
      * @return array A simple array representation
      */
     public static function toArray($item, $allowNullValues=false)
     {
-        if ($item instanceof \Store\Invoice)
+        if ($item instanceof \Todo\MarkDone)
             return self::toArrayObject($item);
         if (is_array($item))
             return self::toArrayList($item, $allowNullValues);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "Store\Invoice" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "Todo\MarkDone" nor an array of said instances!');
     }
 
     private static function toArrayObject($item)
     {
         $ret = array();
         $ret['URI'] = $item->URI;
-        $ret['ID'] = $item->ID;
-        $ret['year'] = $item->year;
-        $ret['number'] = $item->number;
-        $ret['paid'] = $item->paid === null ? null : $item->paid->__toString();
-        $ret['code'] = $item->code;
+        $ret['taskURI'] = $item->taskURI;
         return $ret;
     }
 
@@ -48,8 +44,8 @@ abstract class InvoiceArrayConverter
                 $ret[] = null;
             }
             else {
-                if (!$val instanceof \Store\Invoice)
-                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "Store\Invoice"! Type was: '.\NGS\Utils::getType($val));
+                if (!$val instanceof \Todo\MarkDone)
+                    throw new \InvalidArgumentException('Element with index "'.$key.'" was not an object of class "Todo\MarkDone"! Type was: '.\NGS\Utils::getType($val));
 
                 $ret[] = $val->toArray();
             }
@@ -60,12 +56,12 @@ abstract class InvoiceArrayConverter
 
     public static function fromArray($item)
     {
-        if ($item instanceof \Store\Invoice)
+        if ($item instanceof \Todo\MarkDone)
             return $item;
         if (is_array($item))
-            return new \Store\Invoice($item, 'build_internal');
+            return new \Todo\MarkDone($item);
 
-        throw new \InvalidArgumentException('Argument was not an instance of class "Store\Invoice" nor an array of said instances!');
+        throw new \InvalidArgumentException('Argument was not an instance of class "Todo\MarkDone" nor an array of said instances!');
     }
 
     public static function fromArrayList(array $items, $allowNullValues=false)
@@ -76,12 +72,12 @@ abstract class InvoiceArrayConverter
                     continue;
                 if($val === null)
                     throw new \InvalidArgumentException('Null value found in provided array');
-                if(!$val instanceof \Store\Invoice)
-                    $val = new \Store\Invoice($val, 'build_internal');
+                if(!$val instanceof \Todo\MarkDone)
+                    $val = new \Todo\MarkDone($val);
             }
         }
         catch (\Exception $e) {
-            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "Store\Invoice"!', 42, $e);
+            throw new \InvalidArgumentException('Element at index '.$key.' could not be converted to object "Todo\MarkDone"!', 42, $e);
         }
 
         return $items;

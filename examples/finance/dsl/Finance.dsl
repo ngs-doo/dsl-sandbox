@@ -21,5 +21,7 @@ module Store
         date? paid;
         specification notPaid 'i => i.paid == null';
         index (number, year) where notPaid;
+
+        string updateCode { versioning 'it => it.number + "-" + DateTime.Today.Hour '; }
     }
 }

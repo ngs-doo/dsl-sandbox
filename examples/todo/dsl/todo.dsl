@@ -44,4 +44,9 @@ module Todo
 
         order by priority asc, name desc;
     }
+
+    event MarkDone
+    {
+        string taskURI;
+    }
 }

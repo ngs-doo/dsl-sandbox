@@ -81,6 +81,10 @@ abstract class Connector
 
     public static function diff(array $dsls)
     {
-        return self::curlSend($dsls, 'diff');
+        $params = '';
+        if (!file_exists(Dirs::$modules.'NGS/Requirements.php') && Config::$html)
+            $params = '?firstCompilation';
+
+        return self::curlSend($dsls, 'diff', $params);
     }
 }
