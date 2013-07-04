@@ -1,0 +1,5 @@
+<p>Property can be defined as a <strong>reference collection</strong> in the following format: </p>
+<pre>type?[]? *name;</pre>
+<p>If first question mark is included collection can contain null values.</p>
+<p>Second question mark defines the property itself as nullable.</p>
+<p><strong>Collections in PHP</strong> are represented with arrays. When adding new elements to collections, accessing using the [] syntax, (e.g. $object->property[]=...) will result in PHP issuing notice: "Notice: Indirect modification of overloaded property...". Therefore, properties must be assigned in whole, or using the generated helper methods.</p>

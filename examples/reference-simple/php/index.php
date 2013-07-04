@@ -6,7 +6,7 @@ use Park\CurrentState;
 
 $car = new Vehicle();
 
-// reference to root
+// reference to root, note that root is first persisted, and only then referenced
 $company = new Company(array('name'=>'Ford'));
 $company->persist();
 $car->company = $company;
@@ -16,7 +16,7 @@ $engine = new Engine();
 $engine->serialNumber = '123';
 $car->engine = $engine;
 
-
+// reference to value
 $state = new CurrentState();
 $state->litersInTank = 24.55;
 $car->state = $state;

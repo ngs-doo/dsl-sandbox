@@ -34,11 +34,10 @@ abstract class PostArrayConverter
         $ret['ID'] = $item->ID;
         $ret['title'] = $item->title;
         $ret['content'] = $item->content;
-        $ret['createdAt'] = $item->createdAt->__toString();
-        $ret['comments'] = \Blog\CommentArrayConverter::toArray($item->comments, false);
-        $ret['userID'] = $item->userID;
-        if($item->userURI !== null)
-            $ret['userURI'] = $item->userURI;
+        $ret['categoriesURI'] = $item->categoriesURI;
+        $ret['comments'] = $item->comments === null ? null : \Blog\CommentArrayConverter::toArray($item->comments, false);
+        $ret['tagsURI'] = $item->tagsURI;
+        $ret['links'] = $item->links === null ? null : \Blog\LinkArrayConverter::toArray($item->links, true);
         return $ret;
     }
 

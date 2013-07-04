@@ -1,3 +1,12 @@
-<p><strong>Simple references</strong> @todo
+<p>Properties can be defined as references to other objects.</p>
+<p>Reference with * marks a 'points-to' relationship. Referenced object can exist on its own without being referenced. Object itself maintains his primary keys.</p>
+<p>Reference without * marks a 'has-a' relationship. Referenced object is contained within a parent object referencing it. Parent object maintains the referenced object's primary keys.</p>
+<p>Some simple rules regarding types and references:
+    <ul>
+        <li>Aggregate root must be referenced with * reference. Aggregates are standalone and cannot be contained within another object.</li>
+        <li>Entity can be referenced with or without * reference. Some entities may be standalone, and some may be dependent.</li>
+        <li>Value must be referenced without * reference. Values are always a part of another object.</li>
+    </ul>
 </p>
-<p>Note: @todo: assigning reference to another root object, must first be persisted.</p>
+<p>Root object must first be persisted before being assigned as a reference. Root objects are referenced with their primary keys. As such, they cannot be referenced before being persisted because no values are yet assigned to their primary keys.</p>
+<p>@todo Simple reference vs explicit reference</p>

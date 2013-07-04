@@ -31,6 +31,7 @@ abstract class UserArrayConverter
     {
         $ret = array();
         $ret['URI'] = $item->URI;
+        $ret['ID'] = $item->ID;
         $ret['email'] = $item->email;
         return $ret;
     }

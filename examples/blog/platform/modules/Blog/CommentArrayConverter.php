@@ -31,10 +31,8 @@ abstract class CommentArrayConverter
     {
         $ret = array();
         $ret['URI'] = $item->URI;
+        $ret['email'] = $item->email;
         $ret['content'] = $item->content;
-        $ret['userID'] = $item->userID;
-        if($item->userURI !== null)
-            $ret['userURI'] = $item->userURI;
         $ret['PostID'] = $item->PostID;
         $ret['Index'] = $item->Index;
         return $ret;

@@ -1,6 +1,6 @@
 <?php
 $menu = array(
-    'Beginner' => array(
+    'Intro' => array(
         'hello-world' => array(
             'title' => 'Hello world'),
     ),
@@ -42,8 +42,10 @@ $menu = array(
             'title' => 'Simple references'),
         'detail' => array(
             'title' => 'Detail'),
-       // 'reference-collections' => array(
-       //     'title' => 'Collections references'),
+        'reference-collections' => array(
+            'title' => 'Collections references'),
+        'reference-shared' => array(
+            'title' => 'Shared references'),
         'type-safety' => array(
             'title' => 'Type safety'),
         'search-generic' => array(
@@ -58,7 +60,7 @@ $menu = array(
             'title' => 'Snapshot'),
         'sql' => array(
             'title' => 'SQL'),
-        // 'ling' => array(
+        // 'linq' => array(
         //     'title' => 'LINQ'),
         
     ),

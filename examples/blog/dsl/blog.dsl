@@ -1,16 +1,35 @@
 module Blog
 {
-    root Post {
+    root Post
+    {
         string title;
         string content;
-        date createdAt;
-        bool isVisible;
-        Comment[] comments;
-        Security.User *user;
+        
+        Category[]? *categories;
+        Comment[]? comments;
+        Tag[] *tags;
+        Link?[]? links;
     }
 
-    entity Comment {
+    root Category
+    {
+        string title;
+    }
+
+    entity Comment
+    {
+        string email;
         string content;
-        Security.User *user;
+    }
+
+    root Tag(code)
+    {
+        string code;
+    }
+    
+    value Link
+    {
+        string url;
+        timestamp lastUpdated;
     }
 }

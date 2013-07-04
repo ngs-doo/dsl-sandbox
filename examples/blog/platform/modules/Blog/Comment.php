@@ -3,17 +3,14 @@ namespace Blog;
 
 require_once __DIR__.'/CommentJsonConverter.php';
 require_once __DIR__.'/CommentArrayConverter.php';
-require_once __DIR__.'/../Security/User.php';
 require_once __DIR__.'/Post.php';
 
 /**
  * Generated from NGS DSL
  *
  * @property string $URI a unique object identifier (read-only)
+ * @property string $email a string
  * @property string $content a string
- * @property string $userID used by reference $user (read-only)
- * @property string $userURI reference to an object of class "Security\User" (read-only)
- * @property \Security\User $user an object of class "Security\User"
  * @property int $PostID an integer number
  * @property int $Index an integer number
  *
@@ -23,10 +20,8 @@ require_once __DIR__.'/Post.php';
 class Comment implements \IteratorAggregate
 {
     protected $URI;
+    protected $email;
     protected $content;
-    protected $userID;
-    protected $userURI;
-    protected $user;
     protected $PostID;
     protected $Index;
 
@@ -59,10 +54,10 @@ class Comment implements \IteratorAggregate
     {
         if(!array_key_exists('URI', $data))
             $data['URI'] = null; //a string representing a unique object identifier
+        if(!array_key_exists('email', $data))
+            $data['email'] = ''; // a string
         if(!array_key_exists('content', $data))
             $data['content'] = ''; // a string
-        if(!array_key_exists('userID', $data))
-            $data['userID'] = ''; // a string
         if(!array_key_exists('PostID', $data))
             $data['PostID'] = 0; // an integer number
         if(!array_key_exists('Index', $data))
@@ -81,18 +76,12 @@ class Comment implements \IteratorAggregate
         if(isset($data['URI']))
             $this->URI = \NGS\Converter\PrimitiveConverter::toString($data['URI']);
         unset($data['URI']);
+        if (array_key_exists('email', $data))
+            $this->setEmail($data['email']);
+        unset($data['email']);
         if (array_key_exists('content', $data))
             $this->setContent($data['content']);
         unset($data['content']);
-        if (array_key_exists('userID', $data))
-            $this->setUserID($data['userID']);
-        unset($data['userID']);
-        if (array_key_exists('user', $data))
-            $this->setUser($data['user']);
-        unset($data['user']);
-        if(array_key_exists('userURI', $data))
-            $this->userURI = \NGS\Converter\PrimitiveConverter::toString($data['userURI']);
-        unset($data['userURI']);
         if (array_key_exists('PostID', $data))
             $this->setPostID($data['PostID']);
         unset($data['PostID']);
@@ -120,35 +109,17 @@ class Comment implements \IteratorAggregate
     /**
      * @return a string
      */
-    public function getContent()
+    public function getEmail()
     {
-        return $this->content;
+        return $this->email;
     }
 
     /**
      * @return a string
      */
-    public function getUserID()
+    public function getContent()
     {
-        return $this->userID;
-    }
-
-    /**
-     * @return a reference to an object of class "Security\User"
-     */
-    public function getUserURI()
-    {
-        return $this->userURI;
-    }
-
-    /**
-     * @return an object of class "Security\User"
-     */
-    public function getUser()
-    {
-        if ($this->userURI !== null && $this->user === null)
-            $this->user = \NGS\Patterns\Repository::instance()->find('Security\\User', $this->userURI);
-        return $this->user;
+        return $this->content;
     }
 
     /**
@@ -178,14 +149,10 @@ class Comment implements \IteratorAggregate
     {
         if ($name === 'URI')
             return $this->getURI(); // a string representing a unique object identifier
+        if ($name === 'email')
+            return $this->getEmail(); // a string
         if ($name === 'content')
             return $this->getContent(); // a string
-        if ($name === 'userID')
-            return $this->getUserID(); // a string
-        if ($name === 'userURI')
-            return $this->getUserURI(); // a reference to an object of class "Security\User"
-        if ($name === 'user')
-            return $this->getUser(); // an object of class "Security\User"
         if ($name === 'PostID')
             return $this->getPostID(); // an integer number
         if ($name === 'Index')
@@ -207,10 +174,10 @@ class Comment implements \IteratorAggregate
     {
         if ($name === 'URI')
             return $this->URI !== null;
+        if ($name === 'email')
+            return true; // a string (always set)
         if ($name === 'content')
             return true; // a string (always set)
-        if ($name === 'user')
-            return true; // an object of class "Security\User" (always set)
         if ($name === 'PostID')
             return true; // an integer number (always set)
         if ($name === 'Index')
@@ -219,7 +186,21 @@ class Comment implements \IteratorAggregate
         return false;
     }
 
-    private static $_read_only_properties = array('URI', 'userID', 'userURI');
+    private static $_read_only_properties = array('URI');
+
+    /**
+     * @param string $value a string
+     *
+     * @return string
+     */
+    public function setEmail($value)
+    {
+        if ($value === null)
+            throw new \InvalidArgumentException('Property "email" cannot be set to null because it is non-nullable!');
+        $value = \NGS\Converter\PrimitiveConverter::toString($value);
+        $this->email = $value;
+        return $value;
+    }
 
     /**
      * @param string $value a string
@@ -232,38 +213,6 @@ class Comment implements \IteratorAggregate
             throw new \InvalidArgumentException('Property "content" cannot be set to null because it is non-nullable!');
         $value = \NGS\Converter\PrimitiveConverter::toString($value);
         $this->content = $value;
-        return $value;
-    }
-
-    /**
-     * @param string $value a string
-     *
-     * @return string
-     */
-    private function setUserID($value)
-    {
-        if ($value === null)
-            throw new \InvalidArgumentException('Property "userID" cannot be set to null because it is non-nullable!');
-        $value = \NGS\Converter\PrimitiveConverter::toString($value);
-        $this->userID = $value;
-        return $value;
-    }
-
-    /**
-     * @param \Security\User $value an object of class "Security\User"
-     *
-     * @return \Security\User
-     */
-    public function setUser($value)
-    {
-        if ($value === null)
-            throw new \InvalidArgumentException('Property "user" cannot be set to null because it is non-nullable!');
-        $value = \Security\UserArrayConverter::fromArray($value);
-        if ($value->URI === null)
-            throw new \InvalidArgumentException('Value of property "user" cannot have URI set to null because it\'s a reference! Reference values must have non-null URIs!');
-        $this->user = $value;
-        $this->userURI = $value->URI;
-        $this->userID = $value->email;
         return $value;
     }
 
@@ -305,10 +254,10 @@ class Comment implements \IteratorAggregate
     {
         if(in_array($name, self::$_read_only_properties, true))
             throw new \LogicException('Property "'.$name.'" in "Blog\Comment" cannot be set, because it is read-only!');
+        if ($name === 'email')
+            return $this->setEmail($value); // a string
         if ($name === 'content')
             return $this->setContent($value); // a string
-        if ($name === 'user')
-            return $this->setUser($value); // an object of class "Security\User"
         if ($name === 'PostID')
             return $this->setPostID($value); // an integer number
         if ($name === 'Index')
@@ -325,10 +274,10 @@ class Comment implements \IteratorAggregate
     {
         if(in_array($name, self::$_read_only_properties, true))
             throw new \LogicException('Property "'.$name.'" cannot be unset, because it is read-only!');
+        if ($name === 'email')
+            throw new \LogicException('The property "email" cannot be unset because it is non-nullable!'); // a string (cannot be unset)
         if ($name === 'content')
             throw new \LogicException('The property "content" cannot be unset because it is non-nullable!'); // a string (cannot be unset)
-        if ($name === 'user')
-            throw new \LogicException('The property "user" cannot be unset because it is non-nullable!'); // an object of class "Security\User" (cannot be unset)
         if ($name === 'PostID')
             throw new \LogicException('The property "PostID" cannot be unset because it is non-nullable!'); // an integer number (cannot be unset)
         if ($name === 'Index')
