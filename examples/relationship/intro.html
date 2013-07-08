@@ -1,0 +1,5 @@
+<p><strong>Relationship</strong> concept defines properties by which objects are related. Such relation is similar to the relation created by a * reference property. The difference is <em>relationship</em> doesn't create properties in generated code by which referenced object can be accessed (lazy loaded). In this case, the proper way of accessing related object is by creating a <em>snowflake</em>. Snowflake will contain related property through which referenced object members can be accessed. This is more in line with domain-driven design principles, as it enforces strict object boundaries (no direct navigation allowed from one aggregate to another).</p>
+<p>In this example <em>User</em> and <em>Profile</em> aggregates each have email as a primary key. This relation could be specified as a "<em>Profile(userEmail) *profile</em>" property inside the <em>User</em> root, so Profile members could be accessed directly. Using relationship will disallow this. To access both aggregates from a single object, snowflake <em>UserDetails</em> is introduced.</p>
+<!-- <pre>
+    relationship [name](property) Entity(entityKey);
+</pre> -->

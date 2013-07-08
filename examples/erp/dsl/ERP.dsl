@@ -37,4 +37,13 @@ module ERP
         templater buildReportsPdf 'Orders.docx' pdf;
         templater buildReportsTxt 'report.txt';
     }
+
+    root ConversionRate
+    {
+        string from;
+        string to;
+        float rate;
+
+        persistence { readonly; }
+    }
 }

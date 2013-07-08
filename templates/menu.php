@@ -60,6 +60,10 @@ $menu = array(
             'title' => 'Snapshot'),
         'sql' => array(
             'title' => 'SQL'),
+        'versioning' => array(
+            'title' => 'Versioning'),
+        'index' => array(
+            'title' => 'Index'),
         // 'linq' => array(
         //     'title' => 'LINQ'),
         
@@ -76,19 +80,15 @@ $menu = array(
         'mixin' => array(
             'title' => 'Mixin',
             'dsl'   => 'cms.dsl'),
-        'versioning' => array(
-            'title' => 'Versioning'),
         'versioning-expression' => array(
             'title' => 'Versioning expression'),
-        'index' => array(
-            'title' => 'Index'),
         'index-predicate' => array(
             'title' => 'Index with predicate'),
-/* @todo
-        snapshot za kolekcije
-        security filtriranje (uz neku random funkciju)
-        async event
-*/
+        'relationship' => array(
+            'title' => 'Relationship'),
+        'read-only' => array(
+            'title' => 'Read-only',
+        )
     ),
     'Sample apps' => array(
         'simple-crud' => array(
@@ -97,10 +97,6 @@ $menu = array(
             'title' => 'PDF reports'),
         'todo-crud' => array(
             'title' => 'TODO'),
-
-        // 'blog' => array(
-        //     'title' => 'Collections',
-        //     'dsl' => 'blog.dsl'),
     ),
 );
 ?>

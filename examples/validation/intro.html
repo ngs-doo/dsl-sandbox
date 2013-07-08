@@ -1,10 +1,8 @@
 <p><strong>Validation</strong> can be included in entity or value objects to enforce additional integrity constraints.</p>
 <p>Validation is defined using a validation block with one or more specifications. Every specification must specify two expressions:
     <ol>
-        <li>expression defining the validation constraint</li>
+        <li>expression defining the validation constraint (can be expression or outside specification referenced by name)</li>
         <li>expression holding a message returned if validation has failed</li>
     </ol>
 </p>
-<p>Validation can use existing specifications defined outside the <em>validation</em> block. In that case, specification defineds  Besides defining both expressions,</p>
-
-Keyword <em>check</em> inside validation block enforces performing validation when persisting object. If the validation fails, persist operation fails and an exception is thrown. If <em>check</em> is omitted, validation is not executed on persisting. @todo validation can be executed explicitly or for some other use case</p>
+<p>Keyword <em>check</em> inside validation block enforces performing validation when persisting object. If the validation fails, persist operation fails and an exception is thrown. If <em>check</em> is omitted, validation is not executed on persisting. @todo validation can be executed explicitly or for some other use case</p>
