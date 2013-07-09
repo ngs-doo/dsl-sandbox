@@ -2,6 +2,8 @@ NGS/
 /vendor/
 .idea
 /sandbox/boxes
+*.cache
+*.iml
 
 #ignore thumbnails created by windows
 Thumbs.db

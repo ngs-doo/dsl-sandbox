@@ -14,7 +14,7 @@ try {
 
 ?>
 
-<h4>Existing rates:</h4>
+<h4>Existing root values:</h4>
 <? foreach(ConversionRate::findAll() as $rate): ?>
-<?=$rate->from ?> => <?=$rate->to ?> : <?=$rate->rate?>
+    1 <?=$rate->from ?> = <?=$rate->rate?> <?=$rate->to ?><br />
 <? endforeach ?>
