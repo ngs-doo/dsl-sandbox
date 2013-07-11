@@ -89,9 +89,8 @@ $menu = array(
         'read-only' => array(
             'title' => 'Read-only',
         ),
-        /* @todo uncomment when fixed server-side
         'snapshot-collection' => array(
-            'title' => 'Snapshot collection'),*/
+            'title' => 'Snapshot collection'),
     ),
     'Sample apps' => array(
         'simple-crud' => array(

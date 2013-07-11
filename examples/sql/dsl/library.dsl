@@ -20,11 +20,10 @@ module Library
     }
 
     sql BookSearch
-        <# SELECT book."URI", book.number, book.title
-         FROM "Library"."Book_roo" book
+        <# SELECT book.number, book.title
+         FROM "Library"."Book" book
          ORDER BY 2 DESC #>
     {
-        string URI;
         int number;
         string title;
 
@@ -32,5 +31,5 @@ module Library
         {
             string query;
         }
-    }    
+    }
 }

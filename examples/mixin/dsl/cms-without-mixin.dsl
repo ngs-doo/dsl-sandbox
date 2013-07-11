@@ -6,14 +6,14 @@ module CMS
         string content;
         timestamp? publishedOn;
         timestamp createdAt;
-        timestamp modifiedAt;
+        timestamp modifiedAt { versioning; }
     }
 
     root Comment
     {
         string content;
         timestamp createdAt;
-        timestamp modifiedAt;
+        timestamp modifiedAt { versioning; }
     }
 
     root Page
@@ -21,6 +21,6 @@ module CMS
         string title;
         string content;
         timestamp createdAt;
-        timestamp modifiedAt;
+        timestamp modifiedAt { versioning; }
     }
 }

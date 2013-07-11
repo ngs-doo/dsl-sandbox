@@ -3,7 +3,7 @@ module CMS
     mixin logging
     {
         timestamp createdAt;
-        timestamp modifiedAt;
+        timestamp modifiedAt { versioning; }
     }
 
     root Post
