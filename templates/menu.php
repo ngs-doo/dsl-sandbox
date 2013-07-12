@@ -86,9 +86,9 @@ $menu = array(
             'title' => 'Index with predicate'),
         'relationship' => array(
             'title' => 'Relationship'),
-        'read-only' => array(
+        /*'read-only' => array(
             'title' => 'Read-only',
-        ),
+        ),*/
         'snapshot-collection' => array(
             'title' => 'Snapshot collection'),
     ),
