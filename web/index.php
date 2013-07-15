@@ -147,7 +147,11 @@ $app->get('/example/:example', function($example) use ($app) {
 $app->get('/file', function() use ($app) {
     $example = $app->request()->get('example');
     $relPath = $app->request()->get('path');
-    $path = realpath('../examples/'.$example.'/platform/modules/'.$relPath);
+    if ($example === null) {
+        $path = realpath($relPath);
+    } else {
+        $path = realpath('../examples/'.$example.'/platform/modules/'.$relPath);
+    }
 
     // allows download of _any_ file in /examples
     if(strpos($path, realpath('../examples')) !== 0)
@@ -158,7 +162,8 @@ $app->get('/file', function() use ($app) {
     $content = file_get_contents($path);
 
     $res = $app->response();
-    if ($ext === 'php') $mime = 'application/x-php';
+    if ($ext === 'php')      $mime = 'application/x-php';
+    elseif ($ext === 'txt')  $mime = 'text/plain';
     elseif ($ext === 'docx') $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     if (isset($mime))
         $res->header('Content-Type', $mime);

@@ -16,7 +16,9 @@
     <div class="span10" ng-class="{fade: state.isLoading}">
        <div class="help-btn">
             <div data-position="bottom" data-intro="Toggle help">
-                <a ng-click="toggleHelp()" href="" class="btn btn-primary btn-mini">Show help</a>
+                <a title="Show help" ng-click="toggleHelp()" href="" class="btn btn-primary btn-mini">
+                    <i class="icon icon-white icon-question-sign"></i>
+                </a>
             </div>
         </div>
         <div class="clear"></div>
