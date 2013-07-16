@@ -29,6 +29,6 @@ $user->persist();
 ?>
 
 <pre>
-<?=print_r($post);?>
-<?=print_r($user);?>
+<?=var_dump($post);?>
+<?=var_dump($user);?>
 </pre>

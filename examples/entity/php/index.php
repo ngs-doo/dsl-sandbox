@@ -15,7 +15,7 @@ $anotherEngine = new Engine(array(
 ?>
 
 <pre>
-<? print_r($engine); ?>
+<? var_dump($engine); ?>
 </pre>
 
 <span class="alert alert-info">URI property is empty. That's because it is assigned a value only after peristing an object. Take a look at 'Aggregate root' example for details.</span>

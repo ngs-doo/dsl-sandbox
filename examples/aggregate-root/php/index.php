@@ -13,7 +13,7 @@ $ryan->persist();
 
 ?>
 <pre>
-    <? print_r($manUtd); ?>
+    <? var_dump($manUtd); ?>
 
-    <? print_r($ryan); ?>
+    <? var_dump($ryan); ?>
 </pre>

@@ -15,4 +15,4 @@ $sqlSpec->count();
 
 <div>Total of <?=$sql->count()?> rows.</div>
 <div>First 3 rows:</div>
-<pre><? print_r($rows);?></pre>    
+<pre><? var_dump($rows);?></pre>    

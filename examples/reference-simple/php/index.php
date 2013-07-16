@@ -24,5 +24,5 @@ $car->state = $state;
 ?>
 
 <pre>
-    <? print_r($car); ?>
+    <? var_dump($car); ?>
 </pre>

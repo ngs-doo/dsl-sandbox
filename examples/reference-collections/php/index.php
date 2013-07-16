@@ -34,5 +34,5 @@ $post->persist();
 ?>
 
 <pre>
-<?=print_r($post);?>
+<?=var_dump($post);?>
 </pre>
