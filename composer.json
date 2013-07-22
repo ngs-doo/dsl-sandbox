@@ -10,16 +10,16 @@
     "require": {
         "slim/slim": "2.2.0",
         "slim/extras": "2.0.3",
-        "ngs/ngs-php-core": "*"
+        "ngs/dsl-client-php": "*"
     },
     "repositories": [
         {
             "type": "package",
             "package": {
-                "name": "ngs/ngs-php-core",
+                "name": "ngs/dsl-client-php",
                 "version": "1.0-stable",
                 "source": {
-                    "url": "git@github.com:ngs-doo/ngs-php.git",
+                    "url": "git@github.com:ngs-doo/dsl-client-php.git",
                     "type": "git",
                     "reference": "master"
                 }

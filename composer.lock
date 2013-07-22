@@ -3,24 +3,14 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "27c31c4906aeb426615d59ab7f0e3113",
+    "hash": "fd35b28116f723027b48c6540464b0f7",
     "packages": [
         {
-            "name": "ngs/ngs-php",
+            "name": "ngs/dsl-client-php",
             "version": "1.0-stable",
             "source": {
                 "type": "git",
-                "url": "git@github.com:ngs-doo/ngs-php.git",
-                "reference": "master"
-            },
-            "type": "library"
-        },
-        {
-            "name": "ngs/ngs-php-core",
-            "version": "1.0-stable",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:ngs-doo/ngs-php.git",
+                "url": "git@github.com:ngs-doo/dsl-client-php.git",
                 "reference": "master"
             },
             "type": "library"

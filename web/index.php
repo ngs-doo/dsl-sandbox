@@ -40,7 +40,7 @@ $app->post('/run/:example', function($example) use ($app) {
 
     $initCode = '<?php
 
-require_once SANDBOX_ROOT.\'/vendor/ngs/ngs-php-core/NGS/Requirements.php\';
+require_once SANDBOX_ROOT.\'/vendor/ngs/dsl-client-php/NGS/Requirements.php\';
 require_once SANDBOX_ROOT.\'/examples/[[example]]/platform/modules/Modules.php\';
 $cfg = parse_ini_file(SANDBOX_ROOT.\'/examples/[[example]]/platform/project.ini\');
 $client = new \NGS\Client\RestHttp(
