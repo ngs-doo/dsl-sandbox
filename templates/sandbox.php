@@ -13,16 +13,16 @@
         </div>
     </div>
 
-    <div class="span10" ng-class="{fade: state.isLoading}">
+    <div class="span10 append-top relative" ng-class="{fade: state.isLoading}">
        <div class="help-btn">
             <div data-position="bottom" data-intro="Toggle help">
-                <a title="Show help" ng-click="toggleHelp()" href="" class="btn btn-primary btn-mini">
+                <a title="Show help" ng-click="toggleHelp()" href="" class="btn btn-primary" data-toggle="tooltip" data-placement="left">
                     <i class="icon icon-white icon-question-sign"></i>
                 </a>
             </div>
         </div>
         <div class="clear"></div>
-        <div id="box-intro" ng-show="box.intro" ng-bind-html-unsafe="box.intro"></div>
+        <div id="box-intro" class="well white-box" ng-show="box.intro" ng-bind-html-unsafe="box.intro"></div>
         <div class="row-fluid">
             <div class="span6">
                 <ul class="nav nav-tabs nav-files" data-intro="Domain model is defined in DSL files." data-position="bottom">
@@ -47,25 +47,25 @@
         </div>
 
         <hr>
-        <div class="row-fluid">
-            <div class="span3" data-position="top" data-intro="PHP files are generated out of definitions written in DSL.">
-                <div class="span12">
+        <div class="row-fluid append-vertical">
+            <div class="span2" data-position="top" data-intro="PHP files are generated out of definitions written in DSL.">
+                <div>
                     <h4>Generated PHP</h4>
                     <div class="append-vertical">
                         <div>
-                            <div class="pull-right">
-                                <label class="btn-check" for="showConverters">
-                                    <input id="showConverters" type="checkbox" ng-model="showConverters"><span> Show converters</span>
-                                </label>
-                            </div>
                             <ul class="font-fixed file-tree">
                                 <li ng-repeat="data in box.modules" ng-include="'tree_item_renderer.html'"></li>
                             </ul>
                         </div>
+                        <div class="append-vertical">
+                            <label class="btn-check" for="showConverters">
+                                <input id="showConverters" type="checkbox" ng-model="showConverters"><span> Show converters</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="span12" ng-show="box.uploads">
+                <div ng-show="box.uploads">
                     <hr>
                     <h4>Additional files</h4>
                     <ul class="font-fixed file-tree">
@@ -76,17 +76,19 @@
                     </ul>
                 </div>
             </div>
-            <div class="span9" data-intro="PHP output will appear here. You can click links and submit forms to run the code." data-position="top">
+            <div class="span10" data-intro="PHP output will appear here. You can click links and submit forms to run the code." data-position="top">
                 <div class="append-vertical">
-                    <button  class="btn btn-primary" ng-click="run()" ng-class="{disabled: state.isRunning || !box.php}">
-                        <i class="icon icon-white icon-play"></i>
-                        <span>Run</span>
-                    </button>
-                    
-                    <span ng-show="state.isRunning">
-                        <i class="icon icon-loading"></i>
-                        <span>Running</span>
-                    </span>
+                    <!--
+                    <div ng-show="!state.phpOutput && !state.isRunning">
+                        <p class="text-right"><small>Click the "Run" button to show PHP output</small></p>
+                    </div>
+                    -->
+                    <p class="text-right">
+                        <button  class="btn btn-success btn-normal upper" data-toggle="tooltip" title="Execute index.php" ng-click="run()" ng-class="{disabled: state.isRunning || !box.php}">
+                            <span ng-hide="state.isRunning"><i ng-hide="state.isRunning" class="icon icon-play"></i> Run</span>
+                            <span ng-show="state.isRunning"><i ng-show="state.isRunning" class="icon icon-spinner icon-spin"></i> Running</span>
+                        </button>
+                    </p>
                 </div>
 
                 <div class="alert alert-error" ng-show="state.phpError">{{ state.phpError }}</div>
@@ -100,11 +102,8 @@
                     </ul>
                 </div>
                 <div ng-show="state.phpOutput">
-                    <div id="php-output" class="white-box" ng-bind-html-unsafe="state.phpOutput">
+                    <div id="php-output" class="output-box" ng-bind-html-unsafe="state.phpOutput">
                     </div>
-                </div>
-                <div ng-show="!state.phpOutput && !state.isRunning">
-                    <small>Click the "Run" button to show PHP output</small>
                 </div>
             </div>
         </div>

@@ -1,12 +1,22 @@
+<!DOCTYPE html>
 <html ng-app>
 <head>
+    <meta charset="UTF-8">
     <title>DSL Sandbox</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/sandbox.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="/static/css/font-awesome-ie7.min.css">
+    <![endif]-->
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="https://static.dsl-platform.com/static/css/style-full-20130717.min.css">
+    <link type="text/css" href="/static/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="/static/css/chardinjs.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/sandbox.css">
+
     <script src="/static/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="/static/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js" type="text/javascript"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-sanitize.min.js"></script>
     <script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -40,13 +50,13 @@
         </nav>
       </div>
       <div class="slogan-container">
-        <p class="slogan"><span class="black">Build</span> better applications</p>
+        <p class="slogan">Welcome to <span class="black">DSL platform</span> sandbox</p>
       </div>
       <div class="login-container" id="loggedin">
         <a href="#" class="login-user"><span class="login-icon"><span class="login-user-name"></span> <i class="icon-arrow-down-custom"></i></span></a>
         <ul class="login-user-list">
             <li><a href="https://panel.dsl-platform.com/profile">View profile</a></li>
-            <li><a href="https://panel.dsl-platform.com/profile/account-settings">Manage account</a></li>
+            <li><a href="https://panel.dsl-platform.com/profile/account-settings">Change password</a></li>
             <li><a href="https://panel.dsl-platform.com/logout">Log out</a></li>
             <!--<li><a href="#">Request info</a></li>-->
         </ul>

@@ -66,7 +66,7 @@ $menu = array(
             'title' => 'Index'),
         // 'linq' => array(
         //     'title' => 'LINQ'),
-        
+
     ),
     'Advanced concepts' => array(
         'olap' => array(
@@ -98,21 +98,32 @@ $menu = array(
         'report-app' => array(
             'title' => 'PDF reports'),
         'todo-crud' => array(
-            'title' => 'TODO'),
+            'title' => 'TODO app'),
     ),
 );
 ?>
 
+<div id="left-menu">
 <?php  foreach ($menu as $section=>$examples): ?>
-    <ul class="nav-list well well-small">
-        <li class="nav-header"><?=$section?></li>
-    </ul>
+    <div>
+<? $domId = str_replace(' ', '-', strtolower($section)); ?>
+        <ul class="nav-list well well-small">
+            <li class="nav-header accordion-toggle js-collapse-toggle" data-toggle="collapse" data-target="#<?=$domId?>">
+                <span class="nav-menu-item"><?=$section?></span>
+                <span class="right-10">
+                    <?php if ($domId === "intro"): ?><i class="icon-chevron-up icon-small"></i><?php else: ?><i class="icon-chevron-down icon-small"></i><?php endif ?>
+                </span>
+            </li>
+        </ul>
+        <div class="accordion-body collapse <?php if ($domId === "intro"): ?>in<?php endif ?>" id="<?=$domId?>">
+            <ul class="nav-list">
 <?php      foreach ($examples as $example => $val):
     $title = $val['title'];
 ?>
-
-    <ul class="nav-list">
-        <li ng-class="{active: box.example=='<?=$example?>'}" class="{active: box.example=='<?=$example?>'}"><a href="#/example/<?=$example?>" ng-click="loadExample('<?=$example?>', <?=htmlspecialchars(json_encode($val))?>)"><?=$title?></a></li>
-    </ul>
+                <li ng-class="{active: box.example=='<?=$example?>'}" class="{active: box.example=='<?=$example?>'}"><a href="#/example/<?=$example?>" ng-click="loadExample('<?=$example?>', <?=htmlspecialchars(json_encode($val))?>)"><?=$title?></a></li>
 <?php      endforeach ?>
+            </ul>
+        </div>
+    </div>
 <?php endforeach ?>
+</div>

@@ -22,6 +22,14 @@ $(function(){
     var link = $('.nav-list a[href="#/example/'+example+'"]');
     link.click();
 
+    // updates accordion: show submenu, fix icon
+    var accordionBody = $(link).closest('.accordion-body');
+    accordionBody.addClass('in');
+    accordionBody.siblings('.nav-list')
+        .find('.icon-chevron-down')
+        .removeClass('icon-chevron-down')
+        .addClass('icon-chevron-up');
+
     var sandbox = angular.element(document.body).scope();
 
     // execute click and form submit events via sandbox

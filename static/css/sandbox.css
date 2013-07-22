@@ -2,39 +2,36 @@ textarea {
     font-size: 12px;
     line-height: 15px;
 }
-
 .font-fixed {
     font-family: "Monaco","Inconsolata","Andale Mono","Lucida Console","Bitstream Vera Sans Mono","Courier New",Courier,monospace;
     margin-left: 0;
 }
-
 pre {
     font-size: 12px;
     line-height: 14px;
 }
-
+.container-fluid {
+    padding-right: 20px;
+    padding-left: 20px;
+}
 #php-editor, #dsl-editor {
     width: 500px;
     height: 500px;
     font-size: 12px;
 }
-
 .file-tree li {
     font-size: 12px;
     list-style: none;
     margin-bottom: 3px;
 }
-
 .file-tree li a span{
     padding-left: 5px;
 }
-
 .center {
     float: none;
     margin-left: auto;
     margin-right: auto;
 }
-
 .nav-files>li>a {
     padding-bottom: 4px;
     padding-top: 4px;
@@ -42,7 +39,6 @@ pre {
     padding-right: 6px;
     font-size: 12px;
 }
-
 ul.nav-files {
     margin: 0;
 }
@@ -58,36 +54,34 @@ ul.nav-files {
 .notice {
     z-index: 1000;
 }
-
 .btn-check {
     font-size: 12px;
     margin: 0;
     padding: 0;
 }
-
 .btn-check input {
     margin: 0;
 }
-
 .fade {
     opacity: 0.3;
 }
-
 .icon-loading {
     height: 16px;
     width: 16px;
     background-image: url("../img/spinner.gif");
     background-position: 0 0;
 }
-
 .login-container {
     right: 20px;
 }
 .help-btn {
     position: absolute;
-    right: 0px;
-    top: 61px;
+    right: -10px;
+    top: -15px;
     z-index: 1;
+}
+.tooltip.left{
+    margin-left: -10px;
 }
 .clickable {
     cursor: pointer;
@@ -97,14 +91,33 @@ ul.nav-files {
     z-index: 10000;
     right: 0px;
 }
-
 .btn.disabled, .btn[disabled] .preferences-box {
   margin-bottom: 0px;
 }
-
+.output-box {
+    border: 1px solid #3c8302;
+    border-radius: 3px;
+    padding: 20px;
+    background-color: #fff;
+}
 #php-output input, #php-output select {
     padding: 2px 6px;
+    height: 25px;
 }
 #php-output * {
     font-size: 12px;
+}
+.icon-small {
+    font-size: 70%;
+}
+.relative {
+    position: relative;
+}
+.nav-menu-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+.white-box {
+    background-color: #fff;
 }

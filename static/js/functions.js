@@ -38,11 +38,26 @@ if (documentHeight < windowHeight) {
   */
 };
 
+
 $(document).ready(moveFooter);
 
 $(window).on("resize", moveFooter);
 
 $(function() {
+
+  /* toggle tooltip */
+  $('[data-toggle="tooltip"]').tooltip({
+    container: "body"
+  });
+
+  $(".js-collapse-toggle").click(function() {
+    if (!$(this).parent().parent().find(".accordion-body").hasClass("in")) {
+      $(this).find("i").removeClass("icon-chevron-down").addClass("icon-chevron-up");
+    } else {
+      $(this).find("i").removeClass("icon-chevron-up").addClass("icon-chevron-down");
+    }
+  });
+
   $(".login-user").click(function() {
     $(".login-user-list").slideToggle();
     $(this).toggleClass("active");
@@ -62,5 +77,6 @@ $(function() {
   $('a[data-toggle="tab"]').on("shown", function() {
     return moveFooter();
   });
+
   return moveFooter();
 });
