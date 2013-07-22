@@ -3,6 +3,7 @@ namespace NGS;
 
 abstract class Project
 {
+    public static $path;
     public static $ID;
     public static $username;
     public static $apiUrl;
@@ -25,6 +26,7 @@ abstract class Project
 
         self::$username = $config['username'];
         self::$apiUrl = $config['api-url'];
+        self::$path = $path;
     }
 }
 

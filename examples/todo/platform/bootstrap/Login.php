@@ -55,8 +55,8 @@ abstract class Login
 
     public static function showLoginForm($error)
     {
+        self::logout();
         if (PHP_SAPI !== 'cli') {
-            self::logout();
             $username = Project::$username;
             if (isset($_POST['username'])) $username = $_POST['username'];
             \Bootstrap::remotePredefinedError('login',  urlencode($username). '/' . urlencode(self::$KEY));

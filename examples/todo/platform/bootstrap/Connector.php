@@ -9,7 +9,7 @@ abstract class Connector
     {
         $curl = curl_init(self::URL.$action.'/'.Project::$ID.$params);
 
-        $body = json_encode($data);
+        $body = json_encode($data, JSON_FORCE_OBJECT);
 
         if (Config::$html)
             $headers = array(

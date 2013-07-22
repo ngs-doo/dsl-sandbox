@@ -44,22 +44,22 @@ class Lister
                 break;
             }
 
-            if ($filename === '.' || $filename === '..' || ($rel === '.' && $filename === 'cache')) {
+            if ($filename === '.' || $filename === '..') {
                 continue;
             }
 
-            $relFile = $rel.'/'.$filename;
+            $relFile = ($rel === '.') ? $filename : $rel.'/'.$filename;
             $path = $this->path.$relFile;
 
             if (is_dir($path)) {
                 $this->readFiles($relFile);
             }
-            elseif (is_file($path) && preg_match('/^'.$this->pattern.'$/u', $path)) {
-                $relFile = mb_substr($relFile, 2);
+            elseif (is_file($path) && preg_match('/^'.$this->pattern.'$/u', $relFile)) {
                 $body = file_get_contents($path);
 
-                if ($this->encoding !== null && !mb_check_encoding($body, $this->encoding))
+                if ($this->encoding !== null && !mb_check_encoding($body, $this->encoding)) {
                     throw new \Exception("Wrong encoding detected in file '$relFile'. Please convert it to UTF-8.");
+                }
 
                 $this->sizes[$relFile] = strlen($body);
                 $this->hashes[$relFile] = sha1($body, true);

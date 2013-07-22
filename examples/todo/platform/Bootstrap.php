@@ -164,10 +164,9 @@ NOsF/5oirpt9P/FlUQqmMGqz9IgcgA38corog14=
         }
 
         foreach($files as $filename => $body) {
-            $filepath = $platformPath.'/'.$filename;
-
-            if (file_exists($filepath)) {
-                $oldBody = file_get_contents($filepath);
+            $filename = __DIR__.'/../'.$filename;
+            if (file_exists($filename)) {
+                $oldBody = file_get_contents($filename);
 
                 if ($oldBody === $body) {
                     continue;
@@ -178,7 +177,7 @@ NOsF/5oirpt9P/FlUQqmMGqz9IgcgA38corog14=
                 }
             }
 
-            file_put_contents($filepath, $body);
+            file_put_contents($filename, $body);
         }
     }
 

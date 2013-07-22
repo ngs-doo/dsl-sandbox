@@ -74,7 +74,7 @@ Config::init();
 try {
     // Autoload NGS + generated modules
     require_once __DIR__.'/Dirs.php';
-    require_once Dirs::$bootstrap.'Project.php';
+    require_once \NGS\Dirs::$bootstrap.'Project.php';
 
     function doXtimes($x, $cb) {
         $res = false;

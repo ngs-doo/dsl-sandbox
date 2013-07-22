@@ -13,22 +13,10 @@ abstract class Compiler
         $log = new CommitLog();
 
         foreach($lister->bodies as $path => $body) {
-            // skip root files except a few predefined ones
-            if (!preg_match('/.*\\/.*/u', $path)) {
-                if ($path !== 'project.ini' &&
-                        $path !== 'README' &&
-                        $path !== 'startssl-ca.pem') {
-                    $log->skip($path);
-                    continue;
-                }
-            }
-
-            // skip cache files
-            if (preg_match('/^cache\\/.*/u', $path)) {
+            if (!preg_match(':^platform/(bootstrap,modules)/:u', $path))
                 continue;
-            }
 
-            $oldPath = Dirs::$platform.$path;
+            $oldPath = Dirs::$root.$path;
 
             if (!isset($files[$path])) {
                 $deleted = unlink($oldPath);
@@ -62,15 +50,11 @@ abstract class Compiler
                 $ok = $wrote === $newSize;
                 $log->replace($path, $ok);
                 unset($files[$path]);
-
-                if ($path === 'project.ini') {
-                    Project::init();
-                }
             }
         }
 
         foreach($files as $path => $body) {
-            $newPath = Dirs::$platform.$path;
+            $newPath = Dirs::$root.$path;
             $parent = pathinfo($newPath, PATHINFO_DIRNAME);
 
             if (!is_dir($parent)) {
@@ -80,7 +64,12 @@ abstract class Compiler
             }
 
             $newSize = strlen($body);
-            $wrote = file_put_contents($newPath, $body);
+            if ($path === 'platform/project.ini') {
+                $wrote = file_put_contents(Project::$path, $body);
+                Project::init();
+            } else
+                $wrote = file_put_contents($newPath, $body);
+
             $ok = $wrote === $newSize;
             $log->create($path, $ok);
         }
@@ -146,7 +135,7 @@ abstract class Compiler
             echo $res['data'];
             throw new \Exception('An error has occured whilst retrieving sources!');
         }
-        $lister = new Lister(Dirs::$platform);
+        $lister = new Lister(Dirs::$root, '.*', null);
         return self::overwrite($lister, $files);
     }
 

@@ -1,0 +1,13 @@
+<VirtualHost *:43000>
+    ServerName dsl-sandbox
+    Alias /static /var/www/dsl-sandbox/static
+    DocumentRoot /var/www/dsl-sandbox/web
+
+    <Directory /var/www/dsl-sandbox/web>
+        AllowOverride none
+        RewriteEngine on
+        RewriteBase /
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^ index.php [QSA,L]
+    </Directory>
+</VirtualHost>
