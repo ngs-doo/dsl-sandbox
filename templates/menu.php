@@ -97,6 +97,8 @@ $menu = array(
             'title' => 'Simple CRUD'),
         'report-app' => array(
             'title' => 'PDF reports'),
+        'chat-app' => array(
+            'title' => 'Real-time chat'),
         'todo-crud' => array(
             'title' => 'TODO app'),
     ),

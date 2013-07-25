@@ -1,0 +1,13 @@
+<p>Server can push data to client using the <a href="http://signalr.net">SignalR</a> library which fallbacks to <a href="https://github.com/SignalR/SignalR/wiki/Faq#what-transports-does-signalr-use-in-various-browsers-to-mimic-a-real-time-connection">appropriate communication mechanism</a> depending on browser.</p>
+<p>This example shows client (browser) listening on <em>Chat.Message</em> root. Client is notified each time a new message is created. (hint: open/Run in two separate windows)</p>
+<p>This snippet shows enabling notifications in javascript:</p>
+<pre>
+    &lt;script src="path/to/jquery.signalR-version.min.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="[project-url]/signalr/hubs" type="text/javascript"&gt;&lt;/script&gt;
+
+    $.connection.hub.start().done(function(){
+        $.connection.notifyHub.server.listen('Chat.Message') });
+    $.connection.hub.url = '[project-url]'+'signalr/hubs';
+    $.connection.notifyHub.client.notify = function(root, uris) {
+        console.log('Change on '+root+' with URI(s) '+uris.join(',')) };
+</pre>

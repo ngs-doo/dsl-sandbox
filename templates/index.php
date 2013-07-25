@@ -24,6 +24,8 @@
     <script src="/static/js/dsl-sandbox.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/chardinjs.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/functions.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/jquery.signalR-1.0.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://node0.dsl-platform.com/beta_6ab06d637442ca86edf0c0-signalR/signalr/hubs" type="text/javascript" charset="utf-8"></script>
 </head>
 <body ng-controller="DslSandboxCtrl">
  <!-- header start -->

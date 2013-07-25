@@ -3,6 +3,14 @@
     Alias /static /var/www/dsl-sandbox/static
     DocumentRoot /var/www/dsl-sandbox/web
 
+    # SignalR proxy
+    SSLProxyEngine On
+    ProxyRequests Off
+    ProxyPass /beta_6ab06d637442ca86edf0c0-signalr https://node0.dsl-platform.com/beta_6ab06d637442ca86edf0c0-signalr
+    ProxyPass /beta_6ab06d637442ca86edf0c0-signalR https://node0.dsl-platform.com/beta_6ab06d637442ca86edf0c0-signalR
+    ProxyPassReverse /beta_6ab06d637442ca86edf0c0-signalr https://node0.dsl-platform.com/beta_6ab06d637442ca86edf0c0-signalr
+    ProxyPassReverse /beta_6ab06d637442ca86edf0c0-signalR https://node0.dsl-platform.com/beta_6ab06d637442ca86edf0c0-signalR
+
     <Directory /var/www/dsl-sandbox/web>
         AllowOverride none
         RewriteEngine on

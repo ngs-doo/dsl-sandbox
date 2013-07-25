@@ -30,29 +30,31 @@ $(function(){
         .removeClass('icon-chevron-down')
         .addClass('icon-chevron-up');
 
-    var sandbox = angular.element(document.body).scope();
 
-    // execute click and form submit events via sandbox
+    var sandboxProxy = new SandboxProxy(angular.element(document.body).scope());
+
+    // php output area
+    // run click and form submit events via sandbox
     $('#php-output').on('click', 'a', function(event) {
         event.preventDefault();
-
-        sandbox.run({
+        sandboxProxy.run({
             url:   $(this).attr('href')+'&rnd='+Math.random(),
             method: 'get',
             async: $(this).data('async') !== false
         });
-    });
-
+    })
     $('#php-output').on('submit', 'form', function(event) {
         event.preventDefault();
         var form = $(this);
         var method = form.attr('method') ? form.attr('method').toLowerCase() : 'get';
         var url = method==='get' ? '?'+form.serialize() : form.attr('action');
-        sandbox.run({
+        var isAjax = form.data('isAjax');
+        sandboxProxy.run({
             url: url,
             method: method,
             async: form.data('async') !== 'false',
-            data: form.serialize()
+            data: form.serialize(),
+            ajax: form.data('ajax') !== undefined
         });
     });
 
@@ -70,7 +72,7 @@ $(function(){
                 endLine = lines.length > 1 ? lines[1] : null;
 
             }
-            sandbox.loadFile(file).done(function() {
+            sandboxProxy.loadFile(file).done(function() {
                 if (startLine!==null)
                     window.phpEditor.gotoLine(startLine);
                 if (endLine!==null)
@@ -78,4 +80,5 @@ $(function(){
             });
         }
     })
+
 })
