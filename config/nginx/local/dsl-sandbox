@@ -1,6 +1,6 @@
 server {
-  listen dsl-platform.com:443 ssl spdy;
-  server_name .learn.dsl-platform.com;
+  listen dsl-sandbox:443 ssl;
+  server_name .dsl-sandbox;
 
   ssl on;
   ssl_certificate /var/www/dsl-platform/config/certs/wc.dsl-platform.com.crt.chained;
@@ -18,9 +18,8 @@ server {
   access_log /var/www/dsl-sandbox/logs/nginx/learn-access.log combined buffer=32k;
   error_log /var/www/dsl-sandbox/logs/nginx/learn-error.log;
 
-
   location / {
-    proxy_pass http://learn-dsl-platform-runner:43000;
+    proxy_pass http://dsl-sandbox-runner:43000;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;

@@ -1,5 +1,5 @@
 <VirtualHost *:43000>
-    ServerName dsl-sandbox
+    ServerName dsl-sandbox-runner
     Alias /static /var/www/dsl-sandbox/static
     DocumentRoot /var/www/dsl-sandbox/web
 
