@@ -227,7 +227,7 @@ function DslSandboxCtrl($scope, $http, $location, $window) {
                 phpOutput: $scope.state.phpOutput
             }
             if (!opt.ajax)
-                $scope.isRunning = true;
+                $scope.state.isRunning = true;
             
             $scope.saveCurrent();
 
@@ -268,6 +268,8 @@ function DslSandboxCtrl($scope, $http, $location, $window) {
             }).always(function() {
                 if(!opt.ajax)
                     $scope.state.isRunning = false;
+                if($scope.$$phase !== '$apply')
+                    $scope.$apply();
             })
             return dfd.promise();
         }
