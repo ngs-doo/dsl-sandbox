@@ -22,11 +22,12 @@ if (isset($_POST['message'])) {
 <div class="row-fluid">
 <div class="span6">
     <div>You are user #<?=$user->URI?></div>
-    <form method="post" data-ajax="1">
+    <form class="hide" id="chat-msg-form" method="post" data-ajax="1">
         <input type="text" name="message" placeholder="say something">
         <input type="hidden" name="userURI" value="<?=$user->URI?>"> <br/>
         <button class="btn" type="submit">Submit message</button>
     </form>
+    <div id="loading-js">Registering SignalR listener. Please wait...</div>
 </div>
 <div class="span6 chat-window">
     <ul class="unstyled"></ul>

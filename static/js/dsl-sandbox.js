@@ -26,6 +26,9 @@ function SandboxProxy(scope) {
     }
 }
 
+(function() {
+var jsLoadedInterval;
+
 function onLoadChatApp()
 {
     $.connection.hub.url = '/beta_6ab06d637442ca86edf0c0-signalR/'+'signalr/hubs';
@@ -34,7 +37,18 @@ function onLoadChatApp()
 
     $.connection.hub.start().done(function(){
         hub.server.listen('Chat.Message')
-            .fail(function(msg){ console.error('server.listen failed', msg); });
+            .fail(function(msg){
+                console.error('server.listen failed', msg);
+            })
+            .done(function() {
+                var delay = 500;
+                jsLoadedInterval = window.setInterval(function() {
+                    if($('#loading-js').length)
+                        $('#loading-js').slideUp(function() {
+                            $('#chat-msg-form').slideDown()
+                        });
+                }, delay);
+            })
     }).fail(function(r) {
         console.error('failed to start SignalR connection', r);
     });
@@ -81,12 +95,14 @@ function onLoadChatApp()
 
 function onUnloadChatApp() {
     $.connection.hub.stop();
+    clearInterval(jsLoadedInterval);
 }
 
 window._sandboxExamples['chat-app'] = {
     'onload': onLoadChatApp,
     'onunload': onUnloadChatApp
 }
+})();
 
 
 function DslSandboxCtrl($scope, $http, $location, $window) {
@@ -154,7 +170,6 @@ function DslSandboxCtrl($scope, $http, $location, $window) {
     };
 
     $scope.highlightDsl = function (filename, startLine, endLine) {
-        console.log('highligs');
         $scope.openDsl(filename);
         highlight(window.dslEditor, startLine, endLine);
     };
