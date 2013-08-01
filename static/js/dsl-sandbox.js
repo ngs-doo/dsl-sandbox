@@ -32,10 +32,17 @@ var jsLoadedInterval;
 function onLoadChatApp()
 {
     $.connection.hub.url = '/beta_6ab06d637442ca86edf0c0-signalR/'+'signalr/hubs';
+    var config = {};
     var hub = $.connection.notifyHub;
+    
     hub.client.error = function(r) { console.warn('Error', r); };
 
-    $.connection.hub.start().done(function(){
+    // chrome fix, has issues with other transports
+    var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+    if (isChrome)
+        config.transport = 'longPolling';
+
+    $.connection.hub.start(config).done(function(){
         hub.server.listen('Chat.Message')
             .fail(function(msg){
                 console.error('server.listen failed', msg);
