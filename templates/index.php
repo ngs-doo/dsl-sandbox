@@ -85,6 +85,10 @@
 <!-- content end -->
 
 <!-- footer start -->
+<?
+if (file_exists('../templates/google_analytics.php'))
+    require 'google_analytics.php';
+?>
 <footer id="footer">
   <div class="footer-inner">
     <div class="container">
