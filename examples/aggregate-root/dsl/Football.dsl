@@ -10,12 +10,4 @@ module Football
         string name;
         Team *team;
     }
-
-    root Match
-    {
-        Team *home;
-        Team *guest;
-
-        
-    }
 }
